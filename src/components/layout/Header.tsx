@@ -59,7 +59,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative px-4 py-2 text-[13px] font-medium tracking-[0.08em] uppercase transition-colors duration-300 ${
+                className={`relative px-4 py-2 font-display text-[22px] font-extralight tracking-[0.02em] uppercase transition-colors duration-300 ${
                   isTransparent
                     ? 'text-white/90 hover:text-white'
                     : 'text-forest/70 hover:text-forest'
@@ -80,7 +80,7 @@ export function Header() {
           })}
           <Link
             href="/kaart"
-            className={`ml-3 flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-semibold tracking-[0.08em] uppercase transition-all duration-300 ${
+            className={`ml-3 flex items-center gap-2 px-5 py-2.5 organic-btn text-[12px] font-semibold tracking-[0.08em] uppercase transition-all duration-300 ${
               isTransparent
                 ? 'bg-white/15 text-white backdrop-blur-sm hover:bg-white/25'
                 : 'bg-accent text-white hover:bg-accent-dark'

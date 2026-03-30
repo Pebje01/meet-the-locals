@@ -3,6 +3,7 @@ import '../globals.css'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { TravelPath } from '@/components/TravelPath'
+import { SmoothScroll } from '@/components/SmoothScroll'
 
 export const metadata: Metadata = {
   title: {
@@ -22,8 +23,10 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
           href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
           rel="stylesheet"
         />
+        <link rel="stylesheet" href="https://use.typekit.net/pio7rwo.css" />
       </head>
-      <body className="antialiased">
+      <body className="antialiased relative">
+        <SmoothScroll />
         <TravelPath />
         <Header />
         {children}

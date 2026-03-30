@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
+import { TextReveal, LineReveal } from '@/components/TextReveal'
 
 /* ─── Animation Variants ─── */
 const fadeUp = {
@@ -108,19 +109,18 @@ export default function HomePage() {
       {/* ════════════════════════════════════════
           HERO — Full-bleed immersive hero
       ════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative h-screen min-h-[700px] flex items-end overflow-hidden">
+      <section ref={heroRef} className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
         {/* Background image with parallax */}
         <motion.div style={{ y: heroY }} className="absolute inset-0 -top-[50px]">
           <Image
-            src="/media/Ayuthayya-1-2-scaled.jpg"
-            alt="Reisfotografie Thailand"
+            src="/media/Shirakawago-3.jpg"
+            alt="Turquoise rivier met boten in Azië vanuit de lucht"
             fill
             className="object-cover"
             priority
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/40 to-transparent" />
-          <div className="absolute inset-0 bg-forest/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest/70 via-transparent to-transparent" />
         </motion.div>
 
         {/* Hero content */}
@@ -128,37 +128,30 @@ export default function HomePage() {
           style={{ opacity: heroOpacity }}
           className="relative z-10 w-full"
         >
-          <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 md:pb-24">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
             <motion.div
               initial="hidden"
               animate="visible"
               variants={stagger}
-              className="max-w-3xl"
+              className="max-w-5xl mx-auto"
             >
-              <motion.div variants={fadeUp} className="flex items-center gap-3 mb-6">
-                <span className="w-8 h-[1px] bg-accent" />
-                <span className="text-[11px] uppercase tracking-[0.25em] text-cream/80 font-medium">
-                  Reisblog &amp; Fotografie
-                </span>
-              </motion.div>
-
               <motion.h1
                 variants={fadeUp}
-                className="text-[clamp(2.5rem,8vw,6rem)] font-serif font-bold text-white leading-[1.05] mb-8"
+                className="text-[clamp(2.5rem,8vw,6rem)] font-display text-white! leading-[1.05] mb-8"
               >
                 Ontdek de wereld
                 <br />
-                <span className="text-accent">door lokale ogen</span>
+                door lokale ogen
               </motion.h1>
 
-              <motion.p variants={fadeUp} className="text-white/70 text-lg md:text-xl max-w-lg leading-relaxed mb-10">
+              <motion.p variants={fadeUp} className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10">
                 Persoonlijke reisverhalen, budgettips en fotografie. Van verborgen parels tot bijzondere ontmoetingen.
               </motion.p>
 
-              <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-4">
+              <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-4">
                 <Link
                   href="/blog"
-                  className="group inline-flex items-center gap-3 bg-accent text-white px-8 py-4 rounded-full text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300 hover:shadow-[0_8px_30px_-6px_rgba(196,90,60,0.4)]"
+                  className="group inline-flex items-center gap-3 bg-accent text-white px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300 hover:shadow-[0_8px_30px_-6px_rgba(212,132,90,0.35)]"
                 >
                   <span>Ontdek verhalen</span>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
@@ -167,7 +160,7 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href="/bestemmingen"
-                  className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full text-sm uppercase tracking-[0.1em] font-semibold hover:bg-white/20 transition-all duration-300 border border-white/20"
+                  className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm text-white px-8 py-4 organic-btn-alt text-sm uppercase tracking-[0.1em] font-semibold hover:bg-white/20 transition-all duration-300 border border-white/20"
                 >
                   Bestemmingen
                 </Link>
@@ -175,24 +168,6 @@ export default function HomePage() {
             </motion.div>
           </div>
 
-          {/* Stats bar */}
-          <div className="border-t border-white/10">
-            <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6">
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={stagger}
-                className="flex items-center gap-8 md:gap-16"
-              >
-                {stats.map((stat) => (
-                  <motion.div key={stat.label} variants={fadeIn} className="flex items-baseline gap-2">
-                    <span className="text-2xl md:text-3xl font-serif font-bold text-accent">{stat.value}</span>
-                    <span className="text-[11px] uppercase tracking-[0.15em] text-white/50">{stat.label}</span>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
         </motion.div>
 
         {/* Scroll indicator */}
@@ -200,7 +175,7 @@ export default function HomePage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2"
+          className="absolute bottom-16 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2"
         >
           <motion.div
             animate={{ y: [0, 8, 0] }}
@@ -208,6 +183,13 @@ export default function HomePage() {
             className="w-[1px] h-8 bg-gradient-to-b from-transparent to-white/40"
           />
         </motion.div>
+
+        {/* Wave transition hero → categories */}
+        <div className="absolute bottom-0 left-0 right-0 z-20">
+          <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-[40px] md:h-[60px] block">
+            <path d="M0,60 L0,25 Q180,0 360,20 Q540,42 720,22 Q900,2 1080,25 Q1260,48 1440,20 L1440,60 Z" fill="var(--color-warm-white)" />
+          </svg>
+        </div>
       </section>
 
       {/* ════════════════════════════════════════
@@ -238,7 +220,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════
           INTRO — Over MTL
       ════════════════════════════════════════ */}
-      <section className="py-24 md:py-32 bg-warm-white relative noise-overlay overflow-hidden">
+      <section className="relative py-24 md:py-32 bg-white noise-overlay overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10">
           <motion.div
             initial="hidden"
@@ -253,13 +235,13 @@ export default function HomePage() {
                 <ParallaxImage
                   src="/media/woestijn-9-scaled.jpg"
                   alt="Woestijn fotografie"
-                  className="aspect-[3/4] rounded-3xl"
+                  className="aspect-[3/4] organic-img"
                 />
               </motion.div>
               {/* Floating accent card */}
               <motion.div
                 variants={fadeUp}
-                className="absolute -bottom-6 -right-4 md:right-8 bg-accent text-white px-6 py-4 rounded-2xl shadow-xl"
+                className="absolute -bottom-6 -right-4 md:right-8 bg-accent text-white px-6 py-4 organic-btn shadow-xl"
               >
                 <span className="block text-3xl font-serif font-bold">15+</span>
                 <span className="text-[11px] uppercase tracking-[0.15em] text-white/80">Landen bezocht</span>
@@ -273,19 +255,21 @@ export default function HomePage() {
                 <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-semibold">Over Meet the Locals</span>
               </motion.div>
 
-              <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-forest leading-[1.1] mb-6">
-                Meer dan een
-                <br />
-                <span className="text-accent">reisblog</span>
-              </motion.h2>
+              <LineReveal className="mb-6">
+                <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-forest leading-[1.1]">
+                  Meer dan een
+                  <br />
+                  <span className="text-accent">reisblog</span>
+                </motion.h2>
+              </LineReveal>
 
-              <motion.p variants={fadeUp} className="text-text-muted text-lg leading-relaxed mb-6 max-w-xl">
+              <TextReveal className="text-text-muted text-lg leading-relaxed mb-6 max-w-xl">
                 Meet the Locals is een verzameling persoonlijke verhalen over bijzondere ontmoetingen, lokale culturen en de mooiste plekken die je niet in de reisgids vindt.
-              </motion.p>
+              </TextReveal>
 
-              <motion.p variants={fadeUp} className="text-text-muted leading-relaxed mb-8 max-w-xl">
+              <TextReveal className="text-text-muted leading-relaxed mb-8 max-w-xl">
                 Van straatfotografie in Bangkok tot verborgen bergdorpjes in Peru — ik deel niet alleen de highlights, maar ook de eerlijke verhalen, budgettips en de mensen die je onderweg tegenkomt.
-              </motion.p>
+              </TextReveal>
 
               <motion.div variants={fadeUp}>
                 <Link
@@ -301,12 +285,18 @@ export default function HomePage() {
             </div>
           </motion.div>
         </div>
+        {/* Wave: white → cream */}
+        <div className="absolute bottom-0 left-0 right-0 z-10">
+          <svg viewBox="0 0 1440 50" preserveAspectRatio="none" className="w-full h-[35px] md:h-[50px] block">
+            <path d="M0,50 L0,20 Q240,45 480,18 Q720,0 960,22 Q1200,44 1440,15 L1440,50 Z" fill="var(--color-cream)" />
+          </svg>
+        </div>
       </section>
 
       {/* ════════════════════════════════════════
           RECENT POSTS — Blog grid
       ════════════════════════════════════════ */}
-      <section className="py-24 md:py-32 bg-cream relative">
+      <section className="relative py-24 md:py-32 bg-cream">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <motion.div
             initial="hidden"
@@ -341,7 +331,7 @@ export default function HomePage() {
               {/* Featured */}
               <motion.article variants={scaleIn} className="lg:row-span-2">
                 <Link href={`/blog/${recentPosts[0].slug}`} className="group block h-full">
-                  <div className="relative h-full min-h-[500px] rounded-3xl overflow-hidden img-zoom card-lift">
+                  <div className="relative h-full min-h-[500px] organic-card overflow-hidden img-zoom card-lift">
                     <Image
                       src={recentPosts[0].image}
                       alt={recentPosts[0].title}
@@ -367,8 +357,8 @@ export default function HomePage() {
               {/* Smaller posts */}
               {recentPosts.slice(1).map((post) => (
                 <motion.article key={post.slug} variants={fadeUp}>
-                  <Link href={`/blog/${post.slug}`} className="group flex flex-col md:flex-row gap-6 bg-warm-white rounded-2xl overflow-hidden card-lift">
-                    <div className="relative w-full md:w-[280px] flex-shrink-0 aspect-[4/3] md:aspect-auto md:min-h-full rounded-2xl overflow-hidden img-zoom">
+                  <Link href={`/blog/${post.slug}`} className="group flex flex-col md:flex-row gap-6 bg-warm-white organic-card-alt overflow-hidden card-lift">
+                    <div className="relative w-full md:w-[280px] flex-shrink-0 aspect-[4/3] md:aspect-auto md:min-h-full organic-img-alt overflow-hidden img-zoom">
                       <Image
                         src={post.image}
                         alt={post.title}
@@ -393,12 +383,18 @@ export default function HomePage() {
             </div>
           </motion.div>
         </div>
+        {/* Wave: cream → forest */}
+        <div className="absolute bottom-0 left-0 right-0 z-10">
+          <svg viewBox="0 0 1440 50" preserveAspectRatio="none" className="w-full h-[35px] md:h-[50px] block">
+            <path d="M0,50 L0,18 Q360,48 720,15 Q1080,0 1440,28 L1440,50 Z" fill="var(--color-forest)" />
+          </svg>
+        </div>
       </section>
 
       {/* ════════════════════════════════════════
           DESTINATIONS — Immersive grid
       ════════════════════════════════════════ */}
-      <section className="py-24 md:py-32 bg-forest text-cream relative overflow-hidden noise-overlay">
+      <section className="relative py-24 md:py-32 bg-forest text-cream overflow-hidden noise-overlay">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10">
           <motion.div
             initial="hidden"
@@ -434,7 +430,7 @@ export default function HomePage() {
                   variants={fadeUp}
                   custom={i}
                 >
-                  <Link href={`/bestemmingen/${dest.slug}`} className="group block relative aspect-[3/4] rounded-2xl overflow-hidden card-lift img-zoom">
+                  <Link href={`/bestemmingen/${dest.slug}`} className="group block relative aspect-[3/4] organic-img overflow-hidden card-lift img-zoom">
                     <Image
                       src={dest.image}
                       alt={dest.name}
@@ -461,12 +457,18 @@ export default function HomePage() {
             </div>
           </motion.div>
         </div>
+        {/* Wave: forest → warm-white */}
+        <div className="absolute bottom-0 left-0 right-0 z-10">
+          <svg viewBox="0 0 1440 50" preserveAspectRatio="none" className="w-full h-[35px] md:h-[50px] block">
+            <path d="M0,50 L0,22 Q180,0 480,25 Q780,50 1080,18 Q1260,4 1440,20 L1440,50 Z" fill="var(--color-warm-white)" />
+          </svg>
+        </div>
       </section>
 
       {/* ════════════════════════════════════════
           PHOTOGRAPHY — Split section
       ════════════════════════════════════════ */}
-      <section className="py-24 md:py-32 bg-warm-white relative overflow-hidden">
+      <section className="relative py-24 md:py-32 bg-warm-white overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <motion.div
             initial="hidden"
@@ -482,15 +484,17 @@ export default function HomePage() {
                 <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-semibold">Reisfotografie</span>
               </motion.div>
 
-              <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-serif font-bold text-forest leading-[1.1] mb-6">
-                De mooiste foto&apos;s
-                <br />
-                maak je <span className="text-accent">onderweg</span>
-              </motion.h2>
+              <LineReveal className="mb-6">
+                <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-serif font-bold text-forest leading-[1.1]">
+                  De mooiste foto&apos;s
+                  <br />
+                  maak je <span className="text-accent">onderweg</span>
+                </motion.h2>
+              </LineReveal>
 
-              <motion.p variants={fadeUp} className="text-text-muted text-lg leading-relaxed mb-6 max-w-lg">
+              <TextReveal className="text-text-muted text-lg leading-relaxed mb-6 max-w-lg">
                 Leer hoe je jouw reisfoto&apos;s naar een hoger niveau tilt. Van compositie-tips tot gear reviews en bewerkingstutorials.
-              </motion.p>
+              </TextReveal>
 
               <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 mb-10">
                 {['Tips & Tutorials', 'Gear Reviews', 'Behind the Lens'].map((item) => (
@@ -504,7 +508,7 @@ export default function HomePage() {
               <motion.div variants={fadeUp}>
                 <Link
                   href="/fotografie"
-                  className="group inline-flex items-center gap-3 bg-forest text-cream px-8 py-4 rounded-full text-sm uppercase tracking-[0.1em] font-semibold hover:bg-forest-light transition-all duration-300"
+                  className="group inline-flex items-center gap-3 bg-forest text-cream px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-forest-light transition-all duration-300"
                 >
                   <span>Ontdek fotografie</span>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
@@ -520,13 +524,13 @@ export default function HomePage() {
                 <ParallaxImage
                   src="/media/Ayuthayya-1-9-scaled.jpg"
                   alt="Reisfotografie voorbeeld"
-                  className="aspect-[3/4] rounded-2xl"
+                  className="aspect-[3/4] organic-img"
                   speed={0.08}
                 />
                 <ParallaxImage
                   src="/media/Franksunset-scaled.jpg"
                   alt="Zonsondergang fotografie"
-                  className="aspect-square rounded-2xl"
+                  className="aspect-square organic-img-alt"
                   speed={0.05}
                 />
               </div>
@@ -534,13 +538,13 @@ export default function HomePage() {
                 <ParallaxImage
                   src="/media/Batucaves-6-scaled.jpg"
                   alt="Batu Caves Maleisië"
-                  className="aspect-square rounded-2xl"
+                  className="aspect-square organic-img"
                   speed={0.1}
                 />
                 <ParallaxImage
                   src="/media/DJI_20240517152816_0082_D-scaled.jpg"
                   alt="Drone fotografie Indonesië"
-                  className="aspect-[3/4] rounded-2xl"
+                  className="aspect-[3/4] organic-img-alt"
                   speed={0.06}
                 />
               </div>
@@ -552,7 +556,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════
           MARQUEE — Infinite scroll text
       ════════════════════════════════════════ */}
-      <div className="py-6 bg-accent overflow-hidden">
+      <div className="relative py-6 bg-accent overflow-hidden">
         <div className="animate-marquee flex whitespace-nowrap">
           {Array.from({ length: 2 }).map((_, i) => (
             <span key={i} className="flex items-center gap-8 mr-8">
@@ -570,7 +574,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════
           HIGHLIGHTS — Feature cards
       ════════════════════════════════════════ */}
-      <section className="py-24 md:py-32 bg-cream">
+      <section className="relative py-24 md:py-32 bg-cream">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <motion.div
             initial="hidden"
@@ -625,7 +629,7 @@ export default function HomePage() {
                 <motion.div
                   key={item.title}
                   variants={fadeUp}
-                  className="group bg-warm-white rounded-2xl p-8 md:p-10 card-lift border border-cream-dark/50 hover:border-accent/20 transition-colors"
+                  className="group bg-warm-white organic-card p-8 md:p-10 card-lift border border-cream-dark/50 hover:border-accent/20 transition-colors"
                 >
                   <div className="w-14 h-14 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-white transition-all duration-300">
                     {item.icon}
@@ -636,6 +640,12 @@ export default function HomePage() {
               ))}
             </div>
           </motion.div>
+        </div>
+        {/* Wave: cream → CTA (forest) */}
+        <div className="absolute bottom-0 left-0 right-0 z-10">
+          <svg viewBox="0 0 1440 50" preserveAspectRatio="none" className="w-full h-[35px] md:h-[50px] block">
+            <path d="M0,50 L0,15 Q300,45 600,20 Q900,0 1200,30 Q1350,42 1440,22 L1440,50 Z" fill="var(--color-forest)" />
+          </svg>
         </div>
       </section>
 
@@ -678,7 +688,7 @@ export default function HomePage() {
             <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
               <Link
                 href="/blog"
-                className="group inline-flex items-center gap-3 bg-accent text-white px-8 py-4 rounded-full text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300 hover:shadow-[0_8px_30px_-6px_rgba(196,90,60,0.4)]"
+                className="group inline-flex items-center gap-3 bg-accent text-white px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300 hover:shadow-[0_8px_30px_-6px_rgba(212,132,90,0.35)]"
               >
                 <span>Lees de blog</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
@@ -687,7 +697,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/bestemmingen"
-                className="inline-flex items-center gap-3 border border-white/25 text-white px-8 py-4 rounded-full text-sm uppercase tracking-[0.1em] font-semibold hover:bg-white/10 transition-all duration-300"
+                className="inline-flex items-center gap-3 border border-white/25 text-white px-8 py-4 organic-btn-alt text-sm uppercase tracking-[0.1em] font-semibold hover:bg-white/10 transition-all duration-300"
               >
                 Bekijk bestemmingen
               </Link>

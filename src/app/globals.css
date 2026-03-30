@@ -13,12 +13,13 @@
   --color-text-dark: #1a1a1a;
   --color-text-muted: #6b6b6b;
 
-  /* New accent — warm terracotta/burnt orange */
-  --color-accent: #c45a3c;
-  --color-accent-light: #d4714f;
-  --color-accent-dark: #a84830;
-  --color-accent-muted: #c45a3c20;
+  /* Accent — soft warm orange (Claude-inspired, toned down) */
+  --color-accent: #d4845a;
+  --color-accent-light: #e09672;
+  --color-accent-dark: #b86e45;
+  --color-accent-muted: #d4845a20;
 
+  --font-display: 'poleno', 'El Messiri', Georgia, serif;
   --font-serif: 'El Messiri', Georgia, serif;
   --font-sans: 'DM Sans', system-ui, sans-serif;
 }
@@ -30,8 +31,16 @@ body {
   background-color: var(--color-warm-white);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1 {
+  font-family: var(--font-display);
+  color: var(--color-forest);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+h2, h3, h4, h5, h6 {
   font-family: var(--font-serif);
+  color: var(--color-forest);
 }
 
 ::selection {
@@ -39,9 +48,7 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* Smooth scroll handled by Lenis */
 
 /* ─── Organic blob shapes ─── */
 .blob-1 { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
@@ -52,6 +59,10 @@ html {
 .organic-card-alt { border-radius: 3rem 2rem 3.5rem 2.5rem; }
 .organic-img      { border-radius: 1.5rem 2.5rem 2rem 3rem; }
 .organic-img-alt  { border-radius: 2.5rem 1.5rem 3rem 2rem; }
+
+/* Organic / bumpy button shapes */
+.organic-btn      { border-radius: 1.2rem 2rem 1.5rem 2.4rem; }
+.organic-btn-alt  { border-radius: 2rem 1.3rem 2.2rem 1.4rem; }
 
 /* ─── Marquee ─── */
 @keyframes marquee {

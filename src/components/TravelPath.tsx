@@ -3,59 +3,71 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion'
 
-// SVG path that weaves through the full page — designed for 1440px viewport width
-// This path snakes left-right through each section
-const TRAVEL_PATH =
-  'M 720 0 C 720 80 720 120 680 200 C 620 320 300 380 280 500 C 260 620 500 680 700 740 C 900 800 1100 860 1080 1000 C 1060 1140 700 1200 500 1300 C 300 1400 200 1500 320 1640 C 440 1780 800 1800 900 1940 C 1000 2080 700 2200 500 2340 C 300 2480 380 2600 600 2720 C 820 2840 1000 2900 900 3060 C 800 3220 400 3300 360 3460 C 320 3620 600 3700 720 3800 C 840 3900 720 4000 720 4200'
+const ACCENT = '#d4845a'
 
-// Location pins along the route
+// Pins placed at % of total page scroll
 const PINS = [
-  { progress: 0.08, label: 'Start', side: 'left' as const },
-  { progress: 0.22, label: 'Thailand', side: 'right' as const },
-  { progress: 0.38, label: 'Maleisië', side: 'left' as const },
-  { progress: 0.55, label: 'Peru', side: 'right' as const },
-  { progress: 0.72, label: 'Indonesië', side: 'left' as const },
-  { progress: 0.88, label: 'Volgende...', side: 'right' as const },
+  { progress: 0.05, label: 'Start', side: 'right' as const },
+  { progress: 0.20, label: 'Thailand', side: 'left' as const },
+  { progress: 0.38, label: 'Maleisië', side: 'right' as const },
+  { progress: 0.55, label: 'Peru', side: 'left' as const },
+  { progress: 0.73, label: 'Indonesië', side: 'right' as const },
+  { progress: 0.90, label: 'Volgende...', side: 'left' as const },
 ]
+
+/**
+ * Build an SVG path that snakes through the page.
+ * viewBox width = 200 (abstract units), height = measured page height.
+ * The path stays in a narrow column on the right side of the viewport.
+ */
+function buildPath(height: number): string {
+  const segments = 12
+  const segH = height / segments
+  const points: [number, number][] = []
+
+  for (let i = 0; i <= segments; i++) {
+    // Zigzag between x=40 and x=160 within the 200-wide viewBox
+    const x = i % 2 === 0 ? 60 : 140
+    points.push([x, i * segH])
+  }
+
+  // Build smooth cubic bezier path through points
+  let d = `M ${points[0][0]} ${points[0][1]}`
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1]
+    const curr = points[i]
+    const cpY = (prev[1] + curr[1]) / 2
+    d += ` C ${prev[0]} ${cpY}, ${curr[0]} ${cpY}, ${curr[0]} ${curr[1]}`
+  }
+  return d
+}
 
 export function TravelPath() {
   const containerRef = useRef<HTMLDivElement>(null)
   const pathRef = useRef<SVGPathElement>(null)
   const [pathLength, setPathLength] = useState(0)
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+  const [pageHeight, setPageHeight] = useState(0)
+  const [pathD, setPathD] = useState('')
   const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
 
-  // Scroll progress for the entire page
   const { scrollYProgress } = useScroll()
-
-  // Smooth the scroll progress for a buttery feel
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 50,
     damping: 30,
     restDelta: 0.0001,
   })
 
-  // Path drawing: dashoffset goes from pathLength to 0
   const dashOffset = useTransform(smoothProgress, [0, 1], [pathLength, 0])
 
-  // Parallax shift based on mouse position
+  // Subtle horizontal sway on mouse
   const parallaxX = useSpring(
-    useTransform(mouseX, [0, 1], [-15, 15]),
-    { stiffness: 100, damping: 30 }
-  )
-  const parallaxY = useSpring(
-    useTransform(mouseY, [0, 1], [-10, 10]),
-    { stiffness: 100, damping: 30 }
+    useTransform(mouseX, [0, 1], [-8, 8]),
+    { stiffness: 80, damping: 25 }
   )
 
-  // Track mouse position (normalized 0–1)
   const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      mouseX.set(e.clientX / window.innerWidth)
-      mouseY.set(e.clientY / window.innerHeight)
-    },
-    [mouseX, mouseY],
+    (e: MouseEvent) => mouseX.set(e.clientX / window.innerWidth),
+    [mouseX],
   )
 
   useEffect(() => {
@@ -63,109 +75,106 @@ export function TravelPath() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [handleMouseMove])
 
-  // Measure the SVG path length + container
+  // Measure page height & build path
+  useEffect(() => {
+    const measure = () => {
+      const h = document.documentElement.scrollHeight
+      setPageHeight(h)
+      setPathD(buildPath(h))
+    }
+    measure()
+
+    const ro = new ResizeObserver(measure)
+    ro.observe(document.documentElement)
+    return () => ro.disconnect()
+  }, [])
+
+  // Once path renders, measure its length
   useEffect(() => {
     if (pathRef.current) {
       setPathLength(pathRef.current.getTotalLength())
     }
+  }, [pathD])
 
-    const updateDimensions = () => {
-      if (containerRef.current) {
-        setDimensions({
-          width: containerRef.current.offsetWidth,
-          height: containerRef.current.offsetHeight,
-        })
-      }
-    }
-
-    updateDimensions()
-    window.addEventListener('resize', updateDimensions)
-    return () => window.removeEventListener('resize', updateDimensions)
-  }, [])
-
-  // Airplane position along path
-  const [planePos, setPlanePos] = useState({ x: 720, y: 0, angle: 90 })
+  // Airplane follows the path
+  const [planePos, setPlanePos] = useState({ x: 100, y: 0, angle: 90 })
 
   useEffect(() => {
-    const unsubscribe = smoothProgress.on('change', (v) => {
+    if (!pathLength) return
+    const unsub = smoothProgress.on('change', (v) => {
       if (!pathRef.current) return
       const len = pathRef.current.getTotalLength()
-      const point = pathRef.current.getPointAtLength(v * len)
-      // Get next point for angle calculation
-      const nextPoint = pathRef.current.getPointAtLength(
-        Math.min(v * len + 2, len),
-      )
-      const angle =
-        (Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) * 180) /
-        Math.PI
-      setPlanePos({ x: point.x, y: point.y, angle })
+      const pt = pathRef.current.getPointAtLength(v * len)
+      const next = pathRef.current.getPointAtLength(Math.min(v * len + 3, len))
+      const angle = (Math.atan2(next.y - pt.y, next.x - pt.x) * 180) / Math.PI
+      setPlanePos({ x: pt.x, y: pt.y, angle })
     })
-    return unsubscribe
-  }, [smoothProgress])
+    return unsub
+  }, [smoothProgress, pathLength])
+
+  if (!pageHeight || !pathD) return null
 
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none fixed inset-0 z-[5] overflow-hidden"
+      className="pointer-events-none absolute top-0 right-0 z-[5]"
+      style={{ width: '15vw', maxWidth: 220, minWidth: 100, height: pageHeight }}
       aria-hidden="true"
     >
       <motion.svg
-        viewBox="0 0 1440 4200"
+        viewBox={`0 0 200 ${pageHeight}`}
         fill="none"
-        preserveAspectRatio="xMidYMin slice"
-        className="absolute inset-0 h-full w-full"
-        style={{ x: parallaxX, y: parallaxY }}
+        preserveAspectRatio="none"
+        className="w-full h-full"
+        style={{ x: parallaxX }}
       >
         <defs>
-          {/* Gradient along the path */}
-          <linearGradient id="pathGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#c45a3c" stopOpacity="0.5" />
-            <stop offset="50%" stopColor="#c45a3c" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#c45a3c" stopOpacity="0.1" />
+          <linearGradient id="tpGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={ACCENT} stopOpacity="0.45" />
+            <stop offset="50%" stopColor={ACCENT} stopOpacity="0.25" />
+            <stop offset="100%" stopColor={ACCENT} stopOpacity="0.1" />
           </linearGradient>
-
-          {/* Glow filter */}
-          <filter id="pathGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
+          <filter id="tpGlow" x="-20%" y="-2%" width="140%" height="104%">
+            <feGaussianBlur stdDeviation="2" result="b" />
             <feMerge>
-              <feMergeNode in="blur" />
+              <feMergeNode in="b" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
         </defs>
 
-        {/* Background trace (very subtle) */}
+        {/* Ghost trace — always visible, very faint */}
         <path
-          d={TRAVEL_PATH}
-          stroke="#c45a3c"
+          d={pathD}
+          stroke={ACCENT}
           strokeWidth="1"
-          strokeOpacity="0.08"
-          strokeDasharray="8 16"
+          strokeOpacity="0.06"
+          strokeDasharray="6 14"
           fill="none"
         />
 
-        {/* Animated main path (drawn on scroll) */}
+        {/* Main drawn path */}
         <motion.path
           ref={pathRef}
-          d={TRAVEL_PATH}
-          stroke="url(#pathGradient)"
-          strokeWidth="2"
-          strokeDasharray={`${pathLength}`}
+          d={pathD}
+          stroke="url(#tpGrad)"
+          strokeWidth="1.5"
+          strokeDasharray={pathLength || 1}
           strokeDashoffset={dashOffset}
           strokeLinecap="round"
           fill="none"
-          filter="url(#pathGlow)"
+          filter="url(#tpGlow)"
         />
 
-        {/* Dotted overlay for the "drawn" portion */}
+        {/* Dotted overlay */}
         <motion.path
-          d={TRAVEL_PATH}
-          stroke="#c45a3c"
-          strokeWidth="2"
-          strokeDasharray="4 12"
+          d={pathD}
+          stroke={ACCENT}
+          strokeWidth="1.5"
+          strokeDasharray="3 10"
           strokeDashoffset={dashOffset}
           strokeLinecap="round"
-          strokeOpacity="0.5"
+          strokeOpacity="0.4"
           fill="none"
         />
 
@@ -180,42 +189,29 @@ export function TravelPath() {
           />
         ))}
 
-        {/* Airplane icon */}
-        <motion.g
-          style={{
-            translateX: planePos.x,
-            translateY: planePos.y,
-          }}
-        >
+        {/* Paper airplane */}
+        {pathLength > 0 && (
           <g
-            transform={`rotate(${planePos.angle}, 0, 0) scale(0.7)`}
+            transform={`translate(${planePos.x}, ${planePos.y}) rotate(${planePos.angle}) scale(0.55)`}
             style={{ transformOrigin: '0 0' }}
           >
             <g transform="translate(-12, -12)">
-              {/* Paper airplane / minimal plane icon */}
               <path
                 d="M2 12L22 2L16 22L12 14L2 12Z"
-                fill="#c45a3c"
-                fillOpacity="0.8"
-                stroke="#c45a3c"
+                fill={ACCENT}
+                fillOpacity="0.75"
+                stroke={ACCENT}
                 strokeWidth="0.5"
                 strokeLinejoin="round"
               />
-              <path
-                d="M12 14L22 2"
-                stroke="#1a2e1a"
-                strokeWidth="0.5"
-                strokeOpacity="0.3"
-              />
             </g>
           </g>
-        </motion.g>
+        )}
       </motion.svg>
     </div>
   )
 }
 
-// Individual pin marker with appear animation
 function PinMarker({
   pin,
   pathRef,
@@ -232,21 +228,19 @@ function PinMarker({
 
   useEffect(() => {
     if (!pathRef.current || pathLength === 0) return
+    const pt = pathRef.current.getPointAtLength(pin.progress * pathLength)
+    setPos({ x: pt.x, y: pt.y })
 
-    // Calculate static position
-    const point = pathRef.current.getPointAtLength(pin.progress * pathLength)
-    setPos({ x: point.x, y: point.y })
-
-    const unsubscribe = scrollProgress.on('change', (v) => {
+    const unsub = scrollProgress.on('change', (v) => {
       setVisible(v >= pin.progress - 0.02)
     })
-    return unsubscribe
+    return unsub
   }, [pathRef, pathLength, pin.progress, scrollProgress])
 
   if (pos.x === 0 && pos.y === 0) return null
 
-  const labelX = pin.side === 'left' ? -60 : 20
-  const labelAnchor = pin.side === 'left' ? 'end' : 'start'
+  const labelX = pin.side === 'left' ? -10 : 18
+  const anchor = pin.side === 'left' ? 'end' : 'start'
 
   return (
     <g
@@ -254,44 +248,30 @@ function PinMarker({
       opacity={visible ? 1 : 0}
       style={{ transition: 'opacity 0.6s ease' }}
     >
-      {/* Pulse ring */}
-      <circle r="12" fill="#c45a3c" fillOpacity="0.1">
+      {/* Pulse */}
+      <circle r="10" fill={ACCENT} fillOpacity="0.08">
         {visible && (
-          <animate
-            attributeName="r"
-            values="8;18;8"
-            dur="3s"
-            repeatCount="indefinite"
-          />
-        )}
-        {visible && (
-          <animate
-            attributeName="fill-opacity"
-            values="0.15;0;0.15"
-            dur="3s"
-            repeatCount="indefinite"
-          />
+          <>
+            <animate attributeName="r" values="6;14;6" dur="3s" repeatCount="indefinite" />
+            <animate attributeName="fill-opacity" values="0.12;0;0.12" dur="3s" repeatCount="indefinite" />
+          </>
         )}
       </circle>
+      <circle r="3.5" fill={ACCENT} fillOpacity="0.6" />
+      <circle r="1.5" fill="#faf8f4" />
 
-      {/* Pin dot */}
-      <circle r="4" fill="#c45a3c" fillOpacity="0.7" />
-      <circle r="2" fill="#f5f2eb" />
-
-      {/* Label */}
       <text
         x={labelX}
         y="4"
-        fill="#c45a3c"
-        fontSize="11"
+        fill={ACCENT}
+        fontSize="9"
         fontFamily="'DM Sans', sans-serif"
         fontWeight="500"
-        textAnchor={labelAnchor}
-        letterSpacing="0.1em"
-        textTransform="uppercase"
-        fillOpacity="0.6"
+        textAnchor={anchor}
+        letterSpacing="0.08em"
+        fillOpacity="0.5"
       >
-        {pin.label}
+        {pin.label.toUpperCase()}
       </text>
     </g>
   )
