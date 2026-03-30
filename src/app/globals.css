@@ -1,0 +1,146 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Core palette */
+  --color-forest: #1a2e1a;
+  --color-forest-light: #2d4a2d;
+  --color-forest-dark: #0f1d0f;
+  --color-cream: #f5f2eb;
+  --color-cream-dark: #ebe7dd;
+  --color-sand: #c4a97d;
+  --color-sand-light: #d4be9a;
+  --color-warm-white: #faf8f4;
+  --color-text-dark: #1a1a1a;
+  --color-text-muted: #6b6b6b;
+
+  /* New accent — warm terracotta/burnt orange */
+  --color-accent: #c45a3c;
+  --color-accent-light: #d4714f;
+  --color-accent-dark: #a84830;
+  --color-accent-muted: #c45a3c20;
+
+  --font-serif: 'El Messiri', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+}
+
+/* ─── Base ─── */
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text-dark);
+  background-color: var(--color-warm-white);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── Organic blob shapes ─── */
+.blob-1 { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+.blob-2 { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+.blob-3 { border-radius: 40% 60% 60% 40% / 50% 60% 40% 50%; }
+
+.organic-card     { border-radius: 2rem 3rem 2.5rem 3.5rem; }
+.organic-card-alt { border-radius: 3rem 2rem 3.5rem 2.5rem; }
+.organic-img      { border-radius: 1.5rem 2.5rem 2rem 3rem; }
+.organic-img-alt  { border-radius: 2.5rem 1.5rem 3rem 2rem; }
+
+/* ─── Marquee ─── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* ─── Magnetic button base ─── */
+.magnetic-btn {
+  position: relative;
+  overflow: hidden;
+}
+.magnetic-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 0;
+}
+.magnetic-btn:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.magnetic-btn > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Reveal line for headings ─── */
+.reveal-line {
+  position: relative;
+  display: inline-block;
+}
+.reveal-line::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-accent);
+  transition: width 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.group:hover .reveal-line::after,
+.reveal-line:hover::after {
+  width: 100%;
+}
+
+/* ─── Image zoom on hover ─── */
+.img-zoom {
+  overflow: hidden;
+}
+.img-zoom img {
+  transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.img-zoom:hover img {
+  transform: scale(1.05);
+}
+
+/* ─── Gradient text ─── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-forest) 0%, var(--color-forest-light) 50%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Smooth card lift ─── */
+.card-lift {
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.card-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px -12px rgba(26, 46, 26, 0.15);
+}
+
+/* ─── Noise texture overlay ─── */
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
