@@ -19,6 +19,9 @@
   --color-accent-dark: #b86e45;
   --color-accent-muted: #d4845a20;
 
+  /* Link hover — fris groen */
+  --color-link-hover: #5F9261;
+
   --font-display: 'poleno', 'El Messiri', Georgia, serif;
   --font-serif: 'El Messiri', Georgia, serif;
   --font-sans: 'athletics', 'DM Sans', system-ui, sans-serif;
@@ -48,6 +51,12 @@ h2, h3, h4, h5, h6 {
 ::selection {
   background-color: var(--color-accent);
   color: white;
+}
+
+/* Tekstlinks hover — niet op buttons */
+a.text-link:hover,
+.reveal-line:hover {
+  color: var(--color-link-hover);
 }
 
 /* Smooth scroll handled by Lenis */

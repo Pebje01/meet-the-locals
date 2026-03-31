@@ -3,13 +3,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useCallback, useState } from 'react'
 import { TextReveal, LineReveal } from '@/components/TextReveal'
 
 /* ─── Animation Variants ─── */
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.19, 1, 0.22, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.19, 1, 0.22, 1] as const } },
 }
 const fadeIn = {
   hidden: { opacity: 0 },
@@ -20,7 +20,7 @@ const stagger = {
 }
 const scaleIn = {
   hidden: { opacity: 0, scale: 0.95 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.19, 1, 0.22, 1] } },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.19, 1, 0.22, 1] as const } },
 }
 
 /* ─── Data ─── */
@@ -77,6 +77,88 @@ const stats = [
 ]
 
 /* ─── Components ─── */
+function DestinationSlider() {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(true)
+
+  const checkScroll = useCallback(() => {
+    const el = scrollRef.current
+    if (!el) return
+    setCanScrollLeft(el.scrollLeft > 10)
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10)
+  }, [])
+
+  const scroll = (dir: 'left' | 'right') => {
+    const el = scrollRef.current
+    if (!el) return
+    const amount = 400
+    el.scrollBy({ left: dir === 'right' ? amount : -amount, behavior: 'smooth' })
+    setTimeout(checkScroll, 400)
+  }
+
+  return (
+    <div className="relative">
+      {/* Nav arrows */}
+      <div className="absolute -top-16 right-0 flex gap-3 z-10">
+        <button
+          onClick={() => scroll('left')}
+          className={`w-10 h-10 rounded-full border border-cream/30 flex items-center justify-center transition-all duration-300 ${
+            canScrollLeft ? 'text-cream hover:bg-cream hover:text-forest' : 'text-cream/20 cursor-default'
+          }`}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M19 12H5M5 12l6-6M5 12l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <button
+          onClick={() => scroll('right')}
+          className={`w-10 h-10 rounded-full border border-cream/30 flex items-center justify-center transition-all duration-300 ${
+            canScrollRight ? 'text-cream hover:bg-cream hover:text-forest' : 'text-cream/20 cursor-default'
+          }`}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h14M19 12l-6-6M19 12l-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Scrollable track */}
+      <div
+        ref={scrollRef}
+        onScroll={checkScroll}
+        className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth cursor-grab active:cursor-grabbing"
+      >
+        {destinations.map((dest) => (
+          <Link
+            key={dest.slug}
+            href={`/bestemmingen/${dest.slug}`}
+            className="group block relative flex-shrink-0 w-[300px] md:w-[360px] aspect-[3/4] organic-img overflow-hidden img-zoom"
+          >
+            <Image
+              src={dest.image}
+              alt={dest.name}
+              fill
+              className="object-cover"
+              sizes="360px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent group-hover:from-accent-dark/80 transition-all duration-500" />
+            <div className="absolute bottom-0 left-0 right-0 p-6">
+              <h3 className="font-display text-2xl text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">{dest.name}</h3>
+            </div>
+            {/* Arrow — always visible, fills on hover */}
+            <div className="absolute top-4 right-4 w-9 h-9 rounded-full border border-white/40 group-hover:border-accent group-hover:bg-accent flex items-center justify-center transition-all duration-300">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M7 17L17 7M17 7H7M17 7V17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function ParallaxImage({
   src, alt, className, speed = 0.15,
 }: {
@@ -307,6 +389,18 @@ export default function HomePage() {
                 </motion.article>
               ))}
             </div>
+
+            <motion.div variants={fadeUp} className="mt-12 text-center">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-3 bg-forest text-cream px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-link-hover transition-all duration-300"
+              >
+                <span>Lees verder</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
         {/* Wave: cream → forest */}

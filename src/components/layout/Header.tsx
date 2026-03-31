@@ -56,30 +56,24 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-1">
-          {navItems.map((item) => {
+          {navItems.map((item, i) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+            const wobble = i % 2 === 0 ? 'organic-btn' : 'organic-btn-alt'
+            const hoverColor = i % 2 === 0 ? 'hover:bg-accent' : 'hover:bg-link-hover'
+            const activeColor = i % 2 === 0 ? 'bg-accent' : 'bg-link-hover'
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative px-4 py-2 font-display text-[22px] font-extralight tracking-[0.02em] uppercase transition-colors duration-300 ${
+                className={`relative px-3 py-1 ${wobble} font-display text-[22px] font-extralight tracking-[0.02em] uppercase transition-all duration-300 ${
                   isTransparent
-                    ? 'text-white/90 hover:text-white'
+                    ? `text-white/90 ${hoverColor} hover:text-white`
                     : isActive
-                      ? 'text-accent'
-                      : 'text-forest-dark hover:text-forest'
+                      ? `${activeColor} text-white`
+                      : `text-forest-dark ${hoverColor} hover:text-white`
                 }`}
               >
                 {item.label}
-                {isActive && (
-                  <motion.span
-                    layoutId="nav-indicator"
-                    className={`absolute bottom-0 left-4 right-4 h-[2px] ${
-                      isTransparent ? 'bg-accent' : 'bg-accent'
-                    }`}
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  />
-                )}
               </Link>
             )
           })}
@@ -92,8 +86,8 @@ export function Header() {
             }`}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-              <circle cx="12" cy="10" r="3" />
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
             </svg>
             Kaart
           </Link>
