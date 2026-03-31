@@ -21,11 +21,22 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-forest text-cream relative overflow-hidden noise-overlay">
-      {/* Top decorative accent line */}
-      <div className="h-1 bg-gradient-to-r from-accent via-accent-light to-accent" />
+    <footer className="bg-forest-dark text-cream relative noise-overlay speckle-overlay">
+      {/* Rough brushstroke edge — overlaps into section above */}
+      <div className="absolute left-0 right-0 -top-[50px] md:-top-[75px] z-30 pointer-events-none">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-[55px] md:h-[80px] block">
+          <defs>
+            <filter id="footerRough" x="-5%" y="-30%" width="110%" height="160%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="24" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
+          <rect x="-20" y="30" width="1480" height="80" fill="var(--color-forest-dark)" filter="url(#footerRough)" />
+          <rect x="0" y="70" width="1440" height="35" fill="var(--color-forest-dark)" />
+        </svg>
+      </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 md:py-20 relative z-10">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pt-20 md:pt-24 pb-16 md:pb-20 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
           {/* Brand */}
           <div className="md:col-span-4">
@@ -36,7 +47,7 @@ export function Footer() {
               height={60}
               className="h-12 w-auto brightness-0 invert mb-5"
             />
-            <p className="text-cream/60 text-[15px] leading-relaxed mb-6 max-w-xs">
+            <p className="text-cream/80 text-[15px] leading-relaxed mb-6 max-w-xs">
               Persoonlijke reisverhalen, fotografie en tips van bestemmingen wereldwijd.
             </p>
             <div className="flex items-center gap-4">
@@ -44,7 +55,7 @@ export function Footer() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-cream/10 flex items-center justify-center text-cream/60 hover:bg-accent hover:text-white transition-all duration-300"
+                className="w-10 h-10 rounded-full bg-cream/10 flex items-center justify-center text-cream/80 hover:bg-accent hover:text-white transition-all duration-300"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="5" />
@@ -56,7 +67,7 @@ export function Footer() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-cream/10 flex items-center justify-center text-cream/60 hover:bg-accent hover:text-white transition-all duration-300"
+                className="w-10 h-10 rounded-full bg-cream/10 flex items-center justify-center text-cream/80 hover:bg-accent hover:text-white transition-all duration-300"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z" />
@@ -68,7 +79,7 @@ export function Footer() {
                 href="https://tiktok.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-cream/10 flex items-center justify-center text-cream/60 hover:bg-accent hover:text-white transition-all duration-300"
+                className="w-10 h-10 rounded-full bg-cream/10 flex items-center justify-center text-cream/80 hover:bg-accent hover:text-white transition-all duration-300"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.15V11.7a4.84 4.84 0 01-3.58-1.43V6.69h3.58z" />
@@ -79,11 +90,11 @@ export function Footer() {
 
           {/* Ontdek */}
           <div className="md:col-span-2 md:col-start-6">
-            <h4 className="text-[11px] uppercase tracking-[0.2em] text-accent font-semibold mb-5">Ontdek</h4>
+            <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Ontdek</h4>
             <ul className="space-y-3">
               {footerLinks.ontdek.map((link) => (
                 <li key={link.href + link.label}>
-                  <Link href={link.href} className="text-cream/60 hover:text-cream transition-colors text-[15px]">
+                  <Link href={link.href} className="text-cream/80 hover:text-cream transition-colors text-[15px]">
                     {link.label}
                   </Link>
                 </li>
@@ -93,11 +104,11 @@ export function Footer() {
 
           {/* Info */}
           <div className="md:col-span-2">
-            <h4 className="text-[11px] uppercase tracking-[0.2em] text-accent font-semibold mb-5">Informatie</h4>
+            <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Informatie</h4>
             <ul className="space-y-3">
               {footerLinks.info.map((link) => (
                 <li key={link.href + link.label}>
-                  <Link href={link.href} className="text-cream/60 hover:text-cream transition-colors text-[15px]">
+                  <Link href={link.href} className="text-cream/80 hover:text-cream transition-colors text-[15px]">
                     {link.label}
                   </Link>
                 </li>
@@ -107,11 +118,11 @@ export function Footer() {
 
           {/* Extern */}
           <div className="md:col-span-2">
-            <h4 className="text-[11px] uppercase tracking-[0.2em] text-accent font-semibold mb-5">Meer van Daley</h4>
+            <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Meer van Daley</h4>
             <ul className="space-y-3">
               {footerLinks.extern.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} target="_blank" rel="noopener noreferrer" className="group text-cream/60 hover:text-cream transition-colors text-[15px] inline-flex items-center gap-1">
+                  <a href={link.href} target="_blank" rel="noopener noreferrer" className="group text-cream/80 hover:text-cream transition-colors text-[15px] inline-flex items-center gap-1">
                     {link.label}
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="opacity-0 group-hover:opacity-100 transition-opacity">
                       <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -125,10 +136,10 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="border-t border-cream/8 mt-14 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-cream/30 text-[13px]">
+          <p className="text-cream/50 text-[13px]">
             &copy; {new Date().getFullYear()} Meet the Locals. Alle rechten voorbehouden.
           </p>
-          <p className="text-cream/20 text-[12px]">
+          <p className="text-cream/40 text-[12px]">
             Made with love by The Daley Edit
           </p>
         </div>

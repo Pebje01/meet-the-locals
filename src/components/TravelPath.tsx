@@ -1,278 +1,138 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 
-const ACCENT = '#d4845a'
-
-// Pins placed at % of total page scroll
-const PINS = [
-  { progress: 0.05, label: 'Start', side: 'right' as const },
-  { progress: 0.20, label: 'Thailand', side: 'left' as const },
-  { progress: 0.38, label: 'Maleisië', side: 'right' as const },
-  { progress: 0.55, label: 'Peru', side: 'left' as const },
-  { progress: 0.73, label: 'Indonesië', side: 'right' as const },
-  { progress: 0.90, label: 'Volgende...', side: 'left' as const },
-]
-
-/**
- * Build an SVG path that snakes through the page.
- * viewBox width = 200 (abstract units), height = measured page height.
- * The path stays in a narrow column on the right side of the viewport.
- */
-function buildPath(height: number): string {
-  const segments = 12
-  const segH = height / segments
-  const points: [number, number][] = []
-
-  for (let i = 0; i <= segments; i++) {
-    // Zigzag between x=40 and x=160 within the 200-wide viewBox
-    const x = i % 2 === 0 ? 60 : 140
-    points.push([x, i * segH])
-  }
-
-  // Build smooth cubic bezier path through points
-  let d = `M ${points[0][0]} ${points[0][1]}`
-  for (let i = 1; i < points.length; i++) {
-    const prev = points[i - 1]
-    const curr = points[i]
-    const cpY = (prev[1] + curr[1]) / 2
-    d += ` C ${prev[0]} ${cpY}, ${curr[0]} ${cpY}, ${curr[0]} ${curr[1]}`
-  }
-  return d
-}
+const COLOR = 'rgba(26, 46, 26, 0.12)'
 
 export function TravelPath() {
-  const containerRef = useRef<HTMLDivElement>(null)
   const pathRef = useRef<SVGPathElement>(null)
   const [pathLength, setPathLength] = useState(0)
   const [pageHeight, setPageHeight] = useState(0)
   const [pathD, setPathD] = useState('')
-  const mouseX = useMotionValue(0)
 
   const { scrollYProgress } = useScroll()
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 50,
-    damping: 30,
-    restDelta: 0.0001,
-  })
-
-  const dashOffset = useTransform(smoothProgress, [0, 1], [pathLength, 0])
-
-  // Subtle horizontal sway on mouse
-  const parallaxX = useSpring(
-    useTransform(mouseX, [0, 1], [-8, 8]),
-    { stiffness: 80, damping: 25 }
-  )
-
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => mouseX.set(e.clientX / window.innerWidth),
-    [mouseX],
-  )
+  const laggy = useSpring(scrollYProgress, { stiffness: 30, damping: 50 })
+  const progress = useTransform(laggy, [0, 1], [0, 0.85])
 
   useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [handleMouseMove])
-
-  // Measure page height & build path
-  useEffect(() => {
-    const measure = () => {
+    const build = () => {
       const h = document.documentElement.scrollHeight
       setPageHeight(h)
-      setPathD(buildPath(h))
-    }
-    measure()
 
-    const ro = new ResizeObserver(measure)
+      // Wide sweeping curves across the full page width
+      // viewBox will be 0 0 1440 h, so we use real page coordinates
+      const p = [
+        [1200, 0],
+        [400, h * 0.08],
+        [1100, h * 0.18],
+        [300, h * 0.28],
+        [900, h * 0.38],
+        [200, h * 0.48],
+        [1000, h * 0.58],
+        [350, h * 0.68],
+        [1100, h * 0.78],
+        [500, h * 0.88],
+        [800, h],
+      ]
+
+      let d = `M ${p[0][0]} ${p[0][1]}`
+      for (let i = 1; i < p.length; i++) {
+        const prev = p[i - 1]
+        const curr = p[i]
+        const midY = (prev[1] + curr[1]) / 2
+        d += ` C ${prev[0]} ${midY}, ${curr[0]} ${midY}, ${curr[0]} ${curr[1]}`
+      }
+      setPathD(d)
+    }
+    build()
+    const ro = new ResizeObserver(build)
     ro.observe(document.documentElement)
     return () => ro.disconnect()
   }, [])
 
-  // Once path renders, measure its length
   useEffect(() => {
-    if (pathRef.current) {
-      setPathLength(pathRef.current.getTotalLength())
-    }
+    if (pathRef.current) setPathLength(pathRef.current.getTotalLength())
   }, [pathD])
 
-  // Airplane follows the path
-  const [planePos, setPlanePos] = useState({ x: 100, y: 0, angle: 90 })
+  const dashOffset = useTransform(progress, (p) => pathLength * (1 - p))
+
+  // Airplane position
+  const [plane, setPlane] = useState({ x: 1200, y: 0, angle: 90 })
 
   useEffect(() => {
     if (!pathLength) return
-    const unsub = smoothProgress.on('change', (v) => {
+    const unsub = progress.on('change', (p) => {
       if (!pathRef.current) return
-      const len = pathRef.current.getTotalLength()
-      const pt = pathRef.current.getPointAtLength(v * len)
-      const next = pathRef.current.getPointAtLength(Math.min(v * len + 3, len))
-      const angle = (Math.atan2(next.y - pt.y, next.x - pt.x) * 180) / Math.PI
-      setPlanePos({ x: pt.x, y: pt.y, angle })
+      const at = p * pathLength
+      const pt = pathRef.current.getPointAtLength(at)
+      const ahead = pathRef.current.getPointAtLength(Math.min(at + 15, pathLength))
+      const angle = (Math.atan2(ahead.y - pt.y, ahead.x - pt.x) * 180) / Math.PI
+      setPlane({ x: pt.x, y: pt.y, angle })
     })
     return unsub
-  }, [smoothProgress, pathLength])
+  }, [progress, pathLength])
 
   if (!pageHeight || !pathD) return null
 
   return (
     <div
-      ref={containerRef}
-      className="pointer-events-none absolute top-0 right-0 z-[5]"
-      style={{ width: '15vw', maxWidth: 220, minWidth: 100, height: pageHeight }}
+      className="pointer-events-none absolute top-0 left-0 right-0 z-[5]"
+      style={{ height: pageHeight }}
       aria-hidden="true"
     >
-      <motion.svg
-        viewBox={`0 0 200 ${pageHeight}`}
+      <svg
+        viewBox={`0 0 1440 ${pageHeight}`}
         fill="none"
-        preserveAspectRatio="none"
         className="w-full h-full"
-        style={{ x: parallaxX }}
+        preserveAspectRatio="none"
       >
-        <defs>
-          <linearGradient id="tpGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={ACCENT} stopOpacity="0.45" />
-            <stop offset="50%" stopColor={ACCENT} stopOpacity="0.25" />
-            <stop offset="100%" stopColor={ACCENT} stopOpacity="0.1" />
-          </linearGradient>
-          <filter id="tpGlow" x="-20%" y="-2%" width="140%" height="104%">
-            <feGaussianBlur stdDeviation="2" result="b" />
-            <feMerge>
-              <feMergeNode in="b" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
-        {/* Ghost trace — always visible, very faint */}
-        <path
-          d={pathD}
-          stroke={ACCENT}
-          strokeWidth="1"
-          strokeOpacity="0.06"
-          strokeDasharray="6 14"
-          fill="none"
-        />
-
-        {/* Main drawn path */}
+        {/* Solid line drawn on scroll (clipped by dashoffset) */}
         <motion.path
           ref={pathRef}
           d={pathD}
-          stroke="url(#tpGrad)"
-          strokeWidth="1.5"
+          stroke="#1a2e1a"
+          strokeWidth="3"
+          strokeOpacity="0.15"
           strokeDasharray={pathLength || 1}
           strokeDashoffset={dashOffset}
           strokeLinecap="round"
           fill="none"
-          filter="url(#tpGlow)"
         />
 
-        {/* Dotted overlay */}
+        {/* Visible dashed dots on top (also clipped by dashoffset) */}
         <motion.path
           d={pathD}
-          stroke={ACCENT}
-          strokeWidth="1.5"
-          strokeDasharray="3 10"
+          stroke="#1a2e1a"
+          strokeWidth="3.5"
+          strokeOpacity="0.12"
+          strokeDasharray="8 16"
           strokeDashoffset={dashOffset}
           strokeLinecap="round"
-          strokeOpacity="0.4"
           fill="none"
         />
 
-        {/* Pin markers */}
-        {PINS.map((pin, i) => (
-          <PinMarker
-            key={i}
-            pin={pin}
-            pathRef={pathRef}
-            scrollProgress={smoothProgress}
-            pathLength={pathLength}
-          />
-        ))}
-
-        {/* Paper airplane */}
+        {/* Airplane ✈ — simple, clear, rotated in direction of travel */}
         {pathLength > 0 && (
-          <g
-            transform={`translate(${planePos.x}, ${planePos.y}) rotate(${planePos.angle}) scale(0.55)`}
-            style={{ transformOrigin: '0 0' }}
-          >
-            <g transform="translate(-12, -12)">
-              <path
-                d="M2 12L22 2L16 22L12 14L2 12Z"
-                fill={ACCENT}
-                fillOpacity="0.75"
-                stroke={ACCENT}
-                strokeWidth="0.5"
-                strokeLinejoin="round"
-              />
+          <g transform={`translate(${plane.x}, ${plane.y})`}>
+            <g transform={`rotate(${plane.angle + 90})`}>
+              {/* Simple top-down airplane */}
+              <g transform="translate(-18, -18) scale(1.5)">
+                {/* Body */}
+                <ellipse cx="12" cy="12" rx="1.8" ry="9" fill="#1a2e1a" fillOpacity="0.25" />
+                {/* Left wing */}
+                <path d="M12 9 L2 13 L12 12Z" fill="#1a2e1a" fillOpacity="0.2" />
+                {/* Right wing */}
+                <path d="M12 9 L22 13 L12 12Z" fill="#1a2e1a" fillOpacity="0.2" />
+                {/* Left tail */}
+                <path d="M12 19 L8 22 L12 20Z" fill="#1a2e1a" fillOpacity="0.18" />
+                {/* Right tail */}
+                <path d="M12 19 L16 22 L12 20Z" fill="#1a2e1a" fillOpacity="0.18" />
+              </g>
             </g>
           </g>
         )}
-      </motion.svg>
+      </svg>
     </div>
-  )
-}
-
-function PinMarker({
-  pin,
-  pathRef,
-  scrollProgress,
-  pathLength,
-}: {
-  pin: (typeof PINS)[number]
-  pathRef: React.RefObject<SVGPathElement | null>
-  scrollProgress: ReturnType<typeof useSpring>
-  pathLength: number
-}) {
-  const [pos, setPos] = useState({ x: 0, y: 0 })
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    if (!pathRef.current || pathLength === 0) return
-    const pt = pathRef.current.getPointAtLength(pin.progress * pathLength)
-    setPos({ x: pt.x, y: pt.y })
-
-    const unsub = scrollProgress.on('change', (v) => {
-      setVisible(v >= pin.progress - 0.02)
-    })
-    return unsub
-  }, [pathRef, pathLength, pin.progress, scrollProgress])
-
-  if (pos.x === 0 && pos.y === 0) return null
-
-  const labelX = pin.side === 'left' ? -10 : 18
-  const anchor = pin.side === 'left' ? 'end' : 'start'
-
-  return (
-    <g
-      transform={`translate(${pos.x}, ${pos.y})`}
-      opacity={visible ? 1 : 0}
-      style={{ transition: 'opacity 0.6s ease' }}
-    >
-      {/* Pulse */}
-      <circle r="10" fill={ACCENT} fillOpacity="0.08">
-        {visible && (
-          <>
-            <animate attributeName="r" values="6;14;6" dur="3s" repeatCount="indefinite" />
-            <animate attributeName="fill-opacity" values="0.12;0;0.12" dur="3s" repeatCount="indefinite" />
-          </>
-        )}
-      </circle>
-      <circle r="3.5" fill={ACCENT} fillOpacity="0.6" />
-      <circle r="1.5" fill="#faf8f4" />
-
-      <text
-        x={labelX}
-        y="4"
-        fill={ACCENT}
-        fontSize="9"
-        fontFamily="'DM Sans', sans-serif"
-        fontWeight="500"
-        textAnchor={anchor}
-        letterSpacing="0.08em"
-        fillOpacity="0.5"
-      >
-        {pin.label.toUpperCase()}
-      </text>
-    </g>
   )
 }

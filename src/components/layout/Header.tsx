@@ -18,7 +18,8 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-  const isHome = pathname === '/'
+  const darkHeroPages = ['/', '/blog', '/bestemmingen', '/fotografie', '/over', '/contact', '/kaart']
+  const hasDarkHero = darkHeroPages.includes(pathname)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
@@ -26,17 +27,19 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const isTransparent = isHome && !scrolled && !isOpen
+  const isTransparent = hasDarkHero && !scrolled && !isOpen
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isTransparent
           ? 'bg-transparent'
-          : 'bg-warm-white/95 backdrop-blur-xl shadow-[0_1px_0_0_rgba(26,46,26,0.06)]'
+          : isOpen
+            ? 'bg-forest'
+            : 'bg-warm-white/95 backdrop-blur-xl shadow-[0_1px_0_0_rgba(26,46,26,0.06)]'
       }`}
     >
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between h-24 mt-2">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 lg:px-10 flex items-center justify-between h-16 md:h-24 mt-2">
         {/* Logo */}
         <Link href="/" className="flex-shrink-0 group">
           <Image
@@ -44,8 +47,8 @@ export function Header() {
             alt="Meet the Locals"
             width={320}
             height={96}
-            className={`h-16 w-auto transition-all duration-500 group-hover:scale-[1.02] ${
-              isTransparent ? 'brightness-0 invert' : ''
+            className={`h-14 md:h-16 w-auto transition-all duration-500 group-hover:scale-[1.02] ${
+              isTransparent || isOpen ? 'brightness-0 invert' : 'logo-rust'
             }`}
             priority
           />
@@ -62,8 +65,10 @@ export function Header() {
                 className={`relative px-4 py-2 font-display text-[22px] font-extralight tracking-[0.02em] uppercase transition-colors duration-300 ${
                   isTransparent
                     ? 'text-white/90 hover:text-white'
-                    : 'text-forest/70 hover:text-forest'
-                } ${isActive && !isTransparent ? 'text-forest' : ''}`}
+                    : isActive
+                      ? 'text-accent'
+                      : 'text-forest-dark hover:text-forest'
+                }`}
               >
                 {item.label}
                 {isActive && (
@@ -97,23 +102,25 @@ export function Header() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden relative w-10 h-10 flex items-center justify-center"
+          className={`lg:hidden relative w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-300 ${
+            isTransparent || isOpen ? 'bg-white/15 backdrop-blur-sm' : 'bg-forest/10'
+          }`}
           aria-label="Menu"
         >
           <div className="flex flex-col gap-[5px]">
             <span
               className={`block w-6 h-[1.5px] transition-all duration-300 origin-center ${
-                isTransparent ? 'bg-white' : 'bg-forest'
+                isTransparent || isOpen ? 'bg-white' : 'bg-forest'
               } ${isOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`}
             />
             <span
               className={`block w-4 h-[1.5px] transition-all duration-300 ${
-                isTransparent ? 'bg-white' : 'bg-forest'
+                isTransparent || isOpen ? 'bg-white' : 'bg-forest'
               } ${isOpen ? 'opacity-0 translate-x-2' : ''}`}
             />
             <span
               className={`block w-6 h-[1.5px] transition-all duration-300 origin-center ${
-                isTransparent ? 'bg-white' : 'bg-forest'
+                isTransparent || isOpen ? 'bg-white' : 'bg-forest'
               } ${isOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`}
             />
           </div>
@@ -128,7 +135,7 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden fixed inset-0 top-20 bg-forest z-40"
+            className="lg:hidden fixed inset-0 top-16 md:top-20 bg-forest z-40"
           >
             <div className="px-8 py-12 flex flex-col gap-1">
               {[{ label: 'Home', href: '/' }, ...navItems, { label: 'Kaart', href: '/kaart' }].map(
@@ -153,13 +160,26 @@ export function Header() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="mt-12 flex gap-6"
+                className="mt-12 flex gap-5"
               >
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-cream/50 hover:text-accent transition-colors text-sm uppercase tracking-widest">
-                  Instagram
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-cream/10 flex items-center justify-center text-cream/60 hover:bg-accent hover:text-white transition-all duration-300">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" />
+                    <circle cx="12" cy="12" r="5" />
+                    <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+                  </svg>
                 </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-cream/50 hover:text-accent transition-colors text-sm uppercase tracking-widest">
-                  LinkedIn
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-cream/10 flex items-center justify-center text-cream/60 hover:bg-accent hover:text-white transition-all duration-300">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z" />
+                    <rect x="2" y="9" width="4" height="12" />
+                    <circle cx="4" cy="4" r="2" />
+                  </svg>
+                </a>
+                <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-cream/10 flex items-center justify-center text-cream/60 hover:bg-accent hover:text-white transition-all duration-300">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.17V11.7a4.83 4.83 0 01-3.58-1.43V6.69h3.58z" />
+                  </svg>
                 </a>
               </motion.div>
             </div>
