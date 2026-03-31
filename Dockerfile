@@ -12,6 +12,15 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Build-time env vars needed for Payload CMS
+ARG DATABASE_URI=postgresql://payload:payload@localhost:5432/meetthelocals
+ARG PAYLOAD_SECRET=build-time-secret-placeholder
+ARG NEXT_PUBLIC_SITE_URL=https://meetthelocals.nl
+ENV DATABASE_URI=$DATABASE_URI
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+
 RUN pnpm build
 
 FROM base AS runner
