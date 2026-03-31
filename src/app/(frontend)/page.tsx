@@ -36,7 +36,7 @@ const recentPosts = [
   {
     title: 'Twee weken route door Maleisië',
     slug: 'route-maleisie-twee-weken',
-    image: '/media/maleisie-7-scaled.jpg',
+    image: '/media/maleisie-7-scaled.webp',
     excerpt: 'Van Kuala Lumpur naar Langkawi — de ultieme route door het mooiste van Maleisië.',
     category: 'Zuidoost-Azië',
     date: '14 feb 2026',
@@ -44,7 +44,7 @@ const recentPosts = [
   {
     title: '3 weken rondreizen door Peru',
     slug: '3-weken-rondreizen-door-peru',
-    image: '/media/cusco-12-scaled.jpg',
+    image: '/media/cusco-12-scaled.webp',
     excerpt: 'Lima, Cusco, Machu Picchu en de Amazone — alles wat je moet weten.',
     category: 'Zuid-Amerika',
     date: '28 jan 2026',
@@ -52,7 +52,7 @@ const recentPosts = [
   {
     title: 'Hoe Machu Picchu kaartjes kopen als het uitverkocht is',
     slug: 'machu-picchu-zonder-kaartje-gekocht',
-    image: '/media/DSC_3016-copy-scaled.jpg',
+    image: '/media/DSC_3016-copy-scaled.webp',
     excerpt: 'Uitverkocht? Geen paniek. Zo koop je alsnog kaartjes voor Machu Picchu.',
     category: 'Peru',
     date: '12 jan 2026',
@@ -60,14 +60,14 @@ const recentPosts = [
 ]
 
 const destinations = [
-  { name: 'Maleisië', image: '/media/Malaysia-1-7-1-scaled.jpg', slug: 'maleisie', count: '8 artikelen' },
-  { name: 'Peru', image: '/media/cusco-12-scaled.jpg', slug: 'peru', count: '12 artikelen' },
-  { name: 'Thailand', image: '/media/Ayuthayya-1-4-scaled.jpg', slug: 'thailand', count: '6 artikelen' },
-  { name: 'Indonesië', image: '/media/DJI_20240517152816_0082_D-scaled.jpg', slug: 'indonesie', count: '10 artikelen' },
-  { name: 'Japan', image: '/media/Shirakawago-3.jpg', slug: 'japan', count: '5 artikelen' },
-  { name: 'Marokko', image: '/media/woestijn-9-scaled.jpg', slug: 'marokko', count: '4 artikelen' },
-  { name: 'Colombia', image: '/media/Dansenmaloca-scaled.jpg', slug: 'colombia', count: '7 artikelen' },
-  { name: 'New York', image: '/media/newyork-1-scaled.jpg', slug: 'new-york', count: '3 artikelen' },
+  { name: 'Maleisië', image: '/media/Malaysia-1-7-1-scaled.webp', slug: 'maleisie', count: '8 artikelen' },
+  { name: 'Peru', image: '/media/cusco-12-scaled.webp', slug: 'peru', count: '12 artikelen' },
+  { name: 'Thailand', image: '/media/Ayuthayya-1-4-scaled.webp', slug: 'thailand', count: '6 artikelen' },
+  { name: 'Indonesië', image: '/media/DJI_20240517152816_0082_D-scaled.webp', slug: 'indonesie', count: '10 artikelen' },
+  { name: 'Japan', image: '/media/Shirakawago-3.webp', slug: 'japan', count: '5 artikelen' },
+  { name: 'Marokko', image: '/media/woestijn-9-scaled.webp', slug: 'marokko', count: '4 artikelen' },
+  { name: 'Colombia', image: '/media/Dansenmaloca-scaled.webp', slug: 'colombia', count: '7 artikelen' },
+  { name: 'New York', image: '/media/newyork-1-scaled.webp', slug: 'new-york', count: '3 artikelen' },
 ]
 
 const stats = [
@@ -195,7 +195,7 @@ export default function HomePage() {
       <section ref={heroRef} className="relative h-screen min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
         <motion.div style={{ y: heroY }} className="absolute inset-0 -top-[50px]">
           <Image
-            src="/media/Shirakawago-3.jpg"
+            src="/media/Shirakawago-3.webp"
             alt="Turquoise rivier met boten in Azië vanuit de lucht"
             fill
             className="object-cover"
@@ -282,7 +282,7 @@ export default function HomePage() {
             <div className="lg:col-span-5 relative">
               <motion.div variants={scaleIn}>
                 <ParallaxImage
-                  src="/media/woestijn-9-scaled.jpg"
+                  src="/media/woestijn-9-scaled.webp"
                   alt="Woestijn fotografie"
                   className="aspect-[3/4] organic-img"
                 />
@@ -503,13 +503,13 @@ export default function HomePage() {
             <motion.div variants={scaleIn} className="grid grid-cols-12 gap-4">
               <div className="col-span-7 space-y-4">
                 <ParallaxImage
-                  src="/media/Ayuthayya-1-9-scaled.jpg"
+                  src="/media/Ayuthayya-1-9-scaled.webp"
                   alt="Reisfotografie voorbeeld"
                   className="aspect-[3/4] organic-img"
                   speed={0.08}
                 />
                 <ParallaxImage
-                  src="/media/Franksunset-scaled.jpg"
+                  src="/media/Franksunset-scaled.webp"
                   alt="Zonsondergang fotografie"
                   className="aspect-square organic-img-alt"
                   speed={0.05}
@@ -517,13 +517,13 @@ export default function HomePage() {
               </div>
               <div className="col-span-5 space-y-4 pt-12">
                 <ParallaxImage
-                  src="/media/Batucaves-6-scaled.jpg"
+                  src="/media/Batucaves-6-scaled.webp"
                   alt="Batu Caves Maleisië"
                   className="aspect-square organic-img"
                   speed={0.1}
                 />
                 <ParallaxImage
-                  src="/media/DJI_20240517152816_0082_D-scaled.jpg"
+                  src="/media/DJI_20240517152816_0082_D-scaled.webp"
                   alt="Drone fotografie Indonesië"
                   className="aspect-[3/4] organic-img-alt"
                   speed={0.06}

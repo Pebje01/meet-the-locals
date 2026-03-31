@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: 'Bestemmingen — Reisgidsen & Inspiratie | Meet the Locals',
     description:
       'Ontdek alle bestemmingen die ik heb bezocht: van Zuidoost-Azië tot Zuid-Amerika. Eerlijke reisgidsen en lokale tips.',
-    images: [{ url: '/media/maleisie-7-scaled.jpg', width: 1200, height: 630 }],
+    images: [{ url: '/media/maleisie-7-scaled.webp', width: 1200, height: 630 }],
   },
   alternates: {
     canonical: '/bestemmingen',

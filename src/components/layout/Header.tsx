@@ -70,7 +70,7 @@ export function Header() {
                     ? `text-white/90 ${hoverColor} hover:text-white`
                     : isActive
                       ? `${activeColor} text-white`
-                      : `text-forest-dark ${hoverColor} hover:text-white`
+                      : `text-forest ${hoverColor} hover:text-white`
                 }`}
               >
                 {item.label}
@@ -82,7 +82,7 @@ export function Header() {
             className={`ml-3 flex items-center gap-2 px-5 py-2.5 organic-btn text-[12px] font-semibold tracking-[0.08em] uppercase transition-all duration-300 ${
               isTransparent
                 ? 'bg-white/15 text-white backdrop-blur-sm hover:bg-white/25'
-                : 'bg-accent text-white hover:bg-accent-dark'
+                : 'bg-forest/10 text-forest hover:bg-forest hover:text-white'
             }`}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

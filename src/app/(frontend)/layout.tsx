@@ -43,7 +43,7 @@ export const metadata: Metadata = {
       'Persoonlijke reisblog met reisverhalen, budgettips en professionele fotografie van bestemmingen wereldwijd.',
     images: [
       {
-        url: '/media/Shirakawago-3.jpg',
+        url: '/media/Shirakawago-3.webp',
         width: 1200,
         height: 630,
         alt: 'Meet the Locals — Reisblog & Fotografie',
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     title: 'Meet the Locals — Reisblog & Fotografie',
     description:
       'Persoonlijke reisblog met reisverhalen, budgettips en professionele fotografie van bestemmingen wereldwijd.',
-    images: ['/media/Shirakawago-3.jpg'],
+    images: ['/media/Shirakawago-3.webp'],
     creator: '@meetthelocals',
   },
 

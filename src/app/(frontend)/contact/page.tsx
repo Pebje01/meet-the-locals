@@ -12,9 +12,9 @@ export default function ContactPage() {
         <h1 className="text-6xl md:text-8xl lg:text-9xl">Contact</h1>
       </section>
 
-      {/* Groene full-width sectie */}
-      <section className="bg-forest-dark text-cream">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 md:py-24">
+      {/* Groene sectie — 70% breedte, gecentreerd, afgeronde hoeken */}
+      <section className="max-w-[90%] mx-auto bg-forest-dark text-cream rounded-[2rem] md:rounded-[3rem] mb-24">
+        <div className="px-8 md:px-16 lg:px-20 py-16 md:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             {/* Links — tekst + socials */}
             <div className="flex flex-col justify-between">

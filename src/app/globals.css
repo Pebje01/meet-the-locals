@@ -2,7 +2,7 @@
 
 @theme {
   /* Core palette */
-  --color-forest: #1a2e1a;
+  --color-forest: #2a4a2a;
   --color-forest-light: #2d4a2d;
   --color-forest-dark: #0f1d0f;
   --color-cream: #f5f2eb;
@@ -40,6 +40,7 @@ h1 {
   color: var(--color-forest);
   text-transform: uppercase;
   font-weight: 300;
+  font-size: 94px;
 }
 
 h2, h3, h4, h5, h6 {

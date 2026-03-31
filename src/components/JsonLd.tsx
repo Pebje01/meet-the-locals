@@ -16,7 +16,7 @@ const personSchema = {
   '@id': `${SITE_URL}/#author`,
   name: 'Daley Jansen',
   url: `${SITE_URL}/over`,
-  image: `${SITE_URL}/media/portretje.png`,
+  image: `${SITE_URL}/media/portretje.webp`,
   jobTitle: 'Reisfotograaf & Blogger',
   sameAs: [
     'https://instagram.com/meetthelocals.nl',

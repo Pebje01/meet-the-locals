@@ -16,7 +16,7 @@ const posts = [
   {
     title: 'Twee weken route door Maleisië',
     slug: 'route-maleisie-twee-weken',
-    image: '/media/maleisie-7-scaled.jpg',
+    image: '/media/maleisie-7-scaled.webp',
     excerpt: 'Van Kuala Lumpur naar Langkawi — de ultieme route door het mooiste van Maleisië. We ontdekten verborgen stranden, proefden streetfood en ontmoetten de vriendelijkste mensen.',
     category: 'Zuidoost-Azië',
     date: '14 feb 2026',
@@ -24,7 +24,7 @@ const posts = [
   {
     title: '3 weken rondreizen door Peru',
     slug: '3-weken-rondreizen-door-peru',
-    image: '/media/cusco-12-scaled.jpg',
+    image: '/media/cusco-12-scaled.webp',
     excerpt: 'Lima, Cusco, Machu Picchu en de Amazone — alles wat je moet weten voor de perfecte rondreis door Peru.',
     category: 'Zuid-Amerika',
     date: '28 jan 2026',
@@ -32,7 +32,7 @@ const posts = [
   {
     title: 'Hoe Machu Picchu kaartjes kopen als het uitverkocht is',
     slug: 'machu-picchu-zonder-kaartje-gekocht',
-    image: '/media/DSC_3016-copy-scaled.jpg',
+    image: '/media/DSC_3016-copy-scaled.webp',
     excerpt: 'Uitverkocht? Geen paniek. Zo koop je alsnog kaartjes voor Machu Picchu — getest en bewezen.',
     category: 'Peru',
     date: '12 jan 2026',
@@ -40,7 +40,7 @@ const posts = [
   {
     title: 'De mooiste tempels van Ayutthaya',
     slug: 'mooiste-tempels-ayutthaya',
-    image: '/media/Ayuthayya-1-4-scaled.jpg',
+    image: '/media/Ayuthayya-1-4-scaled.webp',
     excerpt: 'Een dagtrip vanuit Bangkok naar de historische tempels van Ayutthaya. Welke moet je zien en welke kun je overslaan?',
     category: 'Thailand',
     date: '3 jan 2026',
@@ -48,7 +48,7 @@ const posts = [
   {
     title: 'Streetfood tour door Bangkok',
     slug: 'streetfood-bangkok',
-    image: '/media/bangkok-scaled.jpg',
+    image: '/media/bangkok-scaled.webp',
     excerpt: 'Van pad thai op straat tot verborgen food courts — de beste plekken om te eten in Bangkok zonder toeristenprijzen.',
     category: 'Thailand',
     date: '18 dec 2025',
@@ -56,7 +56,7 @@ const posts = [
   {
     title: 'Langkawi: het relaxte eiland van Maleisië',
     slug: 'langkawi-maleisie',
-    image: '/media/langkawi-scaled.jpg',
+    image: '/media/langkawi-scaled.webp',
     excerpt: 'Waarom Langkawi het perfecte eiland is om even helemaal tot rust te komen. Plus de beste tips voor budget reizigers.',
     category: 'Zuidoost-Azië',
     date: '5 dec 2025',
@@ -64,7 +64,7 @@ const posts = [
   {
     title: 'Fotografie in de woestijn: tips en gear',
     slug: 'fotografie-woestijn',
-    image: '/media/woestijn-9-scaled.jpg',
+    image: '/media/woestijn-9-scaled.webp',
     excerpt: 'Hoe bescherm je je camera tegen zand? En hoe vang je het perfecte licht in de woestijn? Mijn beste tips.',
     category: 'Reisfotografie',
     date: '20 nov 2025',
@@ -72,7 +72,7 @@ const posts = [
   {
     title: 'De heilige vallei van Peru',
     slug: 'heilige-vallei-peru',
-    image: '/media/DSC_3088-scaled.jpg',
+    image: '/media/DSC_3088-scaled.webp',
     excerpt: 'Vergeet Machu Picchu even — de Sacred Valley heeft minstens zoveel te bieden. Ontdek de lokale markten, ruïnes en dorpjes.',
     category: 'Peru',
     date: '8 nov 2025',
@@ -80,7 +80,7 @@ const posts = [
   {
     title: 'Cameron Highlands: theeplantages en jungle',
     slug: 'cameron-highlands-maleisie',
-    image: '/media/Cameronhighlands-1-scaled.jpg',
+    image: '/media/Cameronhighlands-1-scaled.webp',
     excerpt: 'Een verfrissende ontsnapping uit de hitte. Wandel door theeplantages, ontdek de Mossy Forest en proef de beste scones van Azië.',
     category: 'Zuidoost-Azië',
     date: '25 okt 2025',
