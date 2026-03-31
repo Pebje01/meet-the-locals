@@ -107,10 +107,6 @@ export default function BlogPage() {
             animate="visible"
             variants={stagger}
           >
-            <motion.div variants={fadeUp} className="flex items-center gap-3 mb-4">
-              <span className="w-8 h-[1px] bg-accent" />
-              <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-semibold">Blog</span>
-            </motion.div>
             <motion.h1
               variants={fadeUp}
               className="text-4xl md:text-6xl lg:text-7xl font-display text-white! leading-[1.05] mb-6"

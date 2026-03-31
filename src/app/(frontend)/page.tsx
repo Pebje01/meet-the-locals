@@ -177,15 +177,8 @@ export default function HomePage() {
           />
         </motion.div>
         <div className="absolute bottom-0 left-0 right-0 z-20">
-          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-[50px] md:h-[75px] block">
-            <defs>
-              <filter id="roughEdge" x="-5%" y="-30%" width="110%" height="160%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="3" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
-              </filter>
-            </defs>
-            <rect x="-20" y="45" width="1480" height="70" fill="white" filter="url(#roughEdge)" />
-            <rect x="0" y="75" width="1440" height="30" fill="white" />
+          <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-[30px] md:h-[50px] block">
+            <path d="M0,60 L0,30 C180,15 360,45 540,25 C720,5 900,40 1080,20 C1260,0 1380,30 1440,18 L1440,60 Z" fill="white" />
           </svg>
         </div>
       </section>
@@ -212,23 +205,10 @@ export default function HomePage() {
                   className="aspect-[3/4] organic-img"
                 />
               </motion.div>
-              {/* Floating accent card */}
-              <motion.div
-                variants={fadeUp}
-                className="absolute -bottom-6 -right-4 md:right-8 bg-accent text-white px-6 py-4 organic-btn shadow-xl"
-              >
-                <span className="block text-3xl font-display font-light">15+</span>
-                <span className="text-[11px] uppercase tracking-[0.15em] text-white/80">Landen bezocht</span>
-              </motion.div>
             </div>
 
             {/* Right text */}
             <div className="lg:col-span-7 lg:pl-8">
-              <motion.div variants={fadeUp} className="flex items-center gap-3 mb-4">
-                <span className="w-8 h-[1px] bg-accent" />
-                <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-semibold">Over Meet the Locals</span>
-              </motion.div>
-
               <LineReveal className="mb-6">
                 <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl lg:text-6xl font-display font-light text-forest leading-[1.1]">
                   Meer dan een
@@ -261,15 +241,8 @@ export default function HomePage() {
         </div>
         {/* Wave: white → cream */}
         <div className="absolute bottom-0 left-0 right-0 z-10">
-          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-[50px] md:h-[75px] block">
-            <defs>
-              <filter id="waveEdge1" x="-5%" y="-30%" width="110%" height="160%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="7" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
-              </filter>
-            </defs>
-            <rect x="-20" y="45" width="1480" height="70" fill="var(--color-cream)" filter="url(#waveEdge1)" />
-            <rect x="0" y="75" width="1440" height="30" fill="var(--color-cream)" />
+          <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[90px] block">
+            <path d="M0,120 L0,70 C180,45 300,85 480,60 C660,35 780,75 960,50 C1140,25 1260,65 1440,45 L1440,120 Z" fill="var(--color-cream)" />
           </svg>
         </div>
       </section>
@@ -288,10 +261,6 @@ export default function HomePage() {
             {/* Section header */}
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
               <motion.div variants={fadeUp}>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="w-8 h-[1px] bg-accent" />
-                  <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-semibold">Blog</span>
-                </div>
                 <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Laatste verhalen</h2>
               </motion.div>
               <motion.div variants={fadeUp}>
@@ -307,56 +276,32 @@ export default function HomePage() {
               </motion.div>
             </div>
 
-            {/* Featured post (large) + 2 smaller */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Featured */}
-              <motion.article variants={scaleIn} className="lg:row-span-2">
-                <Link href={`/blog/${recentPosts[0].slug}`} className="group block h-full">
-                  <div className="relative h-full min-h-[350px] md:min-h-[500px] organic-card overflow-hidden img-zoom card-lift">
-                    <Image
-                      src={recentPosts[0].image}
-                      alt={recentPosts[0].title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/90 via-forest-dark/30 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
-                      <span className="inline-block px-3 py-1 bg-accent text-white text-[11px] uppercase tracking-[0.12em] font-semibold rounded-full mb-4">
-                        {recentPosts[0].category}
-                      </span>
-                      <h3 className="text-2xl md:text-3xl font-display font-light text-white mb-3 group-hover:text-accent-light transition-colors">
-                        {recentPosts[0].title}
-                      </h3>
-                      <p className="text-white/70 leading-relaxed mb-4 max-w-md">{recentPosts[0].excerpt}</p>
-                      <span className="text-[11px] uppercase tracking-[0.15em] text-white/60">{recentPosts[0].date}</span>
-                    </div>
-                  </div>
-                </Link>
-              </motion.article>
-
-              {/* Smaller posts */}
-              {recentPosts.slice(1).map((post) => (
+            {/* Post cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {recentPosts.map((post) => (
                 <motion.article key={post.slug} variants={fadeUp}>
-                  <Link href={`/blog/${post.slug}`} className="group flex flex-col md:flex-row gap-6 bg-warm-white organic-card-alt overflow-hidden card-lift">
-                    <div className="relative w-full md:w-[280px] flex-shrink-0 aspect-[4/3] md:aspect-auto md:min-h-full organic-img-alt overflow-hidden img-zoom">
+                  <Link href={`/blog/${post.slug}`} className="group block card-lift">
+                    <div className="relative aspect-[4/3] organic-img overflow-hidden img-zoom mb-5">
                       <Image
                         src={post.image}
                         alt={post.title}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 280px"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     </div>
-                    <div className="flex flex-col justify-center py-5 px-5 md:px-0 md:pr-6">
-                      <span className="text-[11px] uppercase tracking-[0.12em] text-accent font-semibold mb-2">
-                        {post.category}
-                      </span>
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="text-[11px] uppercase tracking-[0.12em] text-accent font-semibold">
+                          {post.category}
+                        </span>
+                        <span className="text-text-muted/30">|</span>
+                        <span className="text-[11px] uppercase tracking-[0.15em] text-text-muted/70">{post.date}</span>
+                      </div>
                       <h3 className="text-xl font-display font-light text-forest mb-2 group-hover:text-accent transition-colors">
                         {post.title}
                       </h3>
-                      <p className="text-text-muted text-sm leading-relaxed mb-3">{post.excerpt}</p>
-                      <span className="text-[11px] uppercase tracking-[0.15em] text-text-muted/70">{post.date}</span>
+                      <p className="text-text-muted text-[15px] leading-relaxed line-clamp-2">{post.excerpt}</p>
                     </div>
                   </Link>
                 </motion.article>
@@ -366,15 +311,8 @@ export default function HomePage() {
         </div>
         {/* Wave: cream → forest */}
         <div className="absolute bottom-0 left-0 right-0 z-10">
-          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-[50px] md:h-[75px] block">
-            <defs>
-              <filter id="waveEdge2" x="-5%" y="-30%" width="110%" height="160%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="12" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
-              </filter>
-            </defs>
-            <rect x="-20" y="45" width="1480" height="70" fill="var(--color-forest)" filter="url(#waveEdge2)" />
-            <rect x="0" y="75" width="1440" height="30" fill="var(--color-forest)" />
+          <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[90px] block">
+            <path d="M0,120 L0,55 C200,80 400,30 600,60 C800,90 1000,35 1200,55 C1350,70 1400,45 1440,50 L1440,120 Z" fill="var(--color-forest)" />
           </svg>
         </div>
       </section>
@@ -392,11 +330,7 @@ export default function HomePage() {
           >
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
               <motion.div variants={fadeUp}>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="w-8 h-[1px] bg-accent" />
-                  <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-semibold">Bestemmingen</span>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-display font-light">Waar ben ik geweest?</h2>
+                <h2 className="text-4xl md:text-5xl font-display font-light text-cream!">Recent bezochte bestemmingen</h2>
               </motion.div>
               <motion.div variants={fadeUp}>
                 <Link
@@ -411,61 +345,14 @@ export default function HomePage() {
               </motion.div>
             </div>
 
-            {/* Draggable slider */}
-            <motion.div
-              className="overflow-hidden cursor-grab active:cursor-grabbing"
-            >
-              <motion.div
-                drag="x"
-                dragConstraints={{ right: 0, left: -(destinations.length * 310 - (typeof window !== 'undefined' ? window.innerWidth : 1400) + 100) }}
-                dragElastic={0.1}
-                className="flex gap-6"
-              >
-                {destinations.map((dest, i) => (
-                  <motion.div
-                    key={dest.slug}
-                    variants={fadeUp}
-                    custom={i}
-                    className="flex-shrink-0 w-[260px] md:w-[300px]"
-                  >
-                    <Link href={`/bestemmingen/${dest.slug}`} className="group block relative aspect-[3/4] organic-img overflow-hidden img-zoom">
-                      <Image
-                        src={dest.image}
-                        alt={dest.name}
-                        fill
-                        className="object-cover"
-                        sizes="300px"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-transparent to-transparent group-hover:from-accent-dark/80 transition-all duration-500" />
-                      <div className="absolute bottom-0 left-0 right-0 p-6">
-                        <h3 className="font-serif text-2xl font-bold text-white mb-1">{dest.name}</h3>
-                        <span className="text-[11px] uppercase tracking-[0.15em] text-white/70 transition-colors">
-                          {dest.count}
-                        </span>
-                      </div>
-                      <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-accent/0 group-hover:bg-accent flex items-center justify-center transition-all duration-300 scale-0 group-hover:scale-100">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                          <path d="M7 17L17 7M17 7H7M17 7V17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
+            {/* Slider with nav arrows */}
+            <DestinationSlider />
           </motion.div>
         </div>
         {/* Wave: forest → warm-white */}
         <div className="absolute bottom-0 left-0 right-0 z-10">
-          <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-[50px] md:h-[75px] block">
-            <defs>
-              <filter id="waveEdge3" x="-5%" y="-30%" width="110%" height="160%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="19" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
-              </filter>
-            </defs>
-            <rect x="-20" y="45" width="1480" height="70" fill="white" filter="url(#waveEdge3)" />
-            <rect x="0" y="75" width="1440" height="30" fill="white" />
+          <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[90px] block">
+            <path d="M0,120 L0,60 C160,35 320,75 540,50 C760,25 900,70 1100,45 C1300,20 1380,55 1440,40 L1440,120 Z" fill="white" />
           </svg>
         </div>
       </section>
@@ -484,11 +371,6 @@ export default function HomePage() {
           >
             {/* Text */}
             <div>
-              <motion.div variants={fadeUp} className="flex items-center gap-3 mb-4">
-                <span className="w-8 h-[1px] bg-accent" />
-                <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-semibold">Reisfotografie</span>
-              </motion.div>
-
               <LineReveal className="mb-6">
                 <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-display font-light text-forest leading-[1.1]">
                   De mooiste foto&apos;s
@@ -628,11 +510,6 @@ export default function HomePage() {
             variants={stagger}
           >
             <motion.div variants={fadeUp} className="text-center mb-16">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <span className="w-8 h-[1px] bg-accent" />
-                <span className="text-[11px] uppercase tracking-[0.25em] text-accent font-semibold">Waarom MTL</span>
-                <span className="w-8 h-[1px] bg-accent" />
-              </div>
               <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Wat je hier vindt</h2>
             </motion.div>
 

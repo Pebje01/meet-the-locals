@@ -57,26 +57,10 @@ h2, h3, h4, h5, h6 {
 .blob-2 { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
 .blob-3 { border-radius: 40% 60% 60% 40% / 50% 60% 40% 50%; }
 
-.organic-card,
-.organic-card-alt {
-  border-radius: 0;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='4'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='4' xChannelSelector='R' yChannelSelector='G'/%3E%3C/filter%3E%3C/defs%3E%3Crect x='2' y='2' width='196' height='196' rx='14' ry='14' fill='white' filter='url(%23c)'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='4'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='4' xChannelSelector='R' yChannelSelector='G'/%3E%3C/filter%3E%3C/defs%3E%3Crect x='2' y='2' width='196' height='196' rx='14' ry='14' fill='white' filter='url(%23c)'/%3E%3C/svg%3E");
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-}
-.organic-img,
-.organic-img-alt {
-  border-radius: 0;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='1'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='5' xChannelSelector='R' yChannelSelector='G'/%3E%3C/filter%3E%3C/defs%3E%3Crect x='2' y='2' width='196' height='196' rx='16' ry='16' fill='white' filter='url(%23r)'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' seed='1'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='5' xChannelSelector='R' yChannelSelector='G'/%3E%3C/filter%3E%3C/defs%3E%3Crect x='2' y='2' width='196' height='196' rx='16' ry='16' fill='white' filter='url(%23r)'/%3E%3C/svg%3E");
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-}
+.organic-card     { border-radius: 2rem 3rem 2.5rem 3.5rem; overflow: hidden; }
+.organic-card-alt { border-radius: 3rem 2rem 3.5rem 2.5rem; overflow: hidden; }
+.organic-img      { border-radius: 1.5rem 2.5rem 2rem 3rem; overflow: hidden; }
+.organic-img-alt  { border-radius: 2.5rem 1.5rem 3rem 2rem; overflow: hidden; }
 
 /* Organic / bumpy button shapes */
 .organic-btn      { border-radius: 1.2rem 2rem 1.5rem 2.4rem; }
@@ -159,13 +143,12 @@ h2, h3, h4, h5, h6 {
   background-clip: text;
 }
 
-/* ─── Smooth card lift ─── */
+/* ─── Smooth card lift — only subtle lift, no shadow ─── */
 .card-lift {
-  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 .card-lift:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 60px -12px rgba(26, 46, 26, 0.15);
+  transform: translateY(-4px);
 }
 
 /* ─── Noise texture overlay ─── */

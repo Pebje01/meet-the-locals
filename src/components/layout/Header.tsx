@@ -18,7 +18,7 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-  const darkHeroPages = ['/', '/blog', '/bestemmingen', '/fotografie', '/over', '/contact', '/kaart']
+  const darkHeroPages = ['/', '/blog']
   const hasDarkHero = darkHeroPages.includes(pathname)
 
   useEffect(() => {

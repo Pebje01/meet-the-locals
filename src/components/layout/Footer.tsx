@@ -21,20 +21,14 @@ const footerLinks = {
 
 export function Footer() {
   return (
+    <>
+    {/* Wave sits outside footer so it inherits no overlays */}
+    <div className="relative -mb-1">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-[55px] md:h-[85px] block">
+        <path d="M0,120 L0,50 C240,75 420,25 660,55 C900,85 1080,30 1260,50 C1380,65 1420,45 1440,50 L1440,120 Z" fill="var(--color-forest-dark)" />
+      </svg>
+    </div>
     <footer className="bg-forest-dark text-cream relative noise-overlay speckle-overlay">
-      {/* Rough brushstroke edge — overlaps into section above */}
-      <div className="absolute left-0 right-0 -top-[50px] md:-top-[75px] z-30 pointer-events-none">
-        <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="w-full h-[55px] md:h-[80px] block">
-          <defs>
-            <filter id="footerRough" x="-5%" y="-30%" width="110%" height="160%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" seed="24" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-          </defs>
-          <rect x="-20" y="30" width="1480" height="80" fill="var(--color-forest-dark)" filter="url(#footerRough)" />
-          <rect x="0" y="70" width="1440" height="35" fill="var(--color-forest-dark)" />
-        </svg>
-      </div>
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pt-20 md:pt-24 pb-16 md:pb-20 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
@@ -145,5 +139,6 @@ export function Footer() {
         </div>
       </div>
     </footer>
+    </>
   )
 }
