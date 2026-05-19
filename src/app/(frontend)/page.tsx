@@ -2,28 +2,12 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef, useCallback, useState } from 'react'
-import { TextReveal, LineReveal } from '@/components/TextReveal'
-
-/* ─── Animation Variants ─── */
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.19, 1, 0.22, 1] as const } },
-}
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.8 } },
-}
-const stagger = {
-  visible: { transition: { staggerChildren: 0.1 } },
-}
-const scaleIn = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.19, 1, 0.22, 1] as const } },
-}
+import { ComposableMap, Geographies, Geography, type GeoFeature } from 'react-simple-maps'
 
 /* ─── Data ─── */
+const GEO_URL = '/countries-110m.json'
+
 const categories = [
   { name: 'Reistips', slug: 'reis-en-budgettips' },
   { name: 'Food', slug: 'food' },
@@ -37,7 +21,7 @@ const recentPosts = [
     title: 'Twee weken route door Maleisië',
     slug: 'route-maleisie-twee-weken',
     image: '/media/maleisie-7-scaled.webp',
-    excerpt: 'Van Kuala Lumpur naar Langkawi — de ultieme route door het mooiste van Maleisië.',
+    excerpt: 'Van Kuala Lumpur naar Langkawi, de ultieme route door het mooiste van Maleisië.',
     category: 'Zuidoost-Azië',
     date: '14 feb 2026',
   },
@@ -45,7 +29,7 @@ const recentPosts = [
     title: '3 weken rondreizen door Peru',
     slug: '3-weken-rondreizen-door-peru',
     image: '/media/cusco-12-scaled.webp',
-    excerpt: 'Lima, Cusco, Machu Picchu en de Amazone — alles wat je moet weten.',
+    excerpt: 'Lima, Cusco, Machu Picchu en de Amazone, alles wat je moet weten.',
     category: 'Zuid-Amerika',
     date: '28 jan 2026',
   },
@@ -70,13 +54,52 @@ const destinations = [
   { name: 'New York', image: '/media/newyork-1-scaled.webp', slug: 'new-york', count: '3 artikelen' },
 ]
 
-const stats = [
-  { value: '15+', label: 'Landen bezocht' },
-  { value: '50+', label: 'Verhalen gedeeld' },
-  { value: '4', label: 'Continenten' },
+const continents = [
+  { label: 'Europa', value: 'europe' },
+  { label: 'Azië', value: 'asia' },
+  { label: 'Afrika', value: 'africa' },
+  { label: 'Noord-Amerika', value: 'north-america' },
+  { label: 'Zuid-Amerika', value: 'south-america' },
+  { label: 'Oceanië', value: 'oceania' },
 ]
 
 /* ─── Components ─── */
+function isAntarcticGeo(geo: GeoFeature): boolean {
+  const properties = geo.properties as { name?: string } | undefined
+  return String(geo.id).padStart(3, '0') === '010' || /antarctic/i.test(properties?.name ?? '')
+}
+
+function ContinentMapBackdrop() {
+  return (
+    <ComposableMap
+      projection="geoNaturalEarth1"
+      projectionConfig={{ scale: 122, center: [12, 8] }}
+      style={{ width: '100%', height: '100%' }}
+    >
+      <Geographies geography={GEO_URL}>
+        {({ geographies }: { geographies: GeoFeature[] }) =>
+          geographies.map((geo) =>
+            isAntarcticGeo(geo) ? null : (
+              <Geography
+                key={geo.rsmKey}
+                geography={geo}
+                fill="#d8d3cb"
+                stroke="rgba(250,248,244,0.78)"
+                strokeWidth={0.35}
+                style={{
+                  default: { outline: 'none' },
+                  hover: { outline: 'none' },
+                  pressed: { outline: 'none' },
+                }}
+              />
+            ),
+          )
+        }
+      </Geographies>
+    </ComposableMap>
+  )
+}
+
 function DestinationSlider() {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
@@ -92,38 +115,46 @@ function DestinationSlider() {
   const scroll = (dir: 'left' | 'right') => {
     const el = scrollRef.current
     if (!el) return
-    const amount = 400
-    el.scrollBy({ left: dir === 'right' ? amount : -amount, behavior: 'smooth' })
+    el.scrollBy({ left: dir === 'right' ? 400 : -400, behavior: 'smooth' })
     setTimeout(checkScroll, 400)
   }
 
   return (
-    <div className="relative">
-      {/* Nav arrows */}
-      <div className="absolute -top-16 right-0 flex gap-3 z-10">
-        <button
-          onClick={() => scroll('left')}
-          className={`w-10 h-10 rounded-full border border-cream/30 flex items-center justify-center transition-all duration-300 ${
-            canScrollLeft ? 'text-cream hover:bg-cream hover:text-forest' : 'text-cream/20 cursor-default'
-          }`}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5M5 12l6-6M5 12l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-        <button
-          onClick={() => scroll('right')}
-          className={`w-10 h-10 rounded-full border border-cream/30 flex items-center justify-center transition-all duration-300 ${
-            canScrollRight ? 'text-cream hover:bg-cream hover:text-forest' : 'text-cream/20 cursor-default'
-          }`}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M5 12h14M19 12l-6-6M19 12l-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
+    <>
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+        <h2 className="text-4xl md:text-5xl font-display font-light text-cream!">Recent bezochte bestemmingen</h2>
+        <div className="flex items-center gap-5">
+          <div className="flex gap-2">
+            <button
+              onClick={() => scroll('left')}
+              className={`w-10 h-10 rounded-full border border-cream/30 flex items-center justify-center transition-all duration-300 ${
+                canScrollLeft ? 'text-cream hover:bg-cream hover:text-forest' : 'text-cream/20 cursor-default'
+              }`}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M19 12H5M5 12l6-6M5 12l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button
+              onClick={() => scroll('right')}
+              className={`w-10 h-10 rounded-full border border-cream/30 flex items-center justify-center transition-all duration-300 ${
+                canScrollRight ? 'text-cream hover:bg-cream hover:text-forest' : 'text-cream/20 cursor-default'
+              }`}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14M19 12l-6-6M19 12l-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+          <div className="w-px h-5 bg-cream/20" />
+          <Link href="/bestemmingen" className="group inline-flex items-center gap-2 text-cream/70 font-semibold text-sm uppercase tracking-[0.1em] hover:text-cream transition-colors">
+            <span>Alle bestemmingen</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
+        </div>
       </div>
-
-      {/* Scrollable track */}
       <div
         ref={scrollRef}
         onScroll={checkScroll}
@@ -135,18 +166,11 @@ function DestinationSlider() {
             href={`/bestemmingen/${dest.slug}`}
             className="group block relative flex-shrink-0 w-[300px] md:w-[360px] aspect-[3/4] organic-img overflow-hidden img-zoom"
           >
-            <Image
-              src={dest.image}
-              alt={dest.name}
-              fill
-              className="object-cover"
-              sizes="360px"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent group-hover:from-accent-dark/80 transition-all duration-500" />
+            <Image src={dest.image} alt={dest.name} fill className="object-cover" sizes="360px" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-accent-dark/85 transition-all duration-500" />
             <div className="absolute bottom-0 left-0 right-0 p-6">
-              <h3 className="font-display text-2xl text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">{dest.name}</h3>
+              <h3 className="font-display text-2xl text-white! drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">{dest.name}</h3>
             </div>
-            {/* Arrow — always visible, fills on hover */}
             <div className="absolute top-4 right-4 w-9 h-9 rounded-full border border-white/40 group-hover:border-accent group-hover:bg-accent flex items-center justify-center transition-all duration-300">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M7 17L17 7M17 7H7M17 7V17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -155,45 +179,17 @@ function DestinationSlider() {
           </Link>
         ))}
       </div>
-    </div>
-  )
-}
-
-function ParallaxImage({
-  src, alt, className, speed = 0.15,
-}: {
-  src: string; alt: string; className?: string; speed?: number
-}) {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  })
-  const y = useTransform(scrollYProgress, [0, 1], [speed * -100, speed * 100])
-
-  return (
-    <div ref={ref} className={`overflow-hidden ${className ?? ''}`}>
-      <motion.div style={{ y }} className="h-[120%] w-full relative -top-[10%]">
-        <Image src={src} alt={alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
-      </motion.div>
-    </div>
+    </>
   )
 }
 
 /* ─── Page ─── */
 export default function HomePage() {
-  const heroRef = useRef<HTMLElement>(null)
-  const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const heroY = useTransform(heroScroll, [0, 1], [0, 150])
-  const heroOpacity = useTransform(heroScroll, [0, 0.6], [1, 0])
-
   return (
     <main>
-      {/* ════════════════════════════════════════
-          HERO — Full-bleed
-      ════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative h-screen min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
-        <motion.div style={{ y: heroY }} className="absolute inset-0 -top-[50px]">
+      {/* HERO */}
+      <section className="relative h-screen min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 animate-ken-burns">
           <Image
             src="/media/Shirakawago-3.webp"
             alt="Turquoise rivier met boten in Azië vanuit de lucht"
@@ -203,33 +199,20 @@ export default function HomePage() {
             sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-forest/70 via-transparent to-transparent" />
-        </motion.div>
-        <motion.div
-          style={{ opacity: heroOpacity }}
-          className="relative z-10 w-full"
-        >
+        </div>
+        <div className="relative z-10 w-full pt-16 md:pt-20">
           <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={stagger}
-              className="max-w-5xl mx-auto"
-            >
-              <motion.h1
-                variants={fadeUp}
-                className="text-[clamp(2.5rem,8vw,6rem)] font-display text-white! leading-[1.05] mb-8 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]"
-              >
-                Ontdek de wereld
-                <br />
-                door lokale ogen
-              </motion.h1>
-              <motion.p variants={fadeUp} className="text-white text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10 drop-shadow-[0_2px_15px_rgba(0,0,0,0.4)]">
-                Persoonlijke reisverhalen, budgettips en fotografie. Van verborgen parels tot bijzondere ontmoetingen.
-              </motion.p>
-              <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-4">
+            <div className="w-full">
+              <h1 className="font-display text-white! leading-[1.1] mb-5 md:mb-8 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]" style={{ fontSize: 'clamp(1.9rem, 6vw, 4.75rem)' }}>
+                De wereld in beelden en verhalen
+              </h1>
+              <p className="text-white text-[20px] md:text-[22px] max-w-2xl mx-auto leading-relaxed mb-7 md:mb-10 drop-shadow-[0_2px_15px_rgba(0,0,0,0.4)]">
+                Ik ben Daley, fotograaf, designer en foodie. Ik leg de plekken vast die de reisgids overslaat, van onbekende dorpen tot verborgen eetadresjes.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-4">
                 <Link
                   href="/blog"
-                  className="group inline-flex items-center gap-3 bg-accent text-white px-6 py-3 md:px-8 md:py-4 organic-btn text-xs md:text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300 hover:shadow-[0_8px_30px_-6px_rgba(212,132,90,0.35)]"
+                  className="group inline-flex items-center gap-3 bg-accent text-white px-6 py-3 md:px-8 md:py-4 organic-btn text-xs md:text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300 hover:shadow-[0_8px_30px_-6px_rgba(200,121,82,0.35)]"
                 >
                   <span>Ontdek verhalen</span>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
@@ -242,22 +225,10 @@ export default function HomePage() {
                 >
                   Bestemmingen
                 </Link>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-16 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-[1px] h-8 bg-gradient-to-b from-transparent to-white/40"
-          />
-        </motion.div>
+        </div>
         <div className="absolute bottom-0 left-0 right-0 z-20">
           <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-[30px] md:h-[50px] block">
             <path d="M0,60 L0,30 C180,15 360,45 540,25 C720,5 900,40 1080,20 C1260,0 1380,30 1440,18 L1440,60 Z" fill="white" />
@@ -265,63 +236,41 @@ export default function HomePage() {
         </div>
       </section>
 
-
-      {/* ════════════════════════════════════════
-          INTRO — Over MTL
-      ════════════════════════════════════════ */}
+      {/* INTRO */}
       <section className="relative py-24 md:py-32 bg-white noise-overlay overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            variants={stagger}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center"
-          >
-            {/* Left images */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             <div className="lg:col-span-5 relative">
-              <motion.div variants={scaleIn}>
-                <ParallaxImage
-                  src="/media/woestijn-9-scaled.webp"
-                  alt="Woestijn fotografie"
-                  className="aspect-[3/4] organic-img"
-                />
-              </motion.div>
+              <div className="rounded-[3.25rem] bg-water-muted p-3 md:p-4">
+                <div className="relative aspect-[3/4] overflow-hidden rounded-[2.75rem]">
+                  <Image src="/media/woestijn-9-scaled.webp" alt="Woestijn fotografie" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 42vw" />
+                </div>
+              </div>
             </div>
-
-            {/* Right text */}
             <div className="lg:col-span-7 lg:pl-8">
-              <LineReveal className="mb-6">
-                <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl lg:text-6xl font-display font-light text-forest leading-[1.1]">
-                  Meer dan een
-                  <br />
-                  <span className="text-accent">reisblog</span>
-                </motion.h2>
-              </LineReveal>
-
-              <TextReveal className="text-text-muted text-lg leading-relaxed mb-6 max-w-xl">
-                Meet the Locals is een verzameling persoonlijke verhalen over bijzondere ontmoetingen, lokale culturen en de mooiste plekken die je niet in de reisgids vindt.
-              </TextReveal>
-
-              <TextReveal className="text-text-muted leading-relaxed mb-8 max-w-xl">
-                Van straatfotografie in Bangkok tot verborgen bergdorpjes in Peru — ik deel niet alleen de highlights, maar ook de eerlijke verhalen, budgettips en de mensen die je onderweg tegenkomt.
-              </TextReveal>
-
-              <motion.div variants={fadeUp}>
-                <Link
-                  href="/over"
-                  className="group inline-flex items-center gap-3 text-forest font-semibold text-sm uppercase tracking-[0.1em]"
-                >
-                  <span className="reveal-line">Lees mijn verhaal</span>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                    <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </Link>
-              </motion.div>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-light text-forest leading-[1.1] mb-6">
+                Meer dan een
+                <br />
+                <span className="text-water">reisblog</span>
+              </h2>
+              <p className="text-text-muted text-[20px] leading-relaxed mb-6 max-w-5xl">
+                Meet the Locals is mijn kijk op reizen: de plekken die de reisgids overslaat. Onbekende dorpen, verborgen uitzichten en lokale eetadresjes die je zelf nooit zou vinden.
+              </p>
+              <p className="text-text-muted text-[20px] leading-relaxed mb-8 max-w-5xl">
+                Ik leg het vast als fotograaf, designer en foodie. Niet de gebaande paden, maar de stille, eerlijke hoeken van een plek.
+              </p>
+              <Link
+                href="/over"
+                className="group inline-flex items-center gap-3 text-forest font-semibold text-sm uppercase tracking-[0.1em] hover:text-water transition-colors"
+              >
+                <span>Lees mijn verhaal</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
             </div>
-          </motion.div>
+          </div>
         </div>
-        {/* Wave: white → cream */}
         <div className="absolute bottom-0 left-0 right-0 z-10">
           <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[90px] block">
             <path d="M0,120 L0,70 C180,45 300,85 480,60 C660,35 780,75 960,50 C1140,25 1260,65 1440,45 L1440,120 Z" fill="var(--color-cream)" />
@@ -329,81 +278,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════
-          RECENT POSTS — Blog grid
-      ════════════════════════════════════════ */}
+      {/* RECENT POSTS */}
       <section className="relative py-24 md:py-32 bg-cream">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            variants={stagger}
-          >
-            {/* Section header */}
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
-              <motion.div variants={fadeUp}>
-                <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Laatste verhalen</h2>
-              </motion.div>
-              <motion.div variants={fadeUp}>
-                <Link
-                  href="/blog"
-                  className="group inline-flex items-center gap-2 text-forest font-semibold text-sm uppercase tracking-[0.1em]"
-                >
-                  <span className="reveal-line">Alle artikelen</span>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+            <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Laatste verhalen</h2>
+            <Link href="/blog" className="group inline-flex items-center gap-2 text-forest font-semibold text-sm uppercase tracking-[0.1em]">
+              <span>Alle artikelen</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {recentPosts.map((post) => (
+              <article key={post.slug}>
+                <Link href={`/blog/${post.slug}`} className="group block card-lift">
+                  <div className="relative aspect-[4/3] organic-img overflow-hidden img-zoom mb-5">
+                    <Image src={post.image} alt={post.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-[15px] uppercase tracking-[0.12em] text-accent font-semibold">{post.category}</span>
+                      <span className="text-text-muted/30">|</span>
+                      <span className="text-[15px] uppercase tracking-[0.15em] text-text-muted/70">{post.date}</span>
+                    </div>
+                    <h3 className="text-xl font-display font-light text-forest mb-2 group-hover:text-accent transition-colors">{post.title}</h3>
+                    <p className="text-text-muted text-[17px] leading-relaxed line-clamp-2">{post.excerpt}</p>
+                  </div>
                 </Link>
-              </motion.div>
-            </div>
-
-            {/* Post cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {recentPosts.map((post) => (
-                <motion.article key={post.slug} variants={fadeUp}>
-                  <Link href={`/blog/${post.slug}`} className="group block card-lift">
-                    <div className="relative aspect-[4/3] organic-img overflow-hidden img-zoom mb-5">
-                      <Image
-                        src={post.image}
-                        alt={post.title}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-[11px] uppercase tracking-[0.12em] text-accent font-semibold">
-                          {post.category}
-                        </span>
-                        <span className="text-text-muted/30">|</span>
-                        <span className="text-[11px] uppercase tracking-[0.15em] text-text-muted/70">{post.date}</span>
-                      </div>
-                      <h3 className="text-xl font-display font-light text-forest mb-2 group-hover:text-accent transition-colors">
-                        {post.title}
-                      </h3>
-                      <p className="text-text-muted text-[15px] leading-relaxed line-clamp-2">{post.excerpt}</p>
-                    </div>
-                  </Link>
-                </motion.article>
-              ))}
-            </div>
-
-            <motion.div variants={fadeUp} className="mt-12 text-center">
-              <Link
-                href="/blog"
-                className="inline-flex items-center gap-3 bg-forest text-cream px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-link-hover transition-all duration-300"
-              >
-                <span>Lees verder</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
-            </motion.div>
-          </motion.div>
+              </article>
+            ))}
+          </div>
+          <div className="mt-12 text-center">
+            <Link href="/blog" className="inline-flex items-center gap-3 bg-forest text-cream px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-link-hover transition-all duration-300">
+              <span>Lees verder</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+          </div>
         </div>
-        {/* Wave: cream → forest */}
         <div className="absolute bottom-0 left-0 right-0 z-10">
           <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[90px] block">
             <path d="M0,120 L0,55 C200,80 400,30 600,60 C800,90 1000,35 1200,55 C1350,70 1400,45 1440,50 L1440,120 Z" fill="var(--color-forest)" />
@@ -411,39 +326,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════
-          DESTINATIONS — Immersive grid
-      ════════════════════════════════════════ */}
+      {/* DESTINATIONS */}
       <section className="relative py-24 md:py-32 bg-forest text-cream overflow-hidden noise-overlay">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            variants={stagger}
-          >
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
-              <motion.div variants={fadeUp}>
-                <h2 className="text-4xl md:text-5xl font-display font-light text-cream!">Recent bezochte bestemmingen</h2>
-              </motion.div>
-              <motion.div variants={fadeUp}>
-                <Link
-                  href="/bestemmingen"
-                  className="group inline-flex items-center gap-2 text-cream/70 font-semibold text-sm uppercase tracking-[0.1em] hover:text-cream transition-colors"
-                >
-                  <span>Alle bestemmingen</span>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </Link>
-              </motion.div>
-            </div>
-
-            {/* Slider with nav arrows */}
-            <DestinationSlider />
-          </motion.div>
+          <DestinationSlider />
         </div>
-        {/* Wave: forest → warm-white */}
         <div className="absolute bottom-0 left-0 right-0 z-10">
           <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[90px] block">
             <path d="M0,120 L0,60 C160,35 320,75 540,50 C760,25 900,70 1100,45 C1300,20 1380,55 1440,40 L1440,120 Z" fill="white" />
@@ -451,132 +338,78 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════
-          PHOTOGRAPHY — Split section
-      ════════════════════════════════════════ */}
+      {/* COMMISSION WORK */}
       <section className="relative py-24 md:py-32 bg-warm-white overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            variants={stagger}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center"
-          >
-            {/* Text */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <div>
-              <LineReveal className="mb-6">
-                <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-display font-light text-forest leading-[1.1]">
-                  De mooiste foto&apos;s
-                  <br />
-                  maak je <span className="text-accent">onderweg</span>
-                </motion.h2>
-              </LineReveal>
-
-              <TextReveal className="text-text-muted text-lg leading-relaxed mb-6 max-w-lg">
-                Leer hoe je jouw reisfoto&apos;s naar een hoger niveau tilt. Van compositie-tips tot gear reviews en bewerkingstutorials.
-              </TextReveal>
-
-              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 mb-10">
-                {['Tips & Tutorials', 'Gear Reviews', 'Behind the Lens'].map((item) => (
+              <h2 className="text-4xl md:text-5xl font-display font-light text-forest leading-[1.1] mb-6">
+                Werk in <span className="text-accent">opdracht</span>
+              </h2>
+              <p className="text-text-muted text-[20px] leading-relaxed mb-6 max-w-5xl">
+                Een greep uit werk dat ik heb gedaan in opdracht binnen de thema&apos;s van reizen en horeca, waaronder fotografie van accommodaties.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 mb-10">
+                {['Reisfotografie', 'Food & horeca', 'Redactioneel'].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-sm text-forest/70">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                     {item}
                   </div>
                 ))}
-              </motion.div>
-
-              <motion.div variants={fadeUp}>
-                <Link
-                  href="/fotografie"
-                  className="group inline-flex items-center gap-3 bg-forest text-cream px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-forest-light transition-all duration-300"
-                >
-                  <span>Ontdek fotografie</span>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </Link>
-              </motion.div>
+              </div>
+              <Link href="/fotografie" className="group inline-flex items-center gap-3 bg-forest text-cream px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-forest-light transition-all duration-300">
+                <span>Bekijk mijn portfolio</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
             </div>
-
-            {/* Photo grid */}
-            <motion.div variants={scaleIn} className="grid grid-cols-12 gap-4">
+            <div className="grid grid-cols-12 gap-4">
               <div className="col-span-7 space-y-4">
-                <ParallaxImage
-                  src="/media/Ayuthayya-1-9-scaled.webp"
-                  alt="Reisfotografie voorbeeld"
-                  className="aspect-[3/4] organic-img"
-                  speed={0.08}
-                />
-                <ParallaxImage
-                  src="/media/Franksunset-scaled.webp"
-                  alt="Zonsondergang fotografie"
-                  className="aspect-square organic-img-alt"
-                  speed={0.05}
-                />
+                <div className="aspect-[3/4] organic-img overflow-hidden relative">
+                  <Image src="/media/Ayuthayya-1-9-scaled.webp" alt="Reisfotografie voorbeeld" fill className="object-cover" sizes="(max-width: 1024px) 58vw, 29vw" />
+                </div>
+                <div className="aspect-square organic-img-alt overflow-hidden relative">
+                  <Image src="/media/Franksunset-scaled.webp" alt="Zonsondergang fotografie" fill className="object-cover" sizes="(max-width: 1024px) 58vw, 29vw" />
+                </div>
               </div>
               <div className="col-span-5 space-y-4 pt-12">
-                <ParallaxImage
-                  src="/media/Batucaves-6-scaled.webp"
-                  alt="Batu Caves Maleisië"
-                  className="aspect-square organic-img"
-                  speed={0.1}
-                />
-                <ParallaxImage
-                  src="/media/DJI_20240517152816_0082_D-scaled.webp"
-                  alt="Drone fotografie Indonesië"
-                  className="aspect-[3/4] organic-img-alt"
-                  speed={0.06}
-                />
+                <div className="aspect-square organic-img overflow-hidden relative">
+                  <Image src="/media/Batucaves-6-scaled.webp" alt="Batu Caves Maleisië" fill className="object-cover" sizes="(max-width: 1024px) 42vw, 21vw" />
+                </div>
+                <div className="aspect-[3/4] organic-img-alt overflow-hidden relative">
+                  <Image src="/media/DJI_20240517152816_0082_D-scaled.webp" alt="Drone fotografie Indonesië" fill className="object-cover" sizes="(max-width: 1024px) 42vw, 21vw" />
+                </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════
-          REISBLOG PILLS — Ontdek reisblogs
-      ════════════════════════════════════════ */}
+      {/* REISBLOG PILLS */}
       <section className="py-16 md:py-20 bg-cream">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-            variants={stagger}
-            className="flex flex-col md:flex-row md:items-center gap-10 md:gap-16"
-          >
-            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-display uppercase text-forest leading-[1.2] flex-shrink-0 max-w-xs">
-              Ontdek onze
-              <br />
-              nieuwste reisblogs
-            </motion.h2>
-
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-3">
-              {[
-                { label: 'Reisblog Peru', href: '/blog?bestemming=peru' },
-                { label: 'Reisblog Maleisië', href: '/blog?bestemming=maleisie' },
-                { label: 'Reisblog Thailand', href: '/blog?bestemming=thailand' },
-                { label: 'Reisblog Indonesië', href: '/blog?bestemming=indonesie' },
-                { label: 'Reisblog Japan', href: '/blog?bestemming=japan' },
-                { label: 'Reisblog Colombia', href: '/blog?bestemming=colombia' },
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className="px-6 py-3 bg-cream-dark/60 text-forest/70 rounded-full text-sm font-medium hover:bg-accent hover:text-white transition-all duration-300"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </motion.div>
-          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-[minmax(340px,520px)_1fr] md:items-center gap-10 md:gap-16">
+            <h2 className="text-3xl md:text-4xl font-display uppercase text-forest leading-[1.2] flex-shrink-0">
+              Ontdek de werelddelen
+            </h2>
+            <div className="relative min-h-[145px] max-w-[560px] md:min-h-[165px] md:max-w-[620px]">
+              <div className="pointer-events-none absolute inset-0 opacity-85" aria-hidden="true">
+                <ContinentMapBackdrop />
+              </div>
+              <div className="relative z-10 flex min-h-[145px] flex-wrap items-center gap-3 md:min-h-[165px]">
+                {continents.map((item) => (
+                  <Link key={item.value} href={`/blog?werelddeel=${item.value}`} className="px-6 py-3 bg-cream-dark/75 text-forest/75 rounded-full text-sm font-medium backdrop-blur-[1px] hover:bg-accent hover:text-white transition-all duration-300">
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════
-          MARQUEE — Infinite scroll text
-      ════════════════════════════════════════ */}
+      {/* MARQUEE */}
       <div className="relative py-6 bg-accent overflow-hidden">
         <div className="animate-marquee flex whitespace-nowrap">
           {Array.from({ length: 2 }).map((_, i) => (
@@ -592,70 +425,61 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ════════════════════════════════════════
-          HIGHLIGHTS — Feature cards
-      ════════════════════════════════════════ */}
+      {/* HIGHLIGHTS */}
       <section className="relative py-24 md:py-32 bg-cream">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            variants={stagger}
-          >
-            <motion.div variants={fadeUp} className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Wat je hier vindt</h2>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  icon: (
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  ),
-                  title: 'Lokale adresjes',
-                  text: 'De fijnste restaurants, bijzondere accommodaties en hidden gems — getest en goedgekeurd.',
-                },
-                {
-                  icon: (
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-                    </svg>
-                  ),
-                  title: 'Lokale ontmoetingen',
-                  text: 'De mooiste verhalen komen van de mensen die je onderweg ontmoet. Die ontmoetingen deel ik met jou.',
-                },
-                {
-                  icon: (
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="4" width="20" height="14" rx="2" />
-                      <circle cx="12" cy="11" r="4" />
-                      <circle cx="20" cy="6" r="1" fill="currentColor" />
-                    </svg>
-                  ),
-                  title: 'Reisfotografie',
-                  text: 'Tips, tutorials en gear reviews. Leer hoe je de mooiste reisfoto\'s maakt met elke camera.',
-                },
-              ].map((item) => (
-                <motion.div
-                  key={item.title}
-                  variants={fadeUp}
-                  className="group bg-warm-white organic-card p-8 md:p-10 card-lift border border-cream-dark/50 hover:border-accent/20 transition-colors"
-                >
-                  <div className="w-14 h-14 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-white transition-all duration-300">
-                    {item.icon}
-                  </div>
-                  <h3 className="font-serif text-xl font-bold text-forest mb-3">{item.title}</h3>
-                  <p className="text-text-muted leading-relaxed text-[15px]">{item.text}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Wat je hier vindt</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                icon: (
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                ),
+                title: 'Lokale adresjes',
+                text: 'De fijnste eetadresjes en verborgen plekken, zelf ontdekt en gefotografeerd.',
+                cardClass: 'bg-water-muted border-water-light/50',
+                iconClass: 'bg-white/55 text-water',
+              },
+              {
+                icon: (
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+                  </svg>
+                ),
+                title: 'Onbekende plekken',
+                text: 'De stille dorpen, uitzichten en hoeken die de toeristische route links laat liggen.',
+                cardClass: 'bg-[#e6f0df] border-forest/10',
+                iconClass: 'bg-white/55 text-link-hover',
+              },
+              {
+                icon: (
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="4" width="20" height="14" rx="2" />
+                    <circle cx="12" cy="11" r="4" />
+                    <circle cx="20" cy="6" r="1" fill="currentColor" />
+                  </svg>
+                ),
+                title: 'Reisfotografie',
+                text: 'Mijn werk als fotograaf, en de plekken zoals ik ze door de lens zag.',
+                cardClass: 'bg-accent-muted border-accent/15',
+                iconClass: 'bg-white/60 text-accent',
+              },
+            ].map((item) => (
+              <div key={item.title} className={`group organic-card p-8 md:p-10 card-lift border transition-colors ${item.cardClass}`}>
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-white/80 ${item.iconClass}`}>
+                  {item.icon}
+                </div>
+                <h3 className="font-serif text-xl font-bold text-forest mb-3">{item.title}</h3>
+                <p className="text-text-muted leading-relaxed text-[17px]">{item.text}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </main>
