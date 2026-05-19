@@ -30,8 +30,7 @@ export default async function VerhalenPage() {
   return (
     <main className="min-h-screen bg-warm-white">
 
-      {/* R&K-style full-screen hero */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+      <section className="relative h-screen min-h-[600px] flex flex-col items-center justify-center overflow-hidden noise-overlay">
         <Image
           src="/media/maleisie-5-scaled.webp"
           alt="Reizen"
@@ -40,26 +39,26 @@ export default async function VerhalenPage() {
           className="object-cover object-center"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-black/52" />
+        <div className="absolute inset-0 bg-gradient-to-t from-forest/80 via-forest/20 to-transparent" />
 
-        <div className="relative z-10 text-center px-6 w-full">
-          <span className="font-btn block text-[11px] uppercase tracking-[0.3em] text-white/55 mb-6">
+        <div className="relative z-10 text-center px-6 w-full pt-16">
+          <span className="block text-[11px] uppercase tracking-[0.3em] text-white/55 mb-5">
             Diepgaande reisverhalen
           </span>
           <h1
-            className="!text-white !font-normal leading-none mb-8"
+            className="!text-white leading-none mb-6 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]"
             style={{ fontSize: 'clamp(3.5rem, 11vw, 11rem)' }}
           >
             Verhalen
           </h1>
-          <p className="text-white/65 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+          <p className="text-white/75 text-lg md:text-xl max-w-xl mx-auto leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.3)]">
             Meer dan een blog, minder dan een boek.
           </p>
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 z-20">
-          <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-[30px] md:h-[50px] block">
-            <path d="M0,60 L0,30 C180,15 360,45 540,25 C720,5 900,40 1080,20 C1260,0 1380,30 1440,18 L1440,60 Z" fill="var(--color-warm-white)" />
+          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[50px] md:h-[80px] block">
+            <path d="M0,80 L0,65 C240,55 480,72 720,62 C960,52 1200,68 1440,60 L1440,80 Z" fill="var(--color-warm-white)" />
           </svg>
         </div>
       </section>

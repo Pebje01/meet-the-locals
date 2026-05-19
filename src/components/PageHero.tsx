@@ -12,7 +12,7 @@ export function PageHero({
   imageAlt: string
 }) {
   return (
-    <section className="relative h-[60vh] min-h-[400px] md:min-h-[500px] flex items-center justify-center overflow-hidden">
+    <section className="relative h-[60vh] min-h-[400px] md:min-h-[500px] flex items-center justify-center overflow-hidden noise-overlay">
       <div className="absolute inset-0">
         <Image
           src={image}
@@ -41,8 +41,8 @@ export function PageHero({
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 z-20">
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full h-[30px] md:h-[50px] block">
-          <path d="M0,60 L0,30 C180,15 360,45 540,25 C720,5 900,40 1080,20 C1260,0 1380,30 1440,18 L1440,60 Z" fill="var(--color-warm-white)" />
+        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[50px] md:h-[80px] block">
+          <path d="M0,80 L0,65 C240,55 480,72 720,62 C960,52 1200,68 1440,60 L1440,80 Z" fill="var(--color-warm-white)" />
         </svg>
       </div>
     </section>

@@ -129,7 +129,7 @@ export default async function DestinationPage({ params }: Props) {
 
   return (
     <main className="bg-warm-white">
-      <section className="relative min-h-screen overflow-hidden bg-forest-dark px-6 pb-16 pt-32 text-cream md:pt-40 lg:px-10">
+      <section className="relative overflow-hidden bg-forest-dark px-6 pb-20 pt-32 text-cream md:pt-40 lg:px-10 noise-overlay">
         <Image
           src={destination.image}
           alt=""
@@ -179,6 +179,22 @@ export default async function DestinationPage({ params }: Props) {
               center={destination.mapCenter}
             />
           </div>
+        </div>
+      </section>
+
+      <section className="relative h-[55vh] min-h-[400px] overflow-hidden">
+        <Image
+          src={destination.image}
+          alt={destination.name}
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/30 via-transparent to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[50px] md:h-[80px] block">
+            <path d="M0,80 L0,65 C240,55 480,72 720,62 C960,52 1200,68 1440,60 L1440,80 Z" fill="var(--color-warm-white)" />
+          </svg>
         </div>
       </section>
 

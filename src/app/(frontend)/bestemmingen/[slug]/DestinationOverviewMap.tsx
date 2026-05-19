@@ -31,16 +31,14 @@ export function DestinationOverviewMap({
         >
           <Geographies geography={GEO_URL}>
             {({ geographies }: { geographies: GeoFeature[] }) =>
-              geographies.map((geo) => {
-                const isActive = countryIds.includes(normalizedId(geo))
-
-                return (
+              geographies
+                .filter((geo) => countryIds.includes(normalizedId(geo)))
+                .map((geo) => (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    fill={isActive ? '#526f52' : '#142514'}
-                    opacity={isActive ? 1 : 0.35}
-                    stroke={isActive ? '#789178' : '#0a130a'}
+                    fill="#526f52"
+                    stroke="#789178"
                     strokeWidth={0.45}
                     style={{
                       default: { outline: 'none' },
@@ -48,8 +46,7 @@ export function DestinationOverviewMap({
                       pressed: { outline: 'none' },
                     }}
                   />
-                )
-              })
+                ))
             }
           </Geographies>
 
@@ -63,7 +60,7 @@ export function DestinationOverviewMap({
       </div>
 
       <div className="absolute inset-x-8 bottom-8">
-        <p className="text-right font-serif text-2xl uppercase tracking-[0.08em] text-cream/85">
+        <p className="text-right font-editorial text-2xl uppercase tracking-[0.08em] text-cream/85">
           {label}
         </p>
       </div>
