@@ -112,7 +112,7 @@ export function TravelPath() {
           fill="none"
         />
 
-        {/* Airplane ✈ — simple, clear, rotated in direction of travel */}
+        {/* Airplane ✈: simple, clear, rotated in direction of travel */}
         {pathLength > 0 && (
           <g transform={`translate(${plane.x}, ${plane.y})`}>
             <g transform={`rotate(${plane.angle + 90})`}>

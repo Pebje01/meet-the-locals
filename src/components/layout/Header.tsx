@@ -7,7 +7,8 @@ import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const navItems = [
-  { label: 'Blog', href: '/blog' },
+  { label: 'Reistips', href: '/blog' },
+  { label: 'Verhalen', href: '/verhalen' },
   { label: 'Bestemmingen', href: '/bestemmingen' },
   { label: 'Fotografie', href: '/fotografie' },
   { label: 'Over', href: '/over' },
@@ -18,8 +19,7 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-  const darkHeroPages = ['/', '/blog']
-  const hasDarkHero = darkHeroPages.includes(pathname)
+  const hasDarkHero = pathname !== '/over'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
@@ -47,7 +47,7 @@ export function Header() {
             alt="Meet the Locals"
             width={320}
             height={96}
-            className={`h-14 md:h-16 w-auto transition-all duration-500 group-hover:scale-[1.02] ${
+            className={`h-16 md:h-20 w-auto transition-all duration-500 group-hover:scale-[1.02] ${
               isTransparent || isOpen ? 'brightness-0 invert' : 'logo-rust'
             }`}
             priority
@@ -65,7 +65,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative px-3 py-1 ${wobble} font-display text-[22px] font-extralight tracking-[0.02em] uppercase transition-all duration-300 ${
+                className={`relative px-3 py-1 ${wobble} nav-font text-[22px] font-extralight tracking-[0.02em] uppercase transition-all duration-300 ${
                   isTransparent
                     ? `text-white/90 ${hoverColor} hover:text-white`
                     : isActive
@@ -121,7 +121,7 @@ export function Header() {
         </button>
       </div>
 
-      {/* Mobile Navigation — Full screen overlay */}
+      {/* Mobile Navigation: Full screen overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.nav
@@ -143,7 +143,7 @@ export function Header() {
                     <Link
                       href={item.href}
                       onClick={() => setIsOpen(false)}
-                      className="block py-3 text-3xl font-serif text-cream hover:text-accent transition-colors"
+                      className="block py-3 text-3xl font-light text-cream hover:text-accent transition-colors nav-font"
                     >
                       {item.label}
                     </Link>

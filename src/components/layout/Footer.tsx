@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 const footerLinks = {
   ontdek: [
-    { label: 'Blog', href: '/blog' },
+    { label: 'Reistips', href: '/blog' },
     { label: 'Bestemmingen', href: '/bestemmingen' },
     { label: 'Reisfotografie', href: '/fotografie' },
     { label: 'Interactieve Kaart', href: '/kaart' },
@@ -112,7 +112,7 @@ export function Footer() {
 
           {/* Extern */}
           <div className="md:col-span-2">
-            <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Meer van Daley</h4>
+            <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Bekijk ook eens</h4>
             <ul className="space-y-3">
               {footerLinks.extern.map((link) => (
                 <li key={link.label}>
@@ -129,12 +129,12 @@ export function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="border-t border-cream/8 mt-14 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-cream/50 text-[13px]">
-            &copy; {new Date().getFullYear()} Meet the Locals. Alle rechten voorbehouden.
+        <div className="border-t border-cream/8 mt-14 pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <p className="text-cream/40 text-[13px]">
+            &copy; {new Date().getFullYear()} Meet the Locals is onderdeel van <a href="https://thedaleyedit.nl" target="_blank" rel="noopener noreferrer" className="text-cream/60 hover:text-accent transition-colors">The Daley Edit</a>
           </p>
-          <p className="text-cream/40 text-[12px]">
-            Made with love by The Daley Edit
+          <p className="text-cream/40 text-[13px]">
+            Webdesign by <a href="https://wegrowbrands.online" target="_blank" rel="noopener noreferrer" className="text-cream/60 hover:text-accent transition-colors">We Grow Brands</a>
           </p>
         </div>
       </div>

@@ -68,7 +68,9 @@ export interface Config {
   blocks: {};
   collections: {
     posts: Post;
+    stories: Story;
     destinations: Destination;
+    'photo-spots': PhotoSpot;
     'photography-posts': PhotographyPost;
     'photo-galleries': PhotoGallery;
     categories: Category;
@@ -83,7 +85,9 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     posts: PostsSelect<false> | PostsSelect<true>;
+    stories: StoriesSelect<false> | StoriesSelect<true>;
     destinations: DestinationsSelect<false> | DestinationsSelect<true>;
+    'photo-spots': PhotoSpotsSelect<false> | PhotoSpotsSelect<true>;
     'photography-posts': PhotographyPostsSelect<false> | PhotographyPostsSelect<true>;
     'photo-galleries': PhotoGalleriesSelect<false> | PhotoGalleriesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -164,6 +168,16 @@ export interface Post {
   destinations?: (number | Destination)[] | null;
   categories?: (number | Category)[] | null;
   tags?: (number | Tag)[] | null;
+  /**
+   * Werelddeel waar deze blog over gaat. Voedt het werelddeelfilter op de blogpagina.
+   */
+  werelddeel?: ('europe' | 'asia' | 'north-america' | 'south-america' | 'africa' | 'oceania' | 'middle-east') | null;
+  /**
+   * Eén of meer thema's. Voeden het themafilter op de blogpagina.
+   */
+  thema?:
+    | ('reisfotografie' | 'food' | 'accommodaties' | 'reisverhalen-routes' | 'reistips-praktisch' | 'natuur-buiten')[]
+    | null;
   gallery?:
     | {
         image: number | Media;
@@ -200,6 +214,23 @@ export interface Media {
   id: number;
   alt: string;
   caption?: string | null;
+  /**
+   * Wordt automatisch uitgelezen bij het uploaden. Vul handmatig aan als een veld leeg blijft.
+   */
+  exif?: {
+    camera?: string | null;
+    lens?: string | null;
+    aperture?: string | null;
+    shutterSpeed?: string | null;
+    iso?: string | null;
+    focalLength?: string | null;
+    takenAt?: string | null;
+    /**
+     * Uit de foto gelezen. Wordt gebruikt om de pin te plaatsen.
+     */
+    latitude?: number | null;
+    longitude?: number | null;
+  };
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -328,6 +359,111 @@ export interface Tag {
   id: number;
   name: string;
   slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stories".
+ */
+export interface Story {
+  id: number;
+  title: string;
+  slug: string;
+  /**
+   * Kleine koptekst boven de titel, bijv. "De smaken van Georgië" of "Drie weken onderweg".
+   */
+  eyebrow?: string | null;
+  heroImage: number | Media;
+  /**
+   * Korte lead-tekst. Zichtbaar op de kaart én bovenaan het verhaal zelf.
+   */
+  intro: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  publishedDate: string;
+  /**
+   * Werelddeel waar dit verhaal over gaat.
+   */
+  werelddeel?: ('europe' | 'asia' | 'north-america' | 'south-america' | 'africa' | 'oceania' | 'middle-east') | null;
+  /**
+   * Eén of meer thema's.
+   */
+  thema?:
+    | ('reisfotografie' | 'food' | 'accommodaties' | 'reisverhalen-routes' | 'reistips-praktisch' | 'natuur-buiten')[]
+    | null;
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+  };
+  status?: ('draft' | 'published') | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Plekken op de interactieve kaart. Elke spot is één eigen foto met locatie en camera-instellingen.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "photo-spots".
+ */
+export interface PhotoSpot {
+  id: number;
+  /**
+   * Naam van de plek, bijvoorbeeld "Zonsopkomst boven Bagan".
+   */
+  title: string;
+  /**
+   * Wordt automatisch gevuld op basis van de titel.
+   */
+  slug?: string | null;
+  status?: ('draft' | 'published') | null;
+  region?: ('europe' | 'asia' | 'north-america' | 'south-america' | 'africa' | 'oceania' | 'middle-east') | null;
+  /**
+   * Jouw eigen foto van deze plek. Camera-instellingen worden automatisch uit de foto gelezen.
+   */
+  photo: number | Media;
+  /**
+   * Land waar de foto is gemaakt. Wordt ook op de kaart getoond.
+   */
+  country: string;
+  /**
+   * Wordt automatisch ingevuld als je foto GPS-data bevat. Anders zelf de coördinaten invullen.
+   */
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  /**
+   * Korte ervaring bij deze plek. Verschijnt op de kaart wanneer je over de pin hovert.
+   */
+  story?: string | null;
+  /**
+   * Optioneel. Voegt een "lees het verhaal"-link toe aan de kaartkaart.
+   */
+  relatedPost?: (number | null) | Post;
+  relatedDestination?: (number | null) | Destination;
   updatedAt: string;
   createdAt: string;
 }
@@ -493,8 +629,16 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'stories';
+        value: number | Story;
+      } | null)
+    | ({
         relationTo: 'destinations';
         value: number | Destination;
+      } | null)
+    | ({
+        relationTo: 'photo-spots';
+        value: number | PhotoSpot;
       } | null)
     | ({
         relationTo: 'photography-posts';
@@ -576,6 +720,8 @@ export interface PostsSelect<T extends boolean = true> {
   destinations?: T;
   categories?: T;
   tags?: T;
+  werelddeel?: T;
+  thema?: T;
   gallery?:
     | T
     | {
@@ -599,6 +745,39 @@ export interface PostsSelect<T extends boolean = true> {
       };
   status?: T;
   aiDraft?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stories_select".
+ */
+export interface StoriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  eyebrow?: T;
+  heroImage?: T;
+  intro?: T;
+  content?: T;
+  publishedDate?: T;
+  werelddeel?: T;
+  thema?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -640,6 +819,29 @@ export interface DestinationsSelect<T extends boolean = true> {
         metaDescription?: T;
         ogImage?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "photo-spots_select".
+ */
+export interface PhotoSpotsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  status?: T;
+  region?: T;
+  photo?: T;
+  country?: T;
+  coordinates?:
+    | T
+    | {
+        latitude?: T;
+        longitude?: T;
+      };
+  story?: T;
+  relatedPost?: T;
+  relatedDestination?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -746,6 +948,19 @@ export interface TagsSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  exif?:
+    | T
+    | {
+        camera?: T;
+        lens?: T;
+        aperture?: T;
+        shutterSpeed?: T;
+        iso?: T;
+        focalLength?: T;
+        takenAt?: T;
+        latitude?: T;
+        longitude?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   url?: T;

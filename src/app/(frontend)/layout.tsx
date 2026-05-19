@@ -11,7 +11,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://meetthelocals.nl'
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Meet the Locals — Reisblog & Fotografie',
+    default: 'Meet the Locals | Reisblog & Fotografie',
     template: '%s | Meet the Locals',
   },
   description:
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     locale: 'nl_NL',
     url: SITE_URL,
     siteName: 'Meet the Locals',
-    title: 'Meet the Locals — Reisblog & Fotografie',
+    title: 'Meet the Locals | Reisblog & Fotografie',
     description:
       'Persoonlijke reisblog met reisverhalen, budgettips en professionele fotografie van bestemmingen wereldwijd.',
     images: [
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
         url: '/media/Shirakawago-3.webp',
         width: 1200,
         height: 630,
-        alt: 'Meet the Locals — Reisblog & Fotografie',
+        alt: 'Meet the Locals | Reisblog & Fotografie',
       },
     ],
   },
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   // Twitter Card
   twitter: {
     card: 'summary_large_image',
-    title: 'Meet the Locals — Reisblog & Fotografie',
+    title: 'Meet the Locals | Reisblog & Fotografie',
     description:
       'Persoonlijke reisblog met reisverhalen, budgettips en professionele fotografie van bestemmingen wereldwijd.',
     images: ['/media/Shirakawago-3.webp'],
@@ -93,7 +93,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+          href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Oswald:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
         <link rel="stylesheet" href="https://use.typekit.net/pio7rwo.css" />

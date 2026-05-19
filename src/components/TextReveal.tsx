@@ -84,7 +84,7 @@ function Word({
 }
 
 /**
- * Scroll-triggered line reveal — a single line of text slides in
+ * Scroll-triggered line reveal: a single line of text slides in
  * from behind a colored mask as you scroll.
  */
 export function LineReveal({

@@ -52,7 +52,7 @@ const websiteSchema = {
   inLanguage: 'nl-NL',
 }
 
-/** Global schema — include on every page via layout */
+/** Global schema: include on every page via layout */
 export function GlobalJsonLd() {
   const schema = {
     '@context': 'https://schema.org',

@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Contact — Meet the Locals',
+  title: 'Contact | Meet the Locals',
   description:
-    'Heb je een vraag, samenwerking in gedachten of wil je gewoon even hallo zeggen? Stuur me een bericht — ik reageer altijd.',
+    'Heb je een vraag, samenwerking in gedachten of wil je gewoon even hallo zeggen? Stuur me een bericht, ik reageer altijd.',
   openGraph: {
-    title: 'Contact — Meet the Locals',
+    title: 'Contact | Meet the Locals',
     description:
-      'Heb je een vraag of samenwerking in gedachten? Stuur me een bericht — ik reageer altijd.',
+      'Heb je een vraag of samenwerking in gedachten? Stuur me een bericht, ik reageer altijd.',
     images: [{ url: '/media/portretje.webp', width: 1200, height: 630 }],
   },
   alternates: {

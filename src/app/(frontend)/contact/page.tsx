@@ -1,22 +1,25 @@
 'use client'
 
 import { useState } from 'react'
+import { PageHero } from '@/components/PageHero'
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
 
   return (
-    <main className="pt-32 md:pt-40">
-      {/* Contact H1 — op witte achtergrond */}
-      <section className="max-w-[1400px] mx-auto px-6 lg:px-10 mb-12">
-        <h1 className="text-6xl md:text-8xl lg:text-9xl">Contact</h1>
-      </section>
+    <main>
+      <PageHero
+        title="Contact"
+        subtitle="Samenwerken, connecten, of gewoon een vraag?"
+        image="/media/langkawi-scaled.webp"
+        imageAlt="Langkawi strand"
+      />
 
-      {/* Groene sectie — 70% breedte, gecentreerd, afgeronde hoeken */}
-      <section className="max-w-[90%] mx-auto bg-forest-dark text-cream rounded-[2rem] md:rounded-[3rem] mb-24">
+      {/* Groene sectie, 90% breedte, gecentreerd, afgeronde hoeken */}
+      <section className="max-w-[90%] mx-auto bg-forest-dark text-cream rounded-[2rem] md:rounded-[3rem] my-16 md:my-24">
         <div className="px-8 md:px-16 lg:px-20 py-16 md:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-            {/* Links — tekst + socials */}
+            {/* Links: tekst + socials */}
             <div className="flex flex-col justify-between">
               <div>
                 <h2 className="text-3xl md:text-4xl lg:text-5xl text-cream! leading-[1.15] mb-8 font-serif!">
@@ -26,7 +29,7 @@ export default function ContactPage() {
                   <br />
                   een vraag?
                 </h2>
-                <p className="text-cream/60 text-lg leading-relaxed max-w-md mb-10">
+                <p className="text-cream/60 text-lg leading-relaxed max-w-5xl mb-10">
                   Neem contact met me op via het formulier, of connect met me op LinkedIn of Instagram.
                 </p>
               </div>
@@ -76,7 +79,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Rechts — formulier */}
+            {/* Rechts: formulier */}
             <div>
               {submitted ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">

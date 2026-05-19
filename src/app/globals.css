@@ -1,5 +1,22 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'oslla';
+  src: url('/fonts/Oslla.woff2') format('woff2'),
+       url('/fonts/Oslla.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'md-lump';
+  src: url('/fonts/MdLump.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   /* Core palette */
   --color-forest: #2a4a2a;
@@ -13,23 +30,29 @@
   --color-text-dark: #1a1a1a;
   --color-text-muted: #6b6b6b;
 
-  /* Accent — soft warm orange (Claude-inspired, toned down) */
-  --color-accent: #d4845a;
-  --color-accent-light: #e09672;
-  --color-accent-dark: #b86e45;
-  --color-accent-muted: #d4845a20;
+  /* Accent: soft rust orange, warm but muted */
+  --color-accent: #c87952;
+  --color-accent-light: #d9936e;
+  --color-accent-dark: #9f5c3d;
+  --color-accent-muted: #c8795220;
+  --color-water: #6fbfc1;
+  --color-water-light: #a7dcdd;
+  --color-water-muted: #e3f4f3;
 
-  /* Link hover — fris groen */
+  /* Link hover: fris groen */
   --color-link-hover: #5F9261;
 
   --font-display: 'poleno', 'El Messiri', Georgia, serif;
   --font-serif: 'El Messiri', Georgia, serif;
+  --font-editorial: 'oslla', Georgia, serif;
+  --font-oswald: 'Oswald', sans-serif;
   --font-sans: 'athletics', 'DM Sans', system-ui, sans-serif;
 }
 
 /* ─── Base ─── */
 body {
   font-family: var(--font-sans);
+  font-size: 18px;
   color: var(--color-text-dark);
   overflow-x: hidden;
   background-color: var(--color-warm-white);
@@ -43,7 +66,34 @@ h1 {
   font-size: 94px;
 }
 
-h2, h3, h4, h5, h6 {
+:root {
+  --h-font: 'oslla', Georgia, serif;
+  --h-weight: normal;
+  --h-stroke: 0.3px;
+  --ft-ui: 'oslla', Georgia, serif;
+}
+
+button,
+.font-btn,
+.organic-btn,
+.organic-btn-alt {
+  font-family: var(--ft-ui);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.nav-font {
+  font-family: 'poleno', 'El Messiri', Georgia, serif;
+}
+
+h2, h3, h4 {
+  font-family: var(--h-font);
+  color: var(--color-forest);
+  font-weight: var(--h-weight);
+  -webkit-text-stroke: var(--h-stroke) currentColor;
+}
+
+h5, h6 {
   font-family: var(--font-display);
   color: var(--color-forest);
   font-weight: 300;
@@ -54,7 +104,7 @@ h2, h3, h4, h5, h6 {
   color: white;
 }
 
-/* Tekstlinks hover — niet op buttons */
+/* Tekstlinks hover: niet op buttons */
 a.text-link:hover,
 .reveal-line:hover {
   color: var(--color-link-hover);
@@ -69,12 +119,22 @@ a.text-link:hover,
 
 .organic-card     { border-radius: 2rem 3rem 2.5rem 3.5rem; overflow: hidden; }
 .organic-card-alt { border-radius: 3rem 2rem 3.5rem 2.5rem; overflow: hidden; }
-.organic-img      { border-radius: 1.5rem 2.5rem 2rem 3rem; overflow: hidden; }
-.organic-img-alt  { border-radius: 2.5rem 1.5rem 3rem 2rem; overflow: hidden; }
+.organic-img      { border-radius: 2rem 3rem 2.5rem 3.5rem; overflow: hidden; }
+.organic-img-alt  { border-radius: 3rem 2rem 3.5rem 2.5rem; overflow: hidden; }
 
 /* Organic / bumpy button shapes */
 .organic-btn      { border-radius: 1.2rem 2rem 1.5rem 2.4rem; }
 .organic-btn-alt  { border-radius: 2rem 1.3rem 2.2rem 1.4rem; }
+
+/* ─── Ken Burns ─── */
+@keyframes ken-burns {
+  0%   { transform: scale(1) translateX(0); }
+  100% { transform: scale(1.06) translateX(-10px); }
+}
+.animate-ken-burns {
+  animation: ken-burns 25s ease-in-out infinite alternate;
+  will-change: transform;
+}
 
 /* ─── Marquee ─── */
 @keyframes marquee {
@@ -140,9 +200,9 @@ a.text-link:hover,
   transform: scale(1.05);
 }
 
-/* ─── Rust-orange logo tint on white backgrounds ─── */
+/* ─── Soft rust logo tint on white backgrounds ─── */
 .logo-rust {
-  filter: brightness(0) saturate(100%) invert(55%) sepia(60%) saturate(500%) hue-rotate(345deg) brightness(85%);
+  filter: brightness(0) saturate(100%) invert(56%) sepia(34%) saturate(760%) hue-rotate(337deg) brightness(89%) contrast(88%);
 }
 
 /* ─── Gradient text ─── */
@@ -153,7 +213,7 @@ a.text-link:hover,
   background-clip: text;
 }
 
-/* ─── Smooth card lift — only subtle lift, no shadow ─── */
+/* ─── Smooth card lift: only subtle lift, no shadow ─── */
 .card-lift {
   transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -191,4 +251,350 @@ a.text-link:hover,
   pointer-events: none;
   z-index: 20;
   opacity: 0.7;
+}
+
+/* ─── Interactieve kaart (Fotospots) ─── */
+.mtl-map {
+  position: relative;
+  isolation: isolate;
+  z-index: 0;
+  border-radius: 1.75rem;
+  overflow: hidden;
+  background: #ede8e0 !important;
+}
+.mtl-map .leaflet-control-zoom {
+  border-radius: 0.85rem !important;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(15, 29, 15, 0.16) !important;
+  border: 1px solid rgba(42, 74, 42, 0.12) !important;
+}
+.mtl-map .leaflet-control-zoom a {
+  width: 34px !important;
+  height: 34px !important;
+  line-height: 34px !important;
+  color: var(--color-forest) !important;
+  background: var(--color-warm-white) !important;
+  border-bottom-color: rgba(42, 74, 42, 0.12) !important;
+}
+.mtl-map .leaflet-control-zoom a:hover {
+  background: #eaf0e3 !important;
+}
+.mtl-lmarker {
+  background: none !important;
+  border: none !important;
+}
+.mtl-country-label {
+  pointer-events: none !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.mtl-country-label span {
+  transform: translate(-50%, -50%);
+  color: rgba(70, 78, 66, 0.58);
+  text-shadow: 0 1px 1px rgba(250, 248, 244, 0.72);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.mtl-state-label {
+  pointer-events: none !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+.mtl-state-label span {
+  transform: translate(-50%, -50%);
+  color: rgba(70, 78, 66, 0.48);
+  text-shadow: 0 1px 1px rgba(250, 248, 244, 0.72);
+  font-size: 0.58rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Fotospot-pin */
+.mtl-pin {
+  width: 50px;
+  height: 60px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.mtl-pin__photo {
+  position: relative;
+  z-index: 1;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #1a2e1a;
+  box-shadow: 0 5px 16px rgba(15, 29, 15, 0.4);
+  background: #eaf0e3;
+}
+.mtl-pin__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mtl-pin::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 13px solid #1a2e1a;
+  filter: drop-shadow(0 4px 4px rgba(15, 29, 15, 0.25));
+}
+.mtl-pin:hover {
+  transform: translateY(-5px) scale(1.09);
+  z-index: 5;
+}
+.mtl-pin:hover .mtl-pin__photo {
+  border-color: var(--color-accent);
+}
+.mtl-visited-photo-pin .mtl-pin__photo {
+  background: #dfe9d8;
+}
+.mtl-visited-photo-pin__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-forest);
+}
+.mtl-visited-photo-pin__placeholder svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+/* Cluster-bubbel */
+.mtl-cluster {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--color-forest-light), var(--color-forest-dark));
+  color: var(--color-warm-white);
+  border: 3px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 6px 20px rgba(15, 29, 15, 0.42);
+  line-height: 1;
+  transition: transform 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.mtl-cluster:hover {
+  transform: scale(1.09);
+}
+.mtl-cluster.is-sm {
+  width: 46px;
+  height: 46px;
+}
+.mtl-cluster.is-md {
+  width: 58px;
+  height: 58px;
+}
+.mtl-cluster.is-lg {
+  width: 72px;
+  height: 72px;
+}
+.mtl-cluster__count {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+.mtl-cluster.is-lg .mtl-cluster__count {
+  font-size: 1.55rem;
+}
+.mtl-cluster__label {
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-top: 3px;
+  opacity: 0.82;
+  max-width: 62px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Hover-kaart */
+.mtl-popup .leaflet-popup-content-wrapper {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+.mtl-popup .leaflet-popup-content {
+  margin: 0;
+}
+.mtl-popup .leaflet-popup-tip-container {
+  display: none;
+}
+.mtl-card {
+  width: 292px;
+  background: var(--color-warm-white);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 18px 44px rgba(15, 29, 15, 0.34);
+  font-family: var(--font-sans);
+  animation: mtl-card-in 0.26s cubic-bezier(0.19, 1, 0.22, 1);
+}
+@keyframes mtl-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.mtl-card__media {
+  position: relative;
+  height: 168px;
+  overflow: hidden;
+}
+.mtl-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mtl-card__country {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px 4px 8px;
+  background: rgba(15, 29, 15, 0.64);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.mtl-card__country svg {
+  width: 11px;
+  height: 11px;
+  display: block;
+}
+.mtl-card__photo-meta {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-content: flex-end;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 12px;
+  background: linear-gradient(to top, rgba(15, 29, 15, 0.72), rgba(15, 29, 15, 0.12) 58%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.mtl-card__media:hover .mtl-card__photo-meta {
+  opacity: 1;
+  transform: translateY(0);
+}
+.mtl-card__photo-meta .mtl-card__chip,
+.mtl-card__gear-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(250, 248, 244, 0.9);
+  color: var(--color-forest-dark);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.mtl-card__gear-chip svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+.mtl-card__body {
+  padding: 13px 15px 15px;
+}
+.mtl-card__title {
+  font-family: var(--font-display);
+  color: var(--color-forest);
+  font-size: 1.18rem;
+  font-weight: 300;
+  line-height: 1.15;
+  margin: 0 0 5px;
+}
+.mtl-card__story {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  margin: 0 0 11px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.mtl-card__exif {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding-top: 11px;
+  border-top: 1px solid rgba(42, 74, 42, 0.12);
+}
+.mtl-card__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  background: var(--color-cream-dark);
+  color: var(--color-forest);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+.mtl-card__gear {
+  margin-top: 9px;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mtl-card__gear svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+.mtl-card__link {
+  margin-top: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--color-accent-dark);
+  text-decoration: none;
+}
+.mtl-card__link:hover {
+  color: var(--color-link-hover);
+}
+.mtl-card__link svg {
+  width: 12px;
+  height: 12px;
 }

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { WERELDDEEL_OPTIONS, THEMA_OPTIONS } from '../lib/taxonomy'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -65,6 +66,25 @@ export const Posts: CollectionConfig = {
       type: 'relationship',
       relationTo: 'tags',
       hasMany: true,
+    },
+    {
+      name: 'werelddeel',
+      type: 'select',
+      options: WERELDDEEL_OPTIONS,
+      admin: {
+        position: 'sidebar',
+        description: 'Werelddeel waar deze blog over gaat. Voedt het werelddeelfilter op de blogpagina.',
+      },
+    },
+    {
+      name: 'thema',
+      type: 'select',
+      hasMany: true,
+      options: THEMA_OPTIONS,
+      admin: {
+        position: 'sidebar',
+        description: "Eén of meer thema's. Voeden het themafilter op de blogpagina.",
+      },
     },
     {
       name: 'gallery',
