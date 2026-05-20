@@ -352,6 +352,7 @@ export default function HomePage() {
                   'Reportagefotografie',
                   'Hotel en B&B fotografie',
                   'Fotografie voor reisbureaus, touroperators en bedrijven in de reisbranche',
+                  'Webdesign in reisbranche',
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-2.5 text-sm text-forest/70">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0 mt-[5px]" />
