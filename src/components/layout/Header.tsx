@@ -31,15 +31,15 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isTransparent
-          ? 'bg-transparent'
-          : isOpen
-            ? 'bg-forest'
-            : 'bg-warm-white/95 backdrop-blur-xl shadow-[0_1px_0_0_rgba(26,46,26,0.06)]'
+      className={`fixed z-50 transition-all duration-500 ${
+        isOpen
+          ? 'top-0 left-0 right-0 bg-forest'
+          : isTransparent
+            ? 'top-0 left-0 right-0 bg-transparent'
+            : 'top-3 left-4 right-4 md:left-8 md:right-8 rounded-2xl bg-warm-white/75 backdrop-blur-xl shadow-[0_4px_24px_rgba(26,46,26,0.10)] border border-forest/8'
       }`}
     >
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 lg:px-10 flex items-center justify-between h-16 md:h-24 mt-2">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 lg:px-10 flex items-center justify-between h-16 md:h-20 py-2">
         {/* Logo */}
         <Link href="/" className="flex-shrink-0 group">
           <Image
@@ -55,7 +55,7 @@ export function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden xl:flex items-center gap-1">
           {navItems.map((item, i) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
             const wobble = i % 2 === 0 ? 'organic-btn' : 'organic-btn-alt'
@@ -96,7 +96,7 @@ export function Header() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`lg:hidden relative w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-300 ${
+          className={`xl:hidden relative w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-300 ${
             isTransparent || isOpen ? 'bg-white/15 backdrop-blur-sm' : 'bg-forest/10'
           }`}
           aria-label="Menu"
@@ -129,9 +129,11 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden fixed inset-0 top-16 md:top-20 bg-forest z-40"
+            className="xl:hidden fixed inset-0 top-16 md:top-20 bg-forest z-40"
           >
-            <div className="px-8 py-12 flex flex-col gap-1">
+            {/* Grain texture overlay */}
+            <div className="absolute inset-0 bg-repeat opacity-[0.07] pointer-events-none" style={{ backgroundImage: "url('/textures/grain.webp')", backgroundSize: '600px 400px' }} />
+            <div className="relative z-10 px-8 py-12 flex flex-col gap-1">
               {[{ label: 'Home', href: '/' }, ...navItems, { label: 'Kaart', href: '/kaart' }].map(
                 (item, i) => (
                   <motion.div
