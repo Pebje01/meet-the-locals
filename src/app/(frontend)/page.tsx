@@ -347,10 +347,14 @@ export default function HomePage() {
               <p className="text-text-muted text-[20px] leading-relaxed mb-6 max-w-5xl">
                 Een greep uit werk dat ik heb gedaan in opdracht binnen de thema&apos;s van reizen en horeca, waaronder fotografie van accommodaties.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                {['Reisfotografie', 'Food & horeca', 'Redactioneel'].map((item) => (
-                  <div key={item} className="flex items-center gap-2 text-sm text-forest/70">
-                    <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+              <div className="flex flex-col gap-3 mb-10">
+                {[
+                  'Reportagefotografie',
+                  'Hotel en B&B fotografie',
+                  'Fotografie voor reisbureaus, touroperators en bedrijven in de reisbranche',
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-2.5 text-sm text-forest/70">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0 mt-[5px]" />
                     {item}
                   </div>
                 ))}
