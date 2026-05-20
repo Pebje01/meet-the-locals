@@ -188,7 +188,7 @@ export default function HomePage() {
   return (
     <main>
       {/* HERO */}
-      <section className="relative h-screen min-h-[600px] md:min-h-[700px] flex items-center justify-center overflow-hidden noise-overlay">
+      <section className="relative h-[75vh] min-h-[500px] flex items-center justify-center overflow-hidden noise-overlay">
         <div className="absolute inset-0 animate-ken-burns">
           <Image
             src="/media/Shirakawago-3.webp"
@@ -241,10 +241,8 @@ export default function HomePage() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             <div className="lg:col-span-5 relative">
-              <div className="rounded-[3.25rem] bg-water-muted p-3 md:p-4">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-[2.75rem]">
-                  <Image src="/media/woestijn-9-scaled.webp" alt="Woestijn fotografie" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 42vw" />
-                </div>
+              <div className="relative aspect-[3/4] overflow-hidden rounded-[2.75rem]">
+                <Image src="/media/woestijn-9-scaled.webp" alt="Woestijn fotografie" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 42vw" />
               </div>
             </div>
             <div className="lg:col-span-7 lg:pl-8">

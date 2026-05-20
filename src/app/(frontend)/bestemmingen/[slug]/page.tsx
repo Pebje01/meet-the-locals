@@ -126,7 +126,7 @@ export default async function DestinationPage({ params }: Props) {
 
   return (
     <main className="bg-warm-white">
-      <section className="relative overflow-hidden bg-forest-dark px-6 pb-20 pt-32 text-cream md:pt-40 lg:px-10 noise-overlay">
+      <section className="relative min-h-[70vh] overflow-hidden bg-forest-dark px-6 pb-20 pt-32 text-cream md:pt-40 lg:px-10 noise-overlay">
         <Image
           src={destination.image}
           alt=""

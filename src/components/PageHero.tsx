@@ -12,7 +12,7 @@ export function PageHero({
   imageAlt: string
 }) {
   return (
-    <section className="relative h-[60vh] min-h-[400px] md:min-h-[500px] flex items-center justify-center overflow-hidden noise-overlay">
+    <section className="relative h-[75vh] min-h-[500px] flex items-center justify-center overflow-hidden noise-overlay">
       <div className="absolute inset-0">
         <Image
           src={image}

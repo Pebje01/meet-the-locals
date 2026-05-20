@@ -30,7 +30,7 @@ export default async function VerhalenPage() {
   return (
     <main className="min-h-screen bg-warm-white">
 
-      <section className="relative h-screen min-h-[600px] flex flex-col items-center justify-center overflow-hidden noise-overlay">
+      <section className="relative h-[75vh] min-h-[500px] flex flex-col items-center justify-center overflow-hidden noise-overlay">
         <Image
           src="/media/maleisie-5-scaled.webp"
           alt="Reizen"
