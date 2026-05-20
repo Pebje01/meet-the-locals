@@ -345,7 +345,7 @@ export default function HomePage() {
                 Werk in opdracht
               </h2>
               <p className="text-text-muted text-[20px] leading-relaxed mb-6 max-w-5xl">
-                Een greep uit werk dat ik heb gedaan in opdracht binnen de thema&apos;s van reizen en horeca, waaronder fotografie van accommodaties.
+                Een greep uit het werk dat ik heb gedaan in opdracht van bedrijven in of verwant aan de reisbranche en horeca.
               </p>
               <div className="flex flex-col gap-3 mb-10">
                 {[
