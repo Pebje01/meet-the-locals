@@ -204,7 +204,7 @@ export default function HomePage() {
           <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
             <div className="w-full">
               <h1 className="font-display text-white! leading-[1.1] mb-5 md:mb-8 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]" style={{ fontSize: 'clamp(1.9rem, 6vw, 4.75rem)' }}>
-                De wereld in beelden en verhalen
+                De wereld in<br />beelden en verhalen
               </h1>
               <p className="text-white text-[20px] md:text-[22px] max-w-2xl mx-auto leading-relaxed mb-7 md:mb-10 drop-shadow-[0_2px_15px_rgba(0,0,0,0.4)]">
                 Ik ben Daley, fotograaf, designer en foodie. Ik leg de plekken vast die de reisgids overslaat, van onbekende dorpen tot verborgen eetadresjes.
@@ -229,9 +229,9 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 z-20">
+        <div className="absolute bottom-0 left-0 right-0 z-2">
           <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[50px] md:h-[80px] block">
-            <path d="M0,80 L0,65 C240,55 480,72 720,62 C960,52 1200,68 1440,60 L1440,80 Z" fill="white" />
+            <path d="M0,80 L0,65 C240,55 480,72 720,62 C960,52 1200,68 1440,60 L1440,80 Z" fill="var(--color-warm-white)" />
           </svg>
         </div>
       </section>
@@ -331,9 +331,9 @@ export default function HomePage() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10">
           <DestinationSlider />
         </div>
-        <div className="absolute bottom-0 left-0 right-0 z-10">
+        <div className="absolute bottom-0 left-0 right-0 z-2">
           <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[90px] block">
-            <path d="M0,120 L0,60 C160,35 320,75 540,50 C760,25 900,70 1100,45 C1300,20 1380,55 1440,40 L1440,120 Z" fill="white" />
+            <path d="M0,120 L0,60 C160,35 320,75 540,50 C760,25 900,70 1100,45 C1300,20 1380,55 1440,40 L1440,120 Z" fill="var(--color-warm-white)" />
           </svg>
         </div>
       </section>
@@ -344,7 +344,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-display font-light text-forest leading-[1.1] mb-6">
-                Werk in <span className="text-accent">opdracht</span>
+                Werk in opdracht
               </h2>
               <p className="text-text-muted text-[20px] leading-relaxed mb-6 max-w-5xl">
                 Een greep uit werk dat ik heb gedaan in opdracht binnen de thema&apos;s van reizen en horeca, waaronder fotografie van accommodaties.
@@ -357,7 +357,7 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-              <Link href="/fotografie" className="group inline-flex items-center gap-3 bg-forest text-cream px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-forest-light transition-all duration-300">
+              <Link href="/fotografie" className="group inline-flex items-center gap-3 bg-accent text-white px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300">
                 <span>Bekijk mijn portfolio</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
                   <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
