@@ -5,24 +5,38 @@ export function PageHero({
   subtitle,
   image,
   imageAlt,
+  variant = 'photo',
 }: {
   title: string
   subtitle?: string
   image: string
   imageAlt: string
+  variant?: 'photo' | 'dark'
 }) {
+  const isDark = variant === 'dark'
+
   return (
-    <section className="relative h-[75vh] min-h-[500px] flex items-center justify-center overflow-hidden noise-overlay">
+    <section
+      className={`relative h-[75vh] min-h-[500px] flex items-center justify-center overflow-hidden noise-overlay ${
+        isDark ? 'bg-forest-dark' : ''
+      }`}
+    >
       <div className="absolute inset-0">
         <Image
           src={image}
           alt={imageAlt}
           fill
-          className="object-cover"
+          className={`object-cover ${isDark ? 'opacity-20' : ''}`}
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-forest/70 via-forest/30 to-forest/10" />
+        <div
+          className={`absolute inset-0 ${
+            isDark
+              ? 'bg-gradient-to-b from-forest-dark via-forest-dark/90 to-forest-dark'
+              : 'bg-gradient-to-t from-forest/70 via-forest/30 to-forest/10'
+          }`}
+        />
       </div>
 
       <div className="relative z-10 w-full">

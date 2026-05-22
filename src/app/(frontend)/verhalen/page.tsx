@@ -30,16 +30,16 @@ export default async function VerhalenPage() {
   return (
     <main className="min-h-screen bg-warm-white">
 
-      <section className="relative h-[75vh] min-h-[500px] flex flex-col items-center justify-center overflow-hidden noise-overlay">
+      <section className="relative h-[75vh] min-h-[500px] flex flex-col items-center justify-center overflow-hidden noise-overlay bg-forest-dark">
         <Image
           src="/media/maleisie-5-scaled.webp"
           alt="Reizen"
           fill
           priority
-          className="object-cover object-center"
+          className="object-cover object-center opacity-20"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-forest/80 via-forest/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-forest-dark via-forest-dark/90 to-forest-dark" />
 
         <div className="relative z-10 text-center px-6 w-full pt-16">
           <span className="block text-[11px] uppercase tracking-[0.3em] text-white/55 mb-5">

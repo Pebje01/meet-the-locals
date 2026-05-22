@@ -16,6 +16,8 @@ const footerLinks = {
   extern: [
     { label: 'The Daley Edit', href: 'https://thedaleyedit.nl' },
     { label: 'Daley Photography', href: 'https://thedaleyedit.nl' },
+    { label: 'Jose Bakkenes | Travel Counsellors', href: 'https://www.travelcounsellors.nl/jose.bakkenes/' },
+    { label: 'We Grow Brands', href: 'https://wegrowbrands.online' },
   ],
 }
 
@@ -35,7 +37,7 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-4">
             <Image
-              src="/logo.png"
+              src="/media/logo.webp"
               alt="Meet the Locals"
               width={200}
               height={60}

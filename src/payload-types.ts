@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     posts: Post;
+    news: News;
     stories: Story;
     destinations: Destination;
     'photo-spots': PhotoSpot;
@@ -85,6 +86,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     posts: PostsSelect<false> | PostsSelect<true>;
+    news: NewsSelect<false> | NewsSelect<true>;
     stories: StoriesSelect<false> | StoriesSelect<true>;
     destinations: DestinationsSelect<false> | DestinationsSelect<true>;
     'photo-spots': PhotoSpotsSelect<false> | PhotoSpotsSelect<true>;
@@ -285,8 +287,38 @@ export interface Destination {
   id: number;
   name: string;
   slug: string;
+  level?: ('land' | 'regio' | 'gebied' | 'stad') | null;
+  /**
+   * Bovenliggende bestemming, bijv. Italië voor Apulië.
+   */
+  parent?: (number | null) | Destination;
   region: 'europe' | 'asia' | 'north-america' | 'south-america' | 'africa' | 'oceania' | 'middle-east';
   heroImage: number | Media;
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Kleine koptekst boven de titel, bijv. "Regio" of "Overview".
+   */
+  eyebrow?: string | null;
+  /**
+   * Uitgebreide paginatitel voor de detailpagina.
+   */
+  title?: string | null;
+  /**
+   * Lead-tekst: zichtbaar in de hero van de detailpagina en op kaarten.
+   */
+  intro?: string | null;
+  /**
+   * Sfeerwoorden, bijv. "Food, dorpen en routes".
+   */
+  mood?: string | null;
+  /**
+   * Uitgebreide beschrijving (optioneel, voor redactionele pagina's).
+   */
   description?: {
     root: {
       type: string;
@@ -302,36 +334,107 @@ export interface Destination {
     };
     [k: string]: unknown;
   } | null;
-  highlights?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  gallery?:
+  /**
+   * Genummerde highlights op de detailpagina.
+   */
+  highlightList?:
     | {
-        image: number | Media;
+        text: string;
+        /**
+         * Optionele foto onderaan het highlight-kaartje.
+         */
+        photo?: (number | null) | Media;
         id?: string | null;
       }[]
     | null;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
+  /**
+   * Gebieden of plekken als pills op de detailpagina.
+   */
+  places?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  population?: string | null;
+  /**
+   * Reistijd, bijv. "±2,5 uur".
+   */
+  flightHours?: string | null;
+  /**
+   * ISO 3166-1 alpha-2 code, bijv. JP, FR, PE. Gebruikt voor automatische data-updates via n8n.
+   */
+  countryCode?: string | null;
   practicalInfo?: {
     budget?: string | null;
     visa?: string | null;
     bestTime?: string | null;
   };
+  /**
+   * Getoond als scrollende balk onder de fotoslider. Kan automatisch bijgewerkt worden via n8n.
+   */
+  travelInfo?: {
+    /**
+     * bijv. Japans, Engels
+     */
+    language?: string | null;
+    /**
+     * bijv. Japanse Yen (JPY)
+     */
+    currency?: string | null;
+    /**
+     * bijv. Subtropisch, warm en vochtig
+     */
+    climate?: string | null;
+    /**
+     * bijv. UTC+9
+     */
+    timezone?: string | null;
+    /**
+     * bijv. Type A/B, 110V
+     */
+    plugType?: string | null;
+    /**
+     * Reisadvies kleurcode (rijksoverheid.nl).
+     */
+    safetyLevel?: ('green' | 'yellow' | 'orange' | 'red') | null;
+    /**
+     * bijv. Normale waakzaamheid, geen specifieke risicos
+     */
+    safetyNote?: string | null;
+    /**
+     * bijv. Visumvrij tot 90 dagen voor NL-paspoort
+     */
+    visaNote?: string | null;
+  };
+  /**
+   * Tekst op de kaart in hoofdletters, bijv. "ITALIË".
+   */
+  mapLabel?: string | null;
+  /**
+   * Zoomniveau van de kaart (bijv. 1400).
+   */
+  mapScale?: number | null;
+  mapCenter?: {
+    longitude?: number | null;
+    latitude?: number | null;
+  };
+  /**
+   * Markerpositie op de kaart.
+   */
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  /**
+   * ISO-3166 numerieke landcodes voor de kaart, bijv. "380" voor Italië.
+   */
+  countryIds?:
+    | {
+        countryCode: string;
+        id?: string | null;
+      }[]
+    | null;
   seo?: {
     metaTitle?: string | null;
     metaDescription?: string | null;
@@ -361,6 +464,38 @@ export interface Tag {
   slug: string;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "news".
+ */
+export interface News {
+  id: number;
+  title: string;
+  slug: string;
+  status: 'draft' | 'published';
+  publishedDate: string;
+  heroImage?: (number | null) | Media;
+  excerpt: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  category?: ('bestemming' | 'reistip' | 'branchenieuws' | 'fotografie' | 'overig') | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -583,6 +718,9 @@ export interface User {
   name?: string | null;
   updatedAt: string;
   createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -627,6 +765,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'news';
+        value: number | News;
       } | null)
     | ({
         relationTo: 'stories';
@@ -751,6 +893,23 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "news_select".
+ */
+export interface NewsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  status?: T;
+  publishedDate?: T;
+  heroImage?: T;
+  excerpt?: T;
+  content?: T;
+  category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "stories_select".
  */
 export interface StoriesSelect<T extends boolean = true> {
@@ -789,15 +948,63 @@ export interface StoriesSelect<T extends boolean = true> {
 export interface DestinationsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  level?: T;
+  parent?: T;
   region?: T;
   heroImage?: T;
-  description?: T;
-  highlights?: T;
   gallery?:
     | T
     | {
         image?: T;
         id?: T;
+      };
+  eyebrow?: T;
+  title?: T;
+  intro?: T;
+  mood?: T;
+  description?: T;
+  highlightList?:
+    | T
+    | {
+        text?: T;
+        photo?: T;
+        id?: T;
+      };
+  places?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  population?: T;
+  flightHours?: T;
+  countryCode?: T;
+  practicalInfo?:
+    | T
+    | {
+        budget?: T;
+        visa?: T;
+        bestTime?: T;
+      };
+  travelInfo?:
+    | T
+    | {
+        language?: T;
+        currency?: T;
+        climate?: T;
+        timezone?: T;
+        plugType?: T;
+        safetyLevel?: T;
+        safetyNote?: T;
+        visaNote?: T;
+      };
+  mapLabel?: T;
+  mapScale?: T;
+  mapCenter?:
+    | T
+    | {
+        longitude?: T;
+        latitude?: T;
       };
   coordinates?:
     | T
@@ -805,12 +1012,11 @@ export interface DestinationsSelect<T extends boolean = true> {
         latitude?: T;
         longitude?: T;
       };
-  practicalInfo?:
+  countryIds?:
     | T
     | {
-        budget?: T;
-        visa?: T;
-        bestTime?: T;
+        countryCode?: T;
+        id?: T;
       };
   seo?:
     | T
@@ -1025,6 +1231,9 @@ export interface UsersSelect<T extends boolean = true> {
   name?: T;
   updatedAt?: T;
   createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
   email?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;

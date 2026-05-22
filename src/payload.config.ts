@@ -6,6 +6,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import { Posts } from './collections/Posts'
+import { News } from './collections/News'
 import { Stories } from './collections/Stories'
 import { Destinations } from './collections/Destinations'
 import { PhotoSpots } from './collections/PhotoSpots'
@@ -25,6 +26,7 @@ export default buildConfig({
   editor: lexicalEditor(),
   collections: [
     Posts,
+    News,
     Stories,
     Destinations,
     PhotoSpots,

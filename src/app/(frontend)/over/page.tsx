@@ -2,6 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { FAQJsonLd } from '@/components/JsonLd'
+import { PhotoWithInfo } from '@/components/PhotoWithInfo'
+import { photoMeta } from '@/data/photoMeta'
 
 const quickLinks = [
   { label: 'Samenwerken?', href: '#samenwerken' },
@@ -69,39 +71,111 @@ const faqColumns = [faqItems.slice(0, 4), faqItems.slice(4)]
 
 export default function OverPage() {
   return (
-    <main className="bg-[#f8f5ef]">
+    <main className="bg-[#F5EFE8]">
       <FAQJsonLd questions={faqItems} />
 
-      <section className="relative overflow-hidden px-6 pb-20 pt-32 md:pb-28 md:pt-40 lg:px-10">
+      {/* HERO */}
+      <section className="relative overflow-hidden">
+        {/* Dark green top */}
+        <div className="relative bg-forest-dark noise-overlay">
+          <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pb-16 pt-32 md:pt-40 lg:px-10">
+            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
+              <div className="lg:col-span-7">
+                <span className="mb-5 block text-[12px] font-semibold uppercase tracking-[0.16em] text-white/60">
+                  Over mij
+                </span>
+                <h1 className="mb-7 text-5xl leading-[0.98] text-white! md:text-7xl lg:text-8xl">
+                  Hi, ik ben Daley.
+                </h1>
+                <div className="mt-9 flex flex-wrap gap-3">
+                  {quickLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="rounded-full border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-white/60 hover:bg-white/20"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-center lg:col-span-5 lg:justify-end">
+                <div className="relative w-full max-w-[340px] aspect-[3/4] overflow-hidden rounded-[2.5rem] shadow-2xl lg:max-w-[420px]">
+                  <Image
+                    src="/media/over-hero-daley.webp"
+                    alt="Daley Jansen, Manhattan Bridge New York"
+                    fill
+                    priority
+                    className="object-cover object-center"
+                    sizes="(max-width: 768px) 340px, (max-width: 1024px) 340px, 420px"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 z-10">
+            <svg viewBox="0 0 1440 50" preserveAspectRatio="none" className="block h-[35px] w-full md:h-[50px]">
+              <path d="M0,50 L0,35 C240,45 480,22 720,35 C960,48 1200,28 1440,40 L1440,50 Z" fill="#bd6a3a" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Orange stats strip */}
+        <div className="noise-overlay-soft relative bg-accent">
+          <div className="mx-auto max-w-[1400px] px-6 py-12 lg:px-10">
+            <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
+              <div>
+                <p className="font-display text-[52px] leading-none text-white md:text-[64px]">1988</p>
+                <p className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.08em] text-white/70">Het jaar dat ik de wereld kwam verkennen</p>
+              </div>
+              <div>
+                <p className="font-display text-[52px] leading-none text-white md:text-[64px]">30+</p>
+                <p className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.08em] text-white/70">Jaar computernerd. Photoshop, websites maken, ontwerpen.</p>
+              </div>
+              <div>
+                <p className="font-display text-[52px] leading-none text-white md:text-[64px]">6+</p>
+                <p className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.08em] text-white/70">Jaar fotograaf</p>
+              </div>
+              <div>
+                <p className="font-display text-[52px] leading-none text-white md:text-[64px]">5</p>
+                <p className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.08em] text-white/70">Jaar was ik toen ik mijn eerste ervaring al deelde in een schoolkrant.</p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0">
+            <svg viewBox="0 0 1440 50" preserveAspectRatio="none" className="block h-[35px] w-full md:h-[50px]">
+              <path d="M0,50 L0,35 C240,25 480,42 720,32 C960,22 1200,38 1440,30 L1440,50 Z" fill="#F5EFE8" />
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      {/* INTRO — photo grid + daughter paragraph */}
+      <section className="relative overflow-hidden px-6 py-20 md:py-28 lg:px-10">
         <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-6">
-            <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-              Over Meet the Locals
-            </span>
-            <h1 className="mb-7 text-5xl leading-[0.98] text-forest md:text-7xl lg:text-8xl">
-              Hey, ik ben Daley.
-            </h1>
+            <h2 className="mb-5 text-4xl leading-[1.0] text-forest md:text-5xl lg:text-6xl">
+              Over mij
+            </h2>
             <div className="space-y-5 text-[19px] leading-relaxed text-text-muted md:text-[21px]">
+              <p className="font-medium text-forest/80">Hi, ik ben Daley.</p>
               <p>
-                Fotograaf, designer en foodie met een zwak voor plekken die je niet meteen op de
-                eerste pagina van een reisgids vindt.
+                Moeder van mijn dochter Abby en partner van Frank. Ik beschrijf mezelf het best als
+                een professionele creatieveling. Ik kan hier wel een heel verhaal vertellen over hoe
+                ik als 2-jarig meisje al achter de computer zat te tikken... maar daar kom je niet voor.
               </p>
               <p>
-                Meet the Locals is mijn persoonlijke verzameling van reisverhalen, fotospots,
-                lokale adressen en beelden die laten zien hoe een plek echt voelt.
+                Slaan we even 35 jaar over, dan zijn we in 2026. Inmiddels ben ik freelancer. Ik
+                fotografeer, maak websites, doe vormgeving en marketing. Vandaar: professionele
+                creatieveling. Ik ben ook ineens moeder. Dat was even schakelen, want ik was gewend
+                om te werken waar ik wilde en te reizen wanneer ik wilde. Toch heeft dat geen roet
+                in het reizen gegooid ;)
               </p>
-            </div>
-
-            <div className="mt-9 flex flex-wrap gap-3">
-              {quickLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="rounded-full border border-forest/10 bg-white/70 px-5 py-3 text-sm font-semibold text-forest shadow-sm transition-colors hover:border-accent hover:text-accent"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              <p>
+                Mijn dochter Abby reist gewoon mee. Haar eerste reis? Een rondreis door Noorwegen
+                in een caravan. Ze was toen slechts 2,5 maand oud. Inmiddels is ze al in 6 landen
+                geweest. Kleine globetrotter ;)
+              </p>
             </div>
           </div>
 
@@ -110,10 +184,9 @@ export default function OverPage() {
               <div className="col-span-7">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[3rem] bg-cream">
                   <Image
-                    src="/media/portretje.webp"
-                    alt="Daley Jansen"
+                    src="/media/over-peru-klooster.webp"
+                    alt="Santa Catalina klooster, Peru"
                     fill
-                    priority
                     className="object-cover"
                     sizes="(max-width: 1024px) 60vw, 34vw"
                   />
@@ -122,17 +195,17 @@ export default function OverPage() {
               <div className="col-span-5 space-y-4 pb-5">
                 <div className="relative aspect-square overflow-hidden rounded-[2.25rem] bg-cream">
                   <Image
-                    src="/media/Franksunset-scaled.webp"
-                    alt="Zonsondergang onderweg"
+                    src="/media/over-tempel-lantaarns.webp"
+                    alt="Chinese tempel, Maleisie"
                     fill
-                    className="object-cover"
+                    className="object-cover object-top"
                     sizes="(max-width: 1024px) 40vw, 18vw"
                   />
                 </div>
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[2.25rem] bg-cream">
                   <Image
-                    src="/media/langkawi-scaled.webp"
-                    alt="Langkawi vanuit de lucht"
+                    src="/media/over-puglia-steeg.webp"
+                    alt="Wit steegje, Puglia"
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 40vw, 18vw"
@@ -142,16 +215,27 @@ export default function OverPage() {
             </div>
           </div>
         </div>
+
+        {/* Pull quote */}
+        <div className="mx-auto mt-16 max-w-[1400px] border-t border-forest/10 pt-14 lg:mt-20 lg:pt-16">
+          <blockquote className="mx-auto max-w-[900px]">
+            <span className="mb-4 block font-display text-[72px] leading-none text-accent md:text-[96px]">&ldquo;</span>
+            <p className="text-[24px] font-light leading-[1.35] text-forest md:text-[30px] lg:text-[34px]">
+              Al jaren wil ik een reisblog starten. En nu heb ik hem dan eindelijk doorgezet. Want na vier jaar met Meet the Locals in mijn hoofd, staat deze website er.
+            </p>
+            <footer className="mt-6 flex items-center gap-3">
+              <div className="h-px w-8 bg-accent" />
+              <cite className="not-italic text-[13px] font-semibold uppercase tracking-[0.14em] text-accent">Daley Jansen</cite>
+            </footer>
+          </blockquote>
+        </div>
       </section>
 
-      <section className="bg-[#f8f5ef] py-20 md:py-28">
+      <section className="bg-[#F5EFE8] py-20 md:py-28">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <div className="mb-12">
-            <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-              Waarom ik reis
-            </span>
             <h2 className="text-4xl leading-[1.05] text-forest md:text-6xl">
-              Niet afvinken, maar blijven kijken.
+              Reisobsessie? Zo kun je het wel noemen, ja.
             </h2>
           </div>
 
@@ -159,8 +243,8 @@ export default function OverPage() {
             <div className="lg:col-span-5">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[3rem] bg-cream">
                 <Image
-                  src="/media/Ayuthayya-1-9-scaled.webp"
-                  alt="Reisfotografie in Thailand"
+                  src="/media/over-fotograaf-kust.webp"
+                  alt="Aan het fotograferen op de kust"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 38vw"
@@ -170,15 +254,65 @@ export default function OverPage() {
 
             <div className="space-y-5 text-[19px] leading-relaxed text-text-muted md:text-[20px] lg:col-span-7">
               <p>
-                Ik loop graag net iets verder. Een zijstraat in, een markt op, een restaurant
-                binnen waar geen perfecte menukaart buiten hangt. Juist daar begint vaak het verhaal.
+                Reizen heeft me altijd in de greep gehad. Dit begon voor het eerst toen ik Floortje
+                bij 3 op reis keek en zij naar Palau ging. En daarna een aflevering over Nieuw-Zeeland.
+                Vanaf dat moment - en ik denk dat ik een jaar of 14 was - ontdekte ik dat de wereld
+                zo groot was. Dat er zulke mooie en afgelegen plekken bestonden. Die obsessie is nooit
+                meer weggegaan.
               </p>
               <p>
-                Op deze site verzamel ik de plekken waar ik echt ben geweest: bestemmingen,
-                eettips, fotospots en kleine observaties die je helpen om een bestemming minder
-                gehaast te beleven.
+                In 2011 kreeg ik de kans om Nieuw-Zeeland te bezoeken. Mijn droombestemming. Nog altijd
+                heb ik heimwee.
+              </p>
+              <p>
+                Al jaren wil ik daarom een reisblog starten. En nu heb ik hem dan eindelijk doorgezet.
+                Want na vier jaar met Meet the Locals in mijn hoofd, staat deze website er.
+              </p>
+              <p>
+                In iets ander formaat misschien, want de traditionele reisblog is niet meer. Daarom
+                wil ik dit uitbouwen naar een persoonlijke bundeling van mijn reizen en ervaringen.
+                Een reisplatform met alle ins-and-outs over reizen en de reisbranche. Maar met
+                hoofdfocus op: echte beelden, rauwe fotografie en echte ervaringen.
+              </p>
+              <p>
+                Waarom nu? Ik denk juist omdat, ondanks alle drukte en dat ik net moeder ben
+                geworden, in de wereld van AI en niet meer weten wat echt is, ik juist dingen wil
+                laten zien die echt zijn.
+              </p>
+              <p>
+                En zelfs als AI-gebruiker voor veel facetten van mijn werk, ook deze website, vind ik
+                dat fotografie en ervaringen niet te duiden zijn in AI, niet uit te leggen in AI. Dat
+                moet echt blijven. Alles wat je hier ziet, alle foto&apos;s die je ziet, zijn door mij gemaakt
+                en minimaal bewerkt. Gewoon zoals je als fotograaf altijd je foto&apos;s alleen mooier maakt.
+                Of schaduwen of lichten, maar niks is met AI gegenereerd.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#F5EFE8] py-4">
+        <div className="mx-auto max-w-[1400px] px-4 lg:px-6">
+          <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
+            {[
+              { src: '/media/over-peru-klooster.webp', alt: 'Santa Catalina klooster, Peru', key: 'over-peru-klooster' },
+              { src: '/media/over-fotograaf-kust.webp', alt: 'Aan het fotograferen op de kust', key: 'over-fotograaf-kust' },
+              { src: '/media/over-tempel-lantaarns.webp', alt: 'Chinese tempel, Maleisie', key: 'over-tempel-lantaarns' },
+              { src: '/media/over-zwembad-lezen.webp', alt: 'Lezen in het zwembad', key: 'over-zwembad-lezen' },
+              { src: '/media/over-puglia-steeg.webp', alt: 'Wit steegje, Puglia', key: 'over-puglia-steeg' },
+              { src: '/media/over-kleur-trappen.webp', alt: 'Kleurrijke trappen', key: 'over-kleur-trappen' },
+              { src: '/media/over-new-york.webp', alt: 'Times Square, New York', key: 'over-new-york' },
+              { src: '/media/over-durian-mural.webp', alt: 'Durian muurschildering, Kuala Lumpur', key: 'over-durian-mural' },
+            ].map((photo) => (
+              <div key={photo.src} className="relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl">
+                <PhotoWithInfo
+                  src={photo.src}
+                  alt={photo.alt}
+                  meta={photoMeta[photo.key]}
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -215,7 +349,7 @@ export default function OverPage() {
         </div>
       </section>
 
-      <section className="bg-[#f8f5ef] py-20 md:py-24">
+      <section className="bg-[#F5EFE8] py-20 md:py-24">
         <div className="mx-auto max-w-[1200px] px-6 lg:px-10">
           <h2 className="mb-8 text-3xl leading-tight text-forest md:text-4xl">
             Waar ik voor fotografeer
@@ -233,7 +367,7 @@ export default function OverPage() {
         </div>
       </section>
 
-      <section className="bg-white py-20 md:py-28">
+      <section className="bg-[#F5EFE8] py-20 md:py-28">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <div className="mb-14 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
             <div className="lg:col-span-6">

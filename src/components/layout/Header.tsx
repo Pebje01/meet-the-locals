@@ -7,9 +7,9 @@ import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const navItems = [
-  { label: 'Reistips', href: '/blog' },
   { label: 'Verhalen', href: '/verhalen' },
   { label: 'Bestemmingen', href: '/bestemmingen' },
+  { label: 'Reisnieuws', href: '/reisnieuws' },
   { label: 'Fotografie', href: '/fotografie' },
   { label: 'Over', href: '/over' },
   { label: 'Contact', href: '/contact' },
@@ -28,34 +28,35 @@ export function Header() {
   }, [])
 
   const isTransparent = hasDarkHero && !scrolled && !isOpen
+  const isDark = true
 
   return (
     <header
       className={`fixed z-50 transition-all duration-500 ${
         isOpen
-          ? 'top-0 left-0 right-0 bg-forest'
+          ? 'top-0 left-0 right-0 bg-forest-dark noise-overlay overflow-hidden'
           : isTransparent
             ? 'top-0 left-0 right-0 bg-transparent'
-            : 'top-3 left-4 right-4 md:left-8 md:right-8 rounded-2xl bg-warm-white/75 backdrop-blur-xl shadow-[0_4px_24px_rgba(26,46,26,0.10)] border border-forest/8'
+            : 'top-0 left-0 right-0 bg-forest-dark/90 backdrop-blur-xl border-b border-forest/20'
       }`}
     >
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 lg:px-10 flex items-center justify-between h-16 md:h-20 py-2">
+      <div className="max-w-[1400px] mx-auto pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-6 lg:pr-8 flex items-center justify-between h-16 md:h-20 py-2">
         {/* Logo */}
         <Link href="/" className="flex-shrink-0 group">
           <Image
-            src="/logo.png"
+            src="/media/logo.webp"
             alt="Meet the Locals"
             width={320}
             height={96}
             className={`h-16 md:h-20 w-auto transition-all duration-500 group-hover:scale-[1.02] ${
-              isTransparent || isOpen ? 'brightness-0 invert' : 'logo-rust'
+              isOpen ? 'logo-light-green' : 'brightness-0 invert'
             }`}
             priority
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden xl:flex items-center gap-1">
+        <nav className="hidden xl:flex items-center gap-2">
           {navItems.map((item, i) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
             const wobble = i % 2 === 0 ? 'organic-btn' : 'organic-btn-alt'
@@ -65,11 +66,11 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative px-3 py-1 ${wobble} nav-font text-[22px] font-extralight tracking-[0.02em] uppercase transition-all duration-300 ${
-                  isTransparent
-                    ? `text-white/90 ${hoverColor} hover:text-white`
-                    : isActive
-                      ? `${activeColor} text-white`
+                className={`relative px-3 py-1 ${wobble} nav-font text-[17px] font-extralight tracking-[0.04em] uppercase transition-all duration-300 ${
+                  isActive
+                    ? `${activeColor} text-white`
+                    : isDark
+                      ? `text-white/90 ${hoverColor} hover:text-white`
                       : `text-forest ${hoverColor} hover:text-white`
                 }`}
               >
@@ -80,7 +81,7 @@ export function Header() {
           <Link
             href="/kaart"
             className={`ml-3 flex items-center gap-2 px-5 py-2.5 organic-btn text-[12px] font-semibold tracking-[0.08em] uppercase transition-all duration-300 ${
-              isTransparent
+              isDark
                 ? 'bg-white/15 text-white backdrop-blur-sm hover:bg-white/25'
                 : 'bg-forest/10 text-forest hover:bg-forest hover:text-white'
             }`}
@@ -97,24 +98,24 @@ export function Header() {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={`xl:hidden relative w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-300 ${
-            isTransparent || isOpen ? 'bg-white/15 backdrop-blur-sm' : 'bg-forest/10'
+            isDark ? 'bg-white/15 backdrop-blur-sm' : 'bg-forest/10'
           }`}
           aria-label="Menu"
         >
           <div className="flex flex-col gap-[5px]">
             <span
               className={`block w-6 h-[1.5px] transition-all duration-300 origin-center ${
-                isTransparent || isOpen ? 'bg-white' : 'bg-forest'
+                isDark ? 'bg-white' : 'bg-forest'
               } ${isOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`}
             />
             <span
               className={`block w-4 h-[1.5px] transition-all duration-300 ${
-                isTransparent || isOpen ? 'bg-white' : 'bg-forest'
+                isDark ? 'bg-white' : 'bg-forest'
               } ${isOpen ? 'opacity-0 translate-x-2' : ''}`}
             />
             <span
               className={`block w-6 h-[1.5px] transition-all duration-300 origin-center ${
-                isTransparent || isOpen ? 'bg-white' : 'bg-forest'
+                isDark ? 'bg-white' : 'bg-forest'
               } ${isOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`}
             />
           </div>
@@ -129,10 +130,8 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="xl:hidden fixed inset-0 top-16 md:top-20 bg-forest z-40"
+            className="xl:hidden fixed inset-0 top-16 md:top-20 bg-forest-dark noise-overlay overflow-hidden z-40"
           >
-            {/* Grain texture overlay */}
-            <div className="absolute inset-0 bg-repeat opacity-[0.07] pointer-events-none" style={{ backgroundImage: "url('/textures/grain.webp')", backgroundSize: '600px 400px' }} />
             <div className="relative z-10 px-8 py-12 flex flex-col gap-1">
               {[{ label: 'Home', href: '/' }, ...navItems, { label: 'Kaart', href: '/kaart' }].map(
                 (item, i) => (

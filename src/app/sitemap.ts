@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://meetthelocals.nl'
   const now = new Date().toISOString()
 
@@ -60,18 +62,49 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.4,
     },
+    {
+      url: `${baseUrl}/reisnieuws`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
   ]
 
-  // TODO: Fetch dynamic blog posts and destinations from Payload CMS
-  // Once Payload is connected, replace these with real data:
-  //
-  // const posts = await payload.find({ collection: 'posts', limit: 1000 })
-  // const postUrls = posts.docs.map(post => ({
-  //   url: `${baseUrl}/blog/${post.slug}`,
-  //   lastModified: post.updatedAt,
-  //   changeFrequency: 'monthly' as const,
-  //   priority: 0.8,
-  // }))
+  try {
+    const payload = await getPayload({ config })
 
-  return [...staticPages]
+    // Published blog posts
+    const { docs: posts } = await payload.find({
+      collection: 'posts',
+      where: { status: { equals: 'published' } },
+      limit: 1000,
+      depth: 0,
+    })
+
+    const postUrls: MetadataRoute.Sitemap = posts.map((post) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: post.updatedAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    }))
+
+    // All destinations
+    const { docs: destinations } = await payload.find({
+      collection: 'destinations',
+      limit: 1000,
+      depth: 0,
+    })
+
+    const destinationUrls: MetadataRoute.Sitemap = destinations.map((dest) => ({
+      url: `${baseUrl}/bestemmingen/${dest.slug}`,
+      lastModified: dest.updatedAt,
+      changeFrequency: 'weekly' as const,
+      priority: 0.85,
+    }))
+
+    return [...staticPages, ...postUrls, ...destinationUrls]
+  } catch {
+    // Fallback to static-only if Payload is unavailable (e.g. during static export)
+    return staticPages
+  }
 }

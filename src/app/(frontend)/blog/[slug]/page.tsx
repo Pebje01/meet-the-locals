@@ -1,10 +1,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Post } from '@/payload-types'
+import { ArticleJsonLd } from '@/components/JsonLd'
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://meetthelocals.nl'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -23,6 +27,50 @@ function formatDate(date?: string | null): string {
   })
 }
 
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'posts',
+    where: {
+      slug: { equals: slug },
+      status: { equals: 'published' },
+    },
+    depth: 1,
+    limit: 1,
+  })
+  const post = docs[0]
+  if (!post) return { title: 'Artikel niet gevonden' }
+
+  const hero = imageUrl(post.heroImage)
+  const heroAbsolute = hero ? (hero.startsWith('http') ? hero : `${SITE_URL}${hero}`) : undefined
+
+  return {
+    title: `${post.title} | Meet the Locals`,
+    description: post.excerpt ?? '',
+    alternates: {
+      canonical: `${SITE_URL}/blog/${slug}`,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt ?? '',
+      type: 'article',
+      url: `${SITE_URL}/blog/${slug}`,
+      publishedTime: post.publishedDate ?? undefined,
+      modifiedTime: post.updatedAt,
+      authors: ['Daley Jansen'],
+      siteName: 'Meet the Locals',
+      ...(heroAbsolute && { images: [{ url: heroAbsolute, alt: post.title }] }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt ?? '',
+      ...(heroAbsolute && { images: [heroAbsolute] }),
+    },
+  }
+}
+
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
   const payload = await getPayload({ config })
@@ -39,8 +87,18 @@ export default async function BlogPostPage({ params }: Props) {
   const post = docs[0]
   if (!post) notFound()
 
+  const hero = imageUrl(post.heroImage)
+
   return (
     <main className="min-h-screen bg-warm-white">
+      <ArticleJsonLd
+        title={post.title}
+        description={post.excerpt ?? ''}
+        slug={post.slug}
+        image={hero}
+        datePublished={post.publishedDate ?? post.updatedAt}
+        dateModified={post.updatedAt}
+      />
       <article className="mx-auto max-w-[1400px] px-6 py-20 md:py-28 lg:px-10">
         <Link
           href="/blog"
@@ -57,10 +115,10 @@ export default async function BlogPostPage({ params }: Props) {
           {formatDate(post.publishedDate)}
         </p>
 
-        {imageUrl(post.heroImage) && (
+        {hero && (
           <div className="relative aspect-[16/9] organic-img overflow-hidden mb-10">
             <Image
-              src={imageUrl(post.heroImage)}
+              src={hero}
               alt={post.title}
               fill
               priority

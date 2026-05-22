@@ -6,7 +6,6 @@ import type {
   LayerGroup as LeafletLayerGroup,
   Map as LeafletMap,
   Marker as LeafletMarker,
-  Popup as LeafletPopup,
 } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { SpotGrid } from './SpotGrid'
@@ -294,81 +293,73 @@ function buildClusterMarker(count: number, countries: Record<string, number>): H
   return node
 }
 
-function buildCard(spot: MapSpot): HTMLElement {
-  const card = makeEl('div', 'mtl-card')
-
-  const media = makeEl('div', 'mtl-card__media')
-  const img = document.createElement('img')
-  img.src = spot.photoUrl
-  img.alt = spot.alt
-  media.appendChild(img)
-
-  if (spot.country) {
-    const country = makeEl('span', 'mtl-card__country')
-    country.appendChild(iconSpan(ICON_PIN))
-    const label = makeEl('span')
-    label.textContent = spot.country
-    country.appendChild(label)
-    media.appendChild(country)
-  }
-
+// React hover card — rendered outside .mtl-map so it is never clipped by overflow:hidden
+function MapCard({
+  spot,
+  onMouseEnter,
+  onMouseLeave,
+}: {
+  spot: MapSpot
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+}) {
   const chips: string[] = []
   if (spot.aperture) chips.push(spot.aperture)
   if (spot.shutterSpeed) chips.push(spot.shutterSpeed)
   if (spot.iso) chips.push(`ISO ${spot.iso}`)
   if (spot.focalLength) chips.push(spot.focalLength)
-
   const gearText = [spot.camera, spot.lens].filter(Boolean).join('  |  ')
-  if (chips.length > 0 || gearText) {
-    const meta = makeEl('div', 'mtl-card__photo-meta')
-    for (const value of chips) {
-      const chip = makeEl('span', 'mtl-card__chip')
-      chip.textContent = value
-      meta.appendChild(chip)
-    }
-    if (gearText) {
-      const gear = makeEl('span', 'mtl-card__gear-chip')
-      gear.appendChild(iconSpan(ICON_CAMERA))
-      const label = makeEl('span')
-      label.textContent = gearText
-      gear.appendChild(label)
-      meta.appendChild(gear)
-    }
-    media.appendChild(meta)
-  }
-  card.appendChild(media)
 
-  const body = makeEl('div', 'mtl-card__body')
-
-  const title = makeEl('h3', 'mtl-card__title')
-  title.textContent = spot.title
-  body.appendChild(title)
-
-  if (spot.story) {
-    const story = makeEl('p', 'mtl-card__story')
-    story.textContent = spot.story
-    body.appendChild(story)
-  }
-
-  if (spot.postSlug) {
-    const link = document.createElement('a')
-    link.className = 'mtl-card__link'
-    link.href = `/blog/${spot.postSlug}`
-    const label = makeEl('span')
-    label.textContent = 'Lees het verhaal'
-    link.appendChild(label)
-    link.appendChild(iconSpan(ICON_ARROW))
-    body.appendChild(link)
-  }
-
-  card.appendChild(body)
-  return card
+  return (
+    <div className="mtl-card" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <div className="mtl-card__media">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={spot.photoUrl} alt={spot.alt} />
+        {spot.country && (
+          <span className="mtl-card__country">
+            <span dangerouslySetInnerHTML={{ __html: ICON_PIN }} />
+            <span>{spot.country}</span>
+          </span>
+        )}
+        {(chips.length > 0 || gearText) && (
+          <div className="mtl-card__photo-meta">
+            {chips.map((c) => (
+              <span key={c} className="mtl-card__chip">{c}</span>
+            ))}
+            {gearText && (
+              <span className="mtl-card__gear-chip">
+                <span dangerouslySetInnerHTML={{ __html: ICON_CAMERA }} />
+                <span>{gearText}</span>
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+      <div className="mtl-card__body">
+        <h3 className="mtl-card__title">{spot.title}</h3>
+        {spot.story && <p className="mtl-card__story">{spot.story}</p>}
+        {spot.postSlug && (
+          <a className="mtl-card__link" href={`/blog/${spot.postSlug}`}>
+            <span>Lees het verhaal</span>
+            <span dangerouslySetInnerHTML={{ __html: ICON_ARROW }} />
+          </a>
+        )}
+      </div>
+    </div>
+  )
 }
 
 export function PhotoMap({ spots }: { spots: MapSpot[] }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [ready, setReady] = useState(false)
   const [failed, setFailed] = useState(false)
+
+  // Active hover card state — x/y are pixel coords relative to the map container
+  const [activeCard, setActiveCard] = useState<{ spot: MapSpot; x: number; y: number } | null>(null)
+
+  // Refs so the React card element can call hide callbacks defined inside the effect
+  const clearHideRef = useRef<() => void>(() => {})
+  const scheduleHideRef = useRef<() => void>(() => {})
 
   useEffect(() => {
     const container = containerRef.current
@@ -383,7 +374,21 @@ export function PhotoMap({ spots }: { spots: MapSpot[] }) {
     let stateLabelLayer: LeafletLayerGroup | undefined
     let hideTimer: ReturnType<typeof setTimeout> | undefined
     let resizeObserver: ResizeObserver | undefined
-    let popupEl: LeafletPopup | undefined
+
+    const clearHide = () => {
+      if (hideTimer) {
+        clearTimeout(hideTimer)
+        hideTimer = undefined
+      }
+    }
+    const scheduleHide = () => {
+      clearHide()
+      hideTimer = setTimeout(() => setActiveCard(null), 150)
+    }
+
+    // Expose to the React card's event handlers
+    clearHideRef.current = clearHide
+    scheduleHideRef.current = scheduleHide
 
     const init = async () => {
       const L = (await import('leaflet')).default
@@ -517,13 +522,6 @@ export function PhotoMap({ spots }: { spots: MapSpot[] }) {
       resizeObserver = new ResizeObserver(() => mapInstance!.invalidateSize())
       resizeObserver.observe(container)
 
-      popupEl = L.popup({
-        className: 'mtl-popup',
-        closeButton: false,
-        autoPan: false,
-        offset: [0, -60],
-      })
-
       visitedMarkers = VISITED_PLACES.map((place) => {
         const node = buildVisitedMarker(place)
         const icon = L.divIcon({
@@ -562,22 +560,12 @@ export function PhotoMap({ spots }: { spots: MapSpot[] }) {
       )
       const spotById = new Map(spots.map((s) => [s.id, s]))
 
-      const clearHide = () => {
-        if (hideTimer) {
-          clearTimeout(hideTimer)
-          hideTimer = undefined
-        }
-      }
-      const scheduleHide = () => {
-        clearHide()
-        hideTimer = setTimeout(() => popupEl?.remove(), 150)
-      }
+      // showCard: compute pixel position and lift into React state so the card renders
+      // outside .mtl-map's overflow:hidden, meaning it is never clipped at map edges.
       const showCard = (spot: MapSpot) => {
         clearHide()
-        const card = buildCard(spot)
-        card.addEventListener('mouseenter', clearHide)
-        card.addEventListener('mouseleave', scheduleHide)
-        popupEl!.setLatLng([spot.lat, spot.lng]).setContent(card).openOn(mapInstance!)
+        const pt = mapInstance!.latLngToContainerPoint([spot.lat, spot.lng])
+        setActiveCard({ spot, x: pt.x, y: pt.y })
       }
 
       const updateMarkers = () => {
@@ -657,7 +645,12 @@ export function PhotoMap({ spots }: { spots: MapSpot[] }) {
       mapInstance.on('zoomend', updateStateLabels)
       mapInstance.on('click', () => {
         clearHide()
-        popupEl?.remove()
+        setActiveCard(null)
+      })
+      // Dismiss the card when the user starts panning or zooming
+      mapInstance.on('movestart', () => {
+        clearHide()
+        setActiveCard(null)
       })
 
       // Initial view
@@ -715,6 +708,9 @@ export function PhotoMap({ spots }: { spots: MapSpot[] }) {
     return () => {
       cancelled = true
       if (hideTimer) clearTimeout(hideTimer)
+      setActiveCard(null)
+      clearHideRef.current = () => {}
+      scheduleHideRef.current = () => {}
       resizeObserver?.disconnect()
       Object.values(markers).forEach((m) => m.remove())
       visitedMarkers.forEach((m) => m.remove())
@@ -724,6 +720,36 @@ export function PhotoMap({ spots }: { spots: MapSpot[] }) {
       mapInstance?.remove()
     }
   }, [spots])
+
+  // Smart positioning: keep card inside the container horizontally, flip vertically if needed.
+  // Pin iconAnchor is [25, 60] so the pin top is at y-60 in container coords.
+  const cardStyle = (() => {
+    if (!activeCard || !containerRef.current) return null
+    const CARD_WIDTH = 292
+    const CARD_HEIGHT = 390  // generous estimate incl. body
+    const PIN_TOP_OFFSET = 68 // bottom of card sits 8px above pin top (pin is 60px tall)
+
+    const containerW = containerRef.current.clientWidth
+
+    // Horizontal: shift card so it doesn't overflow left or right edge
+    const halfCard = CARD_WIDTH / 2
+    const clampedX = Math.max(halfCard + 8, Math.min(containerW - halfCard - 8, activeCard.x))
+    const adjustX = clampedX - activeCard.x
+
+    // Vertical: show above pin if there's room, otherwise flip below
+    const showAbove = activeCard.y - PIN_TOP_OFFSET > CARD_HEIGHT + 8
+    const top = showAbove ? activeCard.y - PIN_TOP_OFFSET : activeCard.y + 16
+    const translateY = showAbove ? '-100%' : '0%'
+
+    return {
+      position: 'absolute' as const,
+      left: activeCard.x,
+      top,
+      transform: `translate(calc(-50% + ${adjustX}px), ${translateY})`,
+      zIndex: 999,
+      pointerEvents: 'auto' as const,
+    }
+  })()
 
   return (
     <>
@@ -739,6 +765,19 @@ export function PhotoMap({ spots }: { spots: MapSpot[] }) {
             style={{ background: '#ede8e0' }}
           >
             <p className="text-sm text-text-muted">Kaart laden...</p>
+          </div>
+        )}
+        {/* Card portal: sibling of .mtl-map, so it is NOT clipped by overflow:hidden */}
+        {activeCard && cardStyle && (
+          <div
+            key={activeCard.spot.id}
+            style={cardStyle}
+          >
+            <MapCard
+              spot={activeCard.spot}
+              onMouseEnter={() => clearHideRef.current()}
+              onMouseLeave={() => scheduleHideRef.current()}
+            />
           </div>
         )}
       </div>

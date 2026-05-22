@@ -22,17 +22,17 @@
   --color-forest: #2a4a2a;
   --color-forest-light: #2d4a2d;
   --color-forest-dark: #0f1d0f;
-  --color-cream: #f5f2eb;
+  --color-cream: #F5EFE8;
   --color-cream-dark: #ebe7dd;
   --color-sand: #c4a97d;
   --color-sand-light: #d4be9a;
-  --color-warm-white: #faf8f4;
+  --color-warm-white: #F5EFE8;
   --color-text-dark: #1a1a1a;
   --color-text-muted: #6b6b6b;
 
   /* Accent: soft rust orange, warm but muted */
-  --color-accent: #a8522a;
-  --color-accent-light: #c06a3a;
+  --color-accent: #bd6a3a;
+  --color-accent-light: #c47040;
   --color-accent-dark: #7a3518;
   --color-accent-muted: #a8522a20;
   --color-water: #526f52;
@@ -126,14 +126,46 @@ a.text-link:hover,
 .organic-btn      { border-radius: 1.2rem 2rem 1.5rem 2.4rem; }
 .organic-btn-alt  { border-radius: 2rem 1.3rem 2.2rem 1.4rem; }
 
-/* ─── Ken Burns ─── */
-@keyframes ken-burns {
-  0%   { transform: scale(1) translateX(0); }
-  100% { transform: scale(1.06) translateX(-10px); }
+/* ─── Ken Burns variants — alternating zoom-out / zoom-in per slide ─── */
+@keyframes kb-zoom-in-pan-left {
+  0%   { transform: scale(1.06) translate(8px, 4px); }
+  100% { transform: scale(1.18) translate(-8px, -4px); }
 }
-.animate-ken-burns {
-  animation: ken-burns 25s ease-in-out infinite alternate;
-  will-change: transform;
+@keyframes kb-zoom-out-pan-right {
+  0%   { transform: scale(1.18) translate(-8px, 4px); }
+  100% { transform: scale(1.06) translate(8px, -4px); }
+}
+@keyframes kb-zoom-in-pan-right {
+  0%   { transform: scale(1.06) translate(-8px, -4px); }
+  100% { transform: scale(1.18) translate(8px, 4px); }
+}
+@keyframes kb-zoom-out-pan-left {
+  0%   { transform: scale(1.18) translate(8px, -4px); }
+  100% { transform: scale(1.06) translate(-8px, 4px); }
+}
+@keyframes kb-zoom-in-pan-up {
+  0%   { transform: scale(1.06) translate(0, 8px); }
+  100% { transform: scale(1.18) translate(0, -8px); }
+}
+/* 2s delay = crossfade duur, fill-mode both = direct op startpositie wachten */
+.animate-ken-burns   { animation: kb-zoom-in-pan-left   9s 2s linear both; will-change: transform; }
+.animate-ken-burns-b { animation: kb-zoom-out-pan-right 9s 2s linear both; will-change: transform; }
+.animate-ken-burns-c { animation: kb-zoom-in-pan-right  9s 2s linear both; will-change: transform; }
+.animate-ken-burns-d { animation: kb-zoom-out-pan-left  9s 2s linear both; will-change: transform; }
+.animate-ken-burns-e { animation: kb-zoom-in-pan-up     9s 2s linear both; will-change: transform; }
+
+/* ─── Radar ─── */
+@keyframes radar-sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes radar-blip {
+  0%, 100% { opacity: 0; transform: scale(0.3); }
+  40%, 60%  { opacity: 1; transform: scale(1); }
+}
+@keyframes radar-ping {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
 }
 
 /* ─── Marquee ─── */
@@ -205,6 +237,16 @@ a.text-link:hover,
   filter: brightness(0) saturate(100%) invert(40%) sepia(50%) saturate(900%) hue-rotate(340deg) brightness(78%) contrast(95%);
 }
 
+/* ─── Light green logo tint for dark green backgrounds ─── */
+.logo-light-green {
+  filter: brightness(0) saturate(100%) invert(82%) sepia(30%) saturate(450%) hue-rotate(56deg) brightness(104%) contrast(88%);
+}
+
+/* ─── Forest green logo tint for light/white backgrounds ─── */
+.logo-forest {
+  filter: brightness(0) saturate(100%) invert(23%) sepia(30%) saturate(700%) hue-rotate(88deg) brightness(88%) contrast(110%);
+}
+
 /* ─── Gradient text ─── */
 .gradient-text {
   background: linear-gradient(135deg, var(--color-forest) 0%, var(--color-forest-light) 50%, var(--color-accent) 100%);
@@ -222,6 +264,22 @@ a.text-link:hover,
 }
 
 /* ─── Noise texture overlay ─── */
+.noise-overlay-soft::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.45;
+  background-image: url('/textures/grain.webp');
+  background-repeat: repeat;
+  background-size: 800px 533px;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  z-index: 5;
+}
+
 .noise-overlay::before {
   content: '';
   position: absolute;
@@ -229,12 +287,30 @@ a.text-link:hover,
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.08;
+  opacity: 0.85;
   background-image: url('/textures/grain.webp');
   background-repeat: repeat;
-  background-size: 600px 400px;
+  background-size: 800px 533px;
   pointer-events: none;
+  mix-blend-mode: overlay;
   z-index: 5;
+}
+
+.destinations-texture {
+  isolation: isolate;
+}
+
+.destinations-texture::after {
+  content: '';
+  position: absolute;
+  inset: -8%;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url('/media/destinations-noise.webp');
+  background-repeat: repeat;
+  background-size: 520px 347px;
+  mix-blend-mode: soft-light;
+  opacity: 0.36;
 }
 
 /* ─── Speckle texture (splatter dots) ─── */

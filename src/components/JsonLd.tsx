@@ -33,7 +33,7 @@ const organizationSchema = {
   url: SITE_URL,
   logo: {
     '@type': 'ImageObject',
-    url: `${SITE_URL}/logo.png`,
+    url: `${SITE_URL}/media/logo.webp`,
   },
   founder: { '@id': `${SITE_URL}/#author` },
   sameAs: [
