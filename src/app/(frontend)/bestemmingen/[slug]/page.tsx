@@ -251,7 +251,7 @@ export default async function DestinationPage({ params }: Props) {
     <main className="bg-warm-white">
       <BreadcrumbJsonLd items={breadcrumbItems} />
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[60vh] overflow-hidden bg-forest-dark px-6 pb-20 pt-32 text-cream md:pt-40 lg:px-10 noise-overlay">
+      <section className="relative min-h-[60vh] overflow-hidden bg-forest-dark px-6 pb-20 pt-32 text-cream md:pt-40 lg:px-10">
         {image && (
           <Image
             src={image}
@@ -264,6 +264,7 @@ export default async function DestinationPage({ params }: Props) {
         )}
         <WorldMapBackground />
         <div className="absolute inset-0 bg-gradient-to-b from-forest-dark via-forest-dark/95 to-forest-dark" />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,29,15,0.55) 100%)' }} />
 
         <div className="relative z-10 mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <div className={mapProps ? 'lg:col-span-6' : 'lg:col-span-10'}>
@@ -419,7 +420,7 @@ export default async function DestinationPage({ params }: Props) {
                     {dest.places.map((place) => (
                       <span
                         key={place.id}
-                        className="rounded-full border border-forest/10 bg-white px-5 py-2.5 text-sm font-medium text-forest/75 shadow-sm"
+                        className="rounded-full border border-forest/10 bg-white px-5 py-2.5 text-sm font-medium text-forest/75 natural-shadow-box"
                       >
                         {place.name}
                       </span>
@@ -514,7 +515,7 @@ export default async function DestinationPage({ params }: Props) {
               {relatedPosts.map((post) => (
                 <article key={post.id}>
                   <Link href={`/blog/${post.slug}`} className="group block h-full">
-                    <div className="h-full overflow-hidden rounded-[1.75rem] bg-white shadow-sm transition-transform duration-300 group-hover:-translate-y-1">
+                    <div className="h-full overflow-hidden rounded-[1.75rem] bg-white natural-shadow-box transition-transform duration-300 group-hover:-translate-y-1">
                       <div className="relative aspect-[4/3] bg-cream">
                         {postImageUrl(post.heroImage) && (
                           <Image
@@ -546,7 +547,7 @@ export default async function DestinationPage({ params }: Props) {
               ))}
             </div>
           ) : (
-            <div className="rounded-[1.75rem] bg-white p-8 shadow-sm md:p-10">
+            <div className="rounded-[1.75rem] bg-white p-8 natural-shadow-box md:p-10">
               <p className="max-w-3xl text-[19px] leading-relaxed text-text-muted">
                 Binnenkort verschijnen hier de reisblogs die bij {dest.name} horen.
               </p>

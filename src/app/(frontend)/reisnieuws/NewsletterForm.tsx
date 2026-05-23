@@ -4,11 +4,37 @@ import { useState } from 'react'
 
 export function NewsletterForm() {
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // TODO: koppel aan Brevo of andere e-maildienst
-    setSubmitted(true)
+    setError(null)
+    setLoading(true)
+
+    const form = e.currentTarget
+    const email = (form.elements.namedItem('newsletter-email') as HTMLInputElement).value
+    const name = (form.elements.namedItem('newsletter-name') as HTMLInputElement).value
+
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setError(data.error ?? 'Er ging iets mis. Probeer het later opnieuw.')
+        return
+      }
+
+      setSubmitted(true)
+    } catch {
+      setError('Geen verbinding. Controleer je internet en probeer opnieuw.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (submitted) {
@@ -30,7 +56,7 @@ export function NewsletterForm() {
   return (
     <>
       <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-cream/40 mb-2">
-        Gratis, één keer per maand
+        Één keer per maand
       </p>
       <h3 className="text-2xl md:text-3xl font-display text-cream! mb-2">
         Schrijf je in
@@ -65,11 +91,16 @@ export function NewsletterForm() {
         </div>
         <button
           type="submit"
-          className="mt-2 w-full rounded-xl bg-[#5aab6a] px-6 py-4 text-[14px] font-semibold uppercase tracking-[0.1em] text-white transition-all duration-300 hover:bg-[#4d9a5d] hover:shadow-[0_8px_30px_-6px_rgba(90,171,106,0.45)]"
+          disabled={loading}
+          className="mt-2 w-full rounded-xl bg-[#5aab6a] px-6 py-4 text-[14px] font-semibold uppercase tracking-[0.1em] text-white transition-all duration-300 hover:bg-[#4d9a5d] hover:shadow-[0_8px_30px_-6px_rgba(90,171,106,0.45)] disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Ja, ik schrijf me in
+          {loading ? 'Aanmelden...' : 'Ja, ik schrijf me in'}
         </button>
       </form>
+
+      {error && (
+        <p className="mt-4 text-center text-[13px] text-red-400 leading-relaxed">{error}</p>
+      )}
 
       <p className="mt-6 text-center text-[12px] text-cream/25 leading-relaxed">
         Geen spam. Geen doorverkoop van je gegevens. Uitschrijven kan altijd.

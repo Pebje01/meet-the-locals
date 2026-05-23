@@ -9,9 +9,11 @@ const footerLinks = {
     { label: 'Interactieve Kaart', href: '/kaart' },
   ],
   info: [
-    { label: 'Over MTL', href: '/over' },
-    { label: 'Contact', href: '/contact' },
     { label: 'Samenwerken', href: '/contact' },
+    { label: 'Portfolio', href: '/fotografie' },
+    { label: 'Over MTL', href: '/over' },
+    { label: 'Reisnieuws', href: '/reisnieuws' },
+    { label: 'Contact', href: '/contact' },
   ],
   extern: [
     { label: 'The Daley Edit', href: 'https://thedaleyedit.nl' },
@@ -33,15 +35,15 @@ export function Footer() {
     <footer className="bg-forest-dark text-cream relative noise-overlay speckle-overlay">
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pt-20 md:pt-24 pb-16 md:pb-20 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
+        <div className="grid grid-cols-3 md:grid-cols-12 gap-x-4 gap-y-12 md:gap-8">
           {/* Brand */}
-          <div className="md:col-span-4">
+          <div className="col-span-3 md:col-span-4">
             <Image
               src="/media/logo.webp"
               alt="Meet the Locals"
               width={200}
               height={60}
-              className="h-12 w-auto brightness-0 invert mb-5"
+              className="h-24 w-auto brightness-0 invert mb-5"
             />
             <p className="text-cream/80 text-[15px] leading-relaxed mb-6 max-w-xs">
               Persoonlijke reisverhalen, fotografie en tips van bestemmingen wereldwijd.
@@ -85,7 +87,7 @@ export function Footer() {
           </div>
 
           {/* Ontdek */}
-          <div className="md:col-span-2 md:col-start-6">
+          <div className="col-span-1 md:col-span-2 md:col-start-6">
             <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Ontdek</h4>
             <ul className="space-y-3">
               {footerLinks.ontdek.map((link) => (
@@ -99,7 +101,7 @@ export function Footer() {
           </div>
 
           {/* Info */}
-          <div className="md:col-span-2">
+          <div className="col-span-1 md:col-span-2">
             <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Informatie</h4>
             <ul className="space-y-3">
               {footerLinks.info.map((link) => (
@@ -113,7 +115,7 @@ export function Footer() {
           </div>
 
           {/* Extern */}
-          <div className="md:col-span-2">
+          <div className="col-span-1 md:col-span-2">
             <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Bekijk ook eens</h4>
             <ul className="space-y-3">
               {footerLinks.extern.map((link) => (

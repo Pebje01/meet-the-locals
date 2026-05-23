@@ -14,10 +14,12 @@ const quickLinks = [
 
 const services = [
   'Reisfotografie voor bestemmingen en campagnes',
-  'Hotel- en accommodatiefotografie',
-  'Food, horeca en sfeerbeelden',
-  'Redactionele reiscontent voor blogs en socials',
-  'Fotospots en visuele reisgidsen',
+  'Dronefotografie en video',
+  'Food en horeca fotografie',
+  "Interieurfotografie, fotografie voor hotels, B&B's en andere accommodaties",
+  'Websites bouwen en beheren',
+  'Branding en marketing voor reismerken',
+  'Ontwerpen voor brochures, folders, banners en beursstands',
 ]
 
 const logoCards = ['Hotels', 'Horeca', 'Toerisme', 'Reismerken', 'Campagnes', 'Editorial']
@@ -77,7 +79,8 @@ export default function OverPage() {
       {/* HERO */}
       <section className="relative overflow-hidden">
         {/* Dark green top */}
-        <div className="relative bg-forest-dark noise-overlay">
+        <div className="relative bg-forest-dark">
+          <div className="absolute inset-0 pointer-events-none z-0" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,29,15,0.55) 100%)' }} />
           <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pb-16 pt-32 md:pt-40 lg:px-10">
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
               <div className="lg:col-span-7">
@@ -121,7 +124,7 @@ export default function OverPage() {
         </div>
 
         {/* Orange stats strip */}
-        <div className="noise-overlay-soft relative bg-accent">
+        <div className="relative -mt-px overflow-hidden bg-accent">
           <div className="mx-auto max-w-[1400px] px-6 py-12 lg:px-10">
             <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
               <div>
@@ -205,7 +208,7 @@ export default function OverPage() {
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[2.25rem] bg-cream">
                   <Image
                     src="/media/over-puglia-steeg.webp"
-                    alt="Wit steegje, Puglia"
+                    alt="Wit steegje, Locorotondo"
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 40vw, 18vw"
@@ -218,20 +221,19 @@ export default function OverPage() {
 
         {/* Pull quote */}
         <div className="mx-auto mt-16 max-w-[1400px] border-t border-forest/10 pt-14 lg:mt-20 lg:pt-16">
-          <blockquote className="mx-auto max-w-[900px]">
-            <span className="mb-4 block font-display text-[72px] leading-none text-accent md:text-[96px]">&ldquo;</span>
-            <p className="text-[24px] font-light leading-[1.35] text-forest md:text-[30px] lg:text-[34px]">
-              Al jaren wil ik een reisblog starten. En nu heb ik hem dan eindelijk doorgezet. Want na vier jaar met Meet the Locals in mijn hoofd, staat deze website er.
+          <blockquote className="mx-auto max-w-[780px] text-center">
+            <p className="font-display text-[26px] font-light italic leading-[1.4] text-forest md:text-[32px] lg:text-[38px]">
+              &ldquo;Niet alleen wat mooi is, maar wat echt is. Want echt is zoveel mooier.&rdquo;
             </p>
-            <footer className="mt-6 flex items-center gap-3">
-              <div className="h-px w-8 bg-accent" />
-              <cite className="not-italic text-[13px] font-semibold uppercase tracking-[0.14em] text-accent">Daley Jansen</cite>
-            </footer>
+            <cite className="mt-6 block not-italic text-[13px] font-semibold uppercase tracking-[0.16em] text-accent">
+              Daley Jansen
+            </cite>
           </blockquote>
         </div>
       </section>
 
-      <section className="bg-[#F5EFE8] py-20 md:py-28">
+
+<section className="bg-[#F5EFE8] py-20 md:py-28">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <div className="mb-12">
             <h2 className="text-4xl leading-[1.05] text-forest md:text-6xl">
@@ -295,14 +297,10 @@ export default function OverPage() {
         <div className="mx-auto max-w-[1400px] px-4 lg:px-6">
           <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
             {[
+              { src: '/media/over-zwembad-lezen.webp', alt: 'Lezen bij het zwembad', key: 'over-zwembad-lezen' },
               { src: '/media/over-peru-klooster.webp', alt: 'Santa Catalina klooster, Peru', key: 'over-peru-klooster' },
-              { src: '/media/over-fotograaf-kust.webp', alt: 'Aan het fotograferen op de kust', key: 'over-fotograaf-kust' },
-              { src: '/media/over-tempel-lantaarns.webp', alt: 'Chinese tempel, Maleisie', key: 'over-tempel-lantaarns' },
-              { src: '/media/over-zwembad-lezen.webp', alt: 'Lezen in het zwembad', key: 'over-zwembad-lezen' },
-              { src: '/media/over-puglia-steeg.webp', alt: 'Wit steegje, Puglia', key: 'over-puglia-steeg' },
               { src: '/media/over-kleur-trappen.webp', alt: 'Kleurrijke trappen', key: 'over-kleur-trappen' },
-              { src: '/media/over-new-york.webp', alt: 'Times Square, New York', key: 'over-new-york' },
-              { src: '/media/over-durian-mural.webp', alt: 'Durian muurschildering, Kuala Lumpur', key: 'over-durian-mural' },
+              { src: '/media/over-tempel-lantaarns.webp', alt: 'Chinese tempel, Maleisie', key: 'over-tempel-lantaarns' },
             ].map((photo) => (
               <div key={photo.src} className="relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl">
                 <PhotoWithInfo
@@ -318,20 +316,18 @@ export default function OverPage() {
       </section>
 
       <section id="samenwerken" className="mt-16 bg-[#ece7de] py-20 md:mt-24 md:py-28">
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-10">
-          <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-            Contact & samenwerken
-          </span>
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <h2 className="mb-6 text-4xl leading-[1.04] text-forest md:text-6xl">
             Laten we samenwerken.
           </h2>
-          <p className="mb-8 max-w-4xl text-[19px] leading-relaxed text-text-muted md:text-[21px]">
-            Ik maak visuele content voor plekken waar mensen naartoe willen: hotels, restaurants,
-            bestemmingen en reismerken. Altijd met aandacht voor sfeer, licht en het verhaal achter
-            de plek.
+          <p className="mb-8 text-[19px] leading-relaxed text-text-muted md:text-[21px]">
+            Dit kunnen hotels, B&amp;B&apos;s, reisbureaus, touroperators, caravan- en tentmerken,
+            verkeersbureaus en andere reismerken zijn. Als professioneel fotograaf en brand designer
+            kan ik je helpen met authentieke content, een converterende website of andere
+            merkversterkende uitingen.
           </p>
 
-          <ul className="mb-12 grid max-w-4xl grid-cols-1 gap-3 text-[17px] text-text-muted md:grid-cols-2">
+          <ul className="mb-8 grid grid-cols-1 gap-3 text-[19px] text-text-muted md:grid-cols-2 md:text-[19px]">
             {services.map((service) => (
               <li key={service} className="flex gap-3">
                 <span className="mt-2 h-2 w-2 flex-none rounded-full bg-accent" />
@@ -339,6 +335,10 @@ export default function OverPage() {
               </li>
             ))}
           </ul>
+
+          <p className="mb-12 text-[19px] leading-relaxed text-text-muted">
+            Ik ben ervaren in het maken van en het werken met bestaande huisstijlen en tone-of-voice.
+          </p>
 
           <Link
             href="/contact"
@@ -350,7 +350,7 @@ export default function OverPage() {
       </section>
 
       <section className="bg-[#F5EFE8] py-20 md:py-24">
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-10">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <h2 className="mb-8 text-3xl leading-tight text-forest md:text-4xl">
             Waar ik voor fotografeer
           </h2>
@@ -358,7 +358,7 @@ export default function OverPage() {
             {logoCards.map((item) => (
               <div
                 key={item}
-                className="flex min-h-[150px] items-center justify-center rounded-[1.5rem] bg-white px-6 text-center text-xl font-semibold uppercase tracking-[0.08em] text-forest/45 shadow-sm md:min-h-[180px]"
+                className="flex min-h-[150px] items-center justify-center rounded-[1.5rem] bg-white px-6 text-center text-xl font-semibold uppercase tracking-[0.08em] text-forest/45 natural-shadow-box md:min-h-[180px]"
               >
                 {item}
               </div>
@@ -414,6 +414,144 @@ export default function OverPage() {
                   </details>
                 ))}
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* THE DALEY EDIT — professional intro */}
+      <section className="relative bg-forest-dark noise-overlay py-20 md:py-28">
+        <div className="relative z-10 mx-auto max-w-[1400px] px-6 lg:px-10">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-7">
+              <span className="mb-5 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
+                Naast dit blog
+              </span>
+              <h2 className="mb-6 text-4xl leading-[1.04] text-white md:text-6xl">
+                Brand designer, fotograaf en webdesigner.
+              </h2>
+              <div className="space-y-4 text-[18px] leading-relaxed text-cream/75 md:text-[20px]">
+                <p>
+                  Naast Meet the Locals run ik The Daley Edit: mijn creatieve bureau waar ik
+                  merken help met hun uitstraling, marketing en online aanwezigheid.
+                </p>
+                <p>
+                  Ik combineer een goed gevoel voor esthetiek en design met slim en strategisch
+                  merkinzicht. Het resultaat: merken die er niet alleen goed uitzien, maar ook
+                  echt werken.
+                </p>
+                <p className="text-cream/50 text-[16px]">
+                  "Ik vind het zo zonde als bedrijven hun potentie laten liggen."
+                </p>
+              </div>
+            </div>
+            <div className="lg:col-span-5">
+              <div className="relative aspect-[3/4] max-w-[340px] overflow-hidden rounded-[2.5rem] shadow-2xl lg:max-w-full">
+                <Image
+                  src="/media/over-hero-daley.webp"
+                  alt="Daley Jansen"
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 340px, 33vw"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Diensten — waar ik bij kan helpen */}
+      <section className="bg-[#ece7de] py-20 md:py-28">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+          <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
+            The Daley Edit
+          </span>
+          <h2 className="mb-4 text-4xl leading-[1.04] text-forest md:text-6xl">
+            Waar ik bij kan helpen.
+          </h2>
+          <p className="mb-12 max-w-2xl text-[18px] leading-relaxed text-text-muted md:text-[20px]">
+            Van merkidentiteit tot webdesign en van fotografie tot marketing. Alles onder één dak,
+            zonder meerdere ZZP&apos;ers.
+          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                title: 'Branding',
+                desc: 'Merkstrategie, visuele identiteit, brand guidelines en templates. Een merk dat staat.',
+              },
+              {
+                title: 'Fotografie',
+                desc: 'Bedrijfsfotografie, branding- en portretfotografie, productfotografie en drone.',
+              },
+              {
+                title: 'Webdesign',
+                desc: 'Maatwerk websites in huisstijl. Snel, SEO-klaar, met hosting en onderhoud inbegrepen.',
+              },
+              {
+                title: 'Marketing',
+                desc: 'Maandelijkse samenwerking voor brand design, content en online zichtbaarheid.',
+              },
+              {
+                title: 'Vormgeving',
+                desc: 'DTP, brochures, folders, flyers en alle andere merkuitingen die je nodig hebt.',
+              },
+              {
+                title: 'AI & Automations',
+                desc: 'Leadgeneratie, AI-contentprocessen en efficiëntere marketing zonder extra handen.',
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-[1.5rem] bg-white px-8 py-8 natural-shadow-box"
+              >
+                <h3 className="mb-3 text-xl font-semibold uppercase tracking-[0.06em] text-forest">
+                  {item.title}
+                </h3>
+                <p className="text-[16px] leading-relaxed text-text-muted">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Mijn werk */}
+      <section className="bg-[#F5EFE8] py-20 md:py-28">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+          <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
+                Portfolio
+              </span>
+              <h2 className="text-4xl leading-[1.04] text-forest md:text-6xl">
+                Bekijk mijn werk.
+              </h2>
+            </div>
+            <div className="lg:col-span-5 lg:text-right">
+              <a
+                href="https://thedaleyedit.nl"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-accent-dark"
+              >
+                Naar The Daley Edit
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-4">
+            {['Merkidentiteit', 'Websites', 'Campagnebeelden', 'Portretfotografie', 'Branding shoots', 'Dronebeelden', 'Folders & DTP', 'Social content'].map((item) => (
+              <a
+                key={item}
+                href="https://thedaleyedit.nl"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex min-h-[130px] items-center justify-center rounded-[1.5rem] bg-white px-4 text-center text-base font-semibold uppercase tracking-[0.07em] text-forest/45 natural-shadow-box transition-all hover:text-forest/80 md:min-h-[160px]"
+              >
+                {item}
+              </a>
             ))}
           </div>
         </div>

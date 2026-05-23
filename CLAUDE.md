@@ -81,6 +81,29 @@ De site heeft scroll-lag door deze componenten. Pas ze voorzichtig aan:
 - Tailwind 4: gebruik `@theme` in `globals.css` voor design tokens. Geen `tailwind.config.js`.
 - Afbeeldingen altijd via Next.js `<Image>` met `sizes` prop. Hero-afbeeldingen krijgen `priority`.
 
+## CSS utilities
+
+### Schaduwen
+Gebruik **nooit** standaard Tailwind `shadow-sm` / `shadow-md` (grauwe rgba(0,0,0,...) schaduwen). Gebruik altijd de huisstijl-schaduwklassen die zijn gedefinieerd in `globals.css`:
+
+| Klasse | Wanneer gebruiken |
+|---|---|
+| `.natural-shadow` | Losse elementen zonder `overflow: hidden`. Gebruikt `::after` pseudo-element met `mix-blend-mode: multiply` en blur. |
+| `.natural-shadow-box` | Kaartjes en elementen met `overflow: hidden`. Directe `box-shadow` in huisstijlkleur. |
+
+De schaduwkleur is `rgba(15, 29, 15, ...)` (donker bosgroen), afgeleid van `--color-forest-dark`. Dit geeft een warme, natuurlijke schaduw die past bij elke achtergrondkleur op de site.
+
+```css
+/* Beiden gedefinieerd in globals.css, rond regel 278 */
+.natural-shadow      { /* ::after blur ellips */ }
+.natural-shadow-box  { /* directe box-shadow */ }
+```
+
+### Noise texture
+Noise via grain texture (`/textures/grain.webp`) werkt het best met `mix-blend-mode: overlay` en `opacity: 0.6–0.85`. Gebruik **niet** de combinatie van `filter: grayscale/brightness` met `mix-blend-mode` op hetzelfde element: dat breekt de rendering.
+
+De `.noise-overlay` CSS klasse gebruikt `::before` met `top: -80px` — dit wordt afgeknipt door `overflow: hidden` containers. Gebruik in dat geval een inline `<div>` met dezelfde stijl als directe child.
+
 ## Payload schema wijzigen
 
 Na elke wijziging aan een collection of global:

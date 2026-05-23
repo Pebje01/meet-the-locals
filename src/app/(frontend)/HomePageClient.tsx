@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRef, useCallback, useState, useEffect } from 'react'
 import { ComposableMap, Geographies, Geography, type GeoFeature } from 'react-simple-maps'
+import { NewsletterCTA } from '@/components/NewsletterCTA'
 
 /* ─── Data ─── */
 const GEO_URL = '/countries-110m.json'
@@ -26,6 +27,10 @@ const destinations = [
   { name: 'Marokko', image: '/media/woestijn-9-scaled.webp', slug: 'marokko', count: '4 artikelen' },
   { name: 'Colombia', image: '/media/Dansenmaloca-scaled.webp', slug: 'colombia', count: '7 artikelen' },
   { name: 'New York', image: '/media/newyork-1-scaled.webp', slug: 'new-york', count: '3 artikelen' },
+  { name: 'Apulië, Italië', image: '/media/over-puglia-steeg.webp', slug: 'apulie', count: '' },
+  { name: 'Sevilla, Spanje', image: '/media/over-kleur-trappen.webp', slug: 'sevilla', count: '' },
+  { name: 'Ruhrgebied, Duitsland', image: '/media/over-new-york.webp', slug: 'ruhrgebied', count: '' },
+  { name: 'Noorwegen', image: '/media/over-zwembad-lezen.webp', slug: 'noorwegen', count: '' },
 ]
 
 const continents = [
@@ -145,44 +150,50 @@ function DestinationSlider() {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-        <h2 className="text-4xl md:text-5xl font-display font-light text-cream!">Recent bezochte bestemmingen</h2>
-        <div className="flex items-center gap-5">
-          <div className="flex gap-2">
-            <button
-              onClick={() => scroll('left')}
-              className={`w-10 h-10 rounded-full border border-cream/30 flex items-center justify-center transition-all duration-300 ${
-                canScrollLeft ? 'text-cream hover:bg-cream hover:text-forest' : 'text-cream/20 cursor-default'
-              }`}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M19 12H5M5 12l6-6M5 12l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Header uitgelijnd met de rest van de content */}
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <h2 className="text-4xl md:text-5xl font-display font-light text-cream!">Recent bezochte bestemmingen</h2>
+          <div className="flex items-center gap-5">
+            <div className="flex gap-2">
+              <button
+                onClick={() => scroll('left')}
+                className={`w-10 h-10 rounded-full border border-cream/30 flex items-center justify-center transition-all duration-300 ${
+                  canScrollLeft ? 'text-cream hover:bg-cream hover:text-forest' : 'text-cream/20 cursor-default'
+                }`}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M19 12H5M5 12l6-6M5 12l6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <button
+                onClick={() => scroll('right')}
+                className={`w-10 h-10 rounded-full border border-cream/30 flex items-center justify-center transition-all duration-300 ${
+                  canScrollRight ? 'text-cream hover:bg-cream hover:text-forest' : 'text-cream/20 cursor-default'
+                }`}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14M19 12l-6-6M19 12l-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
+            <div className="w-px h-5 bg-cream/20" />
+            <Link href="/bestemmingen" className="group inline-flex items-center gap-2 text-cream/70 font-semibold text-sm uppercase tracking-[0.1em] hover:text-cream transition-colors">
+              <span>Alle bestemmingen</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </button>
-            <button
-              onClick={() => scroll('right')}
-              className={`w-10 h-10 rounded-full border border-cream/30 flex items-center justify-center transition-all duration-300 ${
-                canScrollRight ? 'text-cream hover:bg-cream hover:text-forest' : 'text-cream/20 cursor-default'
-              }`}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12h14M19 12l-6-6M19 12l-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+            </Link>
           </div>
-          <div className="w-px h-5 bg-cream/20" />
-          <Link href="/bestemmingen" className="group inline-flex items-center gap-2 text-cream/70 font-semibold text-sm uppercase tracking-[0.1em] hover:text-cream transition-colors">
-            <span>Alle bestemmingen</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
         </div>
       </div>
+
+      {/* Slider loopt full-width door, eerste kaart uitgelijnd met content */}
       <div
         ref={scrollRef}
         onScroll={checkScroll}
         className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth cursor-grab active:cursor-grabbing"
+        style={{ paddingLeft: '24px', paddingRight: '24px' }}
       >
         {destinations.map((dest) => (
           <Link
@@ -356,7 +367,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
             <path d="M0,0 L0,41 C200,60 400,23 600,45 C800,68 1000,26 1200,41 C1350,53 1400,34 1440,38 L1440,0 Z" fill="var(--color-warm-white)" />
           </svg>
         </div>
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10">
+        <div className="relative z-10">
           <DestinationSlider />
         </div>
         <div className="absolute bottom-0 left-0 right-0 z-2">
@@ -384,7 +395,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
                   'Fotografie voor reisbureaus, touroperators en bedrijven in de reisbranche',
                   'Webdesign in reisbranche',
                 ].map((item) => (
-                  <div key={item} className="flex items-start gap-2.5 text-sm text-forest/70">
+                  <div key={item} className="flex items-start gap-2.5 text-[20px] text-forest/70">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0 mt-[5px]" />
                     {item}
                   </div>
@@ -397,21 +408,21 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
                 </svg>
               </Link>
             </div>
-            <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-7 space-y-4">
+            <div className="grid grid-cols-2 md:grid-cols-12 gap-3 md:gap-4">
+              <div className="col-span-1 md:col-span-7 space-y-3 md:space-y-4">
                 <div className="aspect-[3/4] organic-img overflow-hidden relative">
-                  <Image src="/media/Ayuthayya-1-9-scaled.webp" alt="Reisfotografie voorbeeld" fill className="object-cover" sizes="(max-width: 1024px) 58vw, 29vw" />
+                  <Image src="/media/Ayuthayya-1-9-scaled.webp" alt="Reisfotografie voorbeeld" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 58vw, 29vw" />
                 </div>
                 <div className="aspect-square organic-img-alt overflow-hidden relative">
-                  <Image src="/media/Franksunset-scaled.webp" alt="Zonsondergang fotografie" fill className="object-cover" sizes="(max-width: 1024px) 58vw, 29vw" />
+                  <Image src="/media/Franksunset-scaled.webp" alt="Zonsondergang fotografie" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 58vw, 29vw" />
                 </div>
               </div>
-              <div className="col-span-5 space-y-4 pt-12">
+              <div className="col-span-1 md:col-span-5 space-y-3 md:space-y-4 pt-8 md:pt-12">
                 <div className="aspect-square organic-img overflow-hidden relative">
-                  <Image src="/media/Batucaves-6-scaled.webp" alt="Batu Caves Maleisië" fill className="object-cover" sizes="(max-width: 1024px) 42vw, 21vw" />
+                  <Image src="/media/Batucaves-6-scaled.webp" alt="Batu Caves Maleisië" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 42vw, 21vw" />
                 </div>
                 <div className="aspect-[3/4] organic-img-alt overflow-hidden relative">
-                  <Image src="/media/DJI_20240517152816_0082_D-scaled.webp" alt="Drone fotografie Indonesië" fill className="object-cover" sizes="(max-width: 1024px) 42vw, 21vw" />
+                  <Image src="/media/DJI_20240517152816_0082_D-scaled.webp" alt="Drone fotografie Indonesië" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 42vw, 21vw" />
                 </div>
               </div>
             </div>
@@ -515,6 +526,9 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
           </div>
         </div>
       </section>
+
+      {/* NEWSLETTER CTA */}
+      <NewsletterCTA />
     </main>
   )
 }

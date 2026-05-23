@@ -63,7 +63,7 @@ h1 {
   color: var(--color-forest);
   text-transform: uppercase;
   font-weight: 300;
-  font-size: 94px;
+  font-size: clamp(2rem, 9vw, 5.875rem);
 }
 
 :root {
@@ -261,6 +261,52 @@ a.text-link:hover,
 }
 .card-lift:hover {
   transform: translateY(-4px);
+}
+
+/* ─── Natural shadows ─────────────────────────────────────────────────────────
+   Standaard rgba(0,0,0,...) geeft een grauwe schaduw op gekleurde achtergronden.
+   Door de schaduwkleur af te stemmen op de huisstijl (donker bosgroen) darkert
+   de schaduw de achtergrond op een natuurlijke manier.
+
+   .natural-shadow     — ::after met mix-blend-mode: multiply.
+                         Werkt automatisch op elke achtergrondkleur.
+                         Niet gebruiken op elementen met overflow: hidden.
+
+   .natural-shadow-box — Directe box-shadow in huisstijlkleur.
+                         Gebruik dit op kaartjes met overflow: hidden.
+   ─────────────────────────────────────────────────────────────────────────── */
+.natural-shadow {
+  position: relative;
+}
+.natural-shadow::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 4%;
+  right: 4%;
+  height: 65%;
+  background: rgba(15, 29, 15, 0.22);
+  mix-blend-mode: multiply;
+  filter: blur(14px);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: opacity 0.35s ease, bottom 0.35s ease;
+}
+.natural-shadow:hover::after {
+  bottom: -14px;
+  opacity: 0.85;
+}
+
+.natural-shadow-box {
+  box-shadow:
+    0 1px 4px rgba(15, 29, 15, 0.08),
+    0 6px 20px rgba(15, 29, 15, 0.13);
+  transition: box-shadow 0.3s ease;
+}
+.natural-shadow-box:hover {
+  box-shadow:
+    0 2px 6px rgba(15, 29, 15, 0.10),
+    0 12px 32px rgba(15, 29, 15, 0.16);
 }
 
 /* ─── Noise texture overlay ─── */

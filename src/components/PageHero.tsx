@@ -17,7 +17,7 @@ export function PageHero({
 
   return (
     <section
-      className={`relative h-[75vh] min-h-[500px] flex items-center justify-center overflow-hidden noise-overlay ${
+      className={`relative h-[75vh] min-h-[500px] flex items-center justify-center overflow-hidden ${
         isDark ? 'bg-forest-dark' : ''
       }`}
     >
@@ -36,6 +36,11 @@ export function PageHero({
               ? 'bg-gradient-to-b from-forest-dark via-forest-dark/90 to-forest-dark'
               : 'bg-gradient-to-t from-forest/70 via-forest/30 to-forest/10'
           }`}
+        />
+        {/* Vignette */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,29,15,0.55) 100%)' }}
         />
       </div>
 
