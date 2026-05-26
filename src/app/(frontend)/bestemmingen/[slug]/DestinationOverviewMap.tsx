@@ -2,7 +2,7 @@
 
 import { ComposableMap, Geographies, Geography, Marker, type GeoFeature } from 'react-simple-maps'
 
-const GEO_URL = '/countries-110m.json'
+const GEO_URL = '/countries-10m.json'
 
 function normalizedId(geo: GeoFeature): string {
   return String(geo.id).padStart(3, '0')

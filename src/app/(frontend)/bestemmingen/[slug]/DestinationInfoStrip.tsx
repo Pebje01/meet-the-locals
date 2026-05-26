@@ -26,13 +26,13 @@ type StripItem = {
 
 // Shown while no travel info has been added in the CMS yet
 const PLACEHOLDER_ITEMS: StripItem[] = [
-  { label: 'Taal', value: '—', placeholder: true },
-  { label: 'Valuta', value: '—', placeholder: true },
-  { label: 'Klimaat', value: '—', placeholder: true },
-  { label: 'Tijdzone', value: '—', placeholder: true },
-  { label: 'Stroom', value: '—', placeholder: true },
-  { label: 'Reisadvies', value: '—', placeholder: true },
-  { label: 'Visum', value: '—', placeholder: true },
+  { label: 'Taal', value: '-', placeholder: true },
+  { label: 'Valuta', value: '-', placeholder: true },
+  { label: 'Klimaat', value: '-', placeholder: true },
+  { label: 'Tijdzone', value: '-', placeholder: true },
+  { label: 'Stroom', value: '-', placeholder: true },
+  { label: 'Reisadvies', value: '-', placeholder: true },
+  { label: 'Visum', value: '-', placeholder: true },
 ]
 
 export function DestinationInfoStrip({

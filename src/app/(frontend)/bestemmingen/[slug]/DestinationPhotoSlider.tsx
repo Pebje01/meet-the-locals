@@ -4,11 +4,71 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
+type SliderImage = {
+  url: string
+  caption?: string | null
+  exif?: {
+    camera?: string | null
+    lens?: string | null
+    aperture?: string | null
+    shutterSpeed?: string | null
+    iso?: string | null
+    focalLength?: string | null
+    takenAt?: string | null
+  } | null
+}
+
+function getYear(takenAt?: string | null): string | null {
+  if (!takenAt) return null
+  try {
+    return new Date(takenAt).getFullYear().toString()
+  } catch {
+    return null
+  }
+}
+
+function MetaBar({ image }: { image: SliderImage }) {
+  const exif = image.exif
+  const year = getYear(exif?.takenAt)
+
+  const leftParts = [
+    exif?.camera,
+    exif?.lens,
+    exif?.focalLength,
+    exif?.aperture,
+    exif?.shutterSpeed,
+    exif?.iso ? `ISO ${exif.iso}` : null,
+  ].filter(Boolean) as string[]
+
+  const hasLeft = leftParts.length > 0
+  const hasRight = !!(image.caption || year)
+
+  if (!hasLeft && !hasRight) return null
+
+  return (
+    <div className="absolute bottom-0 inset-x-0 z-20 flex items-end justify-between gap-4 px-5 pb-8 md:px-8 md:pb-10 pointer-events-none opacity-0 group-hover/slider:opacity-100 transition-opacity duration-300">
+      {/* Links: camera metadata */}
+      {hasLeft && (
+        <p className="font-mono text-[11px] md:text-[12px] tracking-wide text-white leading-none rounded-lg bg-white/20 backdrop-blur-md px-3 py-2">
+          {leftParts.join(' · ')}
+        </p>
+      )}
+
+      {/* Rechts: locatie + jaar */}
+      {hasRight && (
+        <p className="text-right italic text-[11px] md:text-[12px] tracking-wide text-white leading-none rounded-lg bg-white/20 backdrop-blur-md px-3 py-2 ml-auto">
+          {[image.caption, year].filter(Boolean).join(', ')}
+        </p>
+      )}
+    </div>
+  )
+}
+
 export function DestinationPhotoSlider({
   images,
   name,
 }: {
-  images: string[]
+  images: SliderImage[]
   name: string
 }) {
   const [current, setCurrent] = useState(0)
@@ -23,7 +83,7 @@ export function DestinationPhotoSlider({
   const next = () => goTo((current + 1) % images.length)
 
   return (
-    <section className="relative h-[55vh] md:h-[72vh] lg:h-[88vh] min-h-[400px] md:min-h-[560px] overflow-hidden">
+    <section className="group/slider relative h-[55vh] md:h-[72vh] lg:h-[88vh] min-h-[400px] md:min-h-[560px] overflow-hidden">
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={current}
@@ -35,7 +95,7 @@ export function DestinationPhotoSlider({
           className="absolute inset-0"
         >
           <Image
-            src={images[current]}
+            src={images[current].url}
             alt={`${name} foto ${current + 1}`}
             fill
             className="object-cover"
@@ -45,8 +105,6 @@ export function DestinationPhotoSlider({
         </motion.div>
       </AnimatePresence>
 
-      {/* Gradient top — blends hero into slider, no hard edge */}
-      <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/60 via-transparent to-transparent pointer-events-none z-10" />
 
       {/* Arrows */}
       {images.length > 1 && (
@@ -88,6 +146,8 @@ export function DestinationPhotoSlider({
         </div>
       )}
 
+      {/* Metadata balk */}
+      <MetaBar image={images[current]} />
     </section>
   )
 }

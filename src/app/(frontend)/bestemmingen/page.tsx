@@ -9,6 +9,14 @@ function heroUrl(img: Destination['heroImage']): string {
   return img && typeof img === 'object' ? (img.url ?? '') : ''
 }
 
+function thumbnailUrl(destination: Destination): string {
+  const firstGallery = destination.gallery?.[0]
+  if (firstGallery?.image && typeof firstGallery.image === 'object') {
+    return firstGallery.image.url ?? ''
+  }
+  return heroUrl(destination.heroImage)
+}
+
 const regionLabel: Record<string, string> = {
   europe: 'Europa',
   asia: 'Azië',
@@ -40,24 +48,10 @@ export default async function DestinatiesPage() {
         variant="dark"
       />
 
-      <section className="mx-auto max-w-[1400px] px-6 py-24 md:py-32 lg:px-10">
-        <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <span className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.15em] text-accent">
-              Locatiepagina&apos;s
-            </span>
-            <h2 className="text-4xl leading-tight text-forest md:text-5xl">
-              Waar ik ben geweest
-            </h2>
-          </div>
-          <p className="max-w-xl text-[17px] leading-relaxed text-text-muted">
-            Elk land heeft een eigen overzicht met sfeer, highlights, bezochte regio&apos;s en een kaart.
-          </p>
-        </div>
-
+      <section className="mx-auto max-w-[1400px] px-6 py-16 md:py-20 lg:px-10">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {countries.map((destination) => {
-            const image = heroUrl(destination.heroImage)
+            const image = thumbnailUrl(destination)
             const label = regionLabel[destination.region] ?? destination.region
 
             return (

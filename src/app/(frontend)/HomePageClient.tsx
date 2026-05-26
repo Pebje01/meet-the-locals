@@ -238,7 +238,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
                 De wereld in<br />beeld en verhalen
               </h1>
               <p className="text-white text-[20px] md:text-[22px] max-w-2xl mx-auto leading-relaxed mb-7 md:mb-10 drop-shadow-[0_2px_15px_rgba(0,0,0,0.4)]">
-                Beleef de wereld vanuit mijn lens. Als fotograaf en brand designer neem ik je mee naar plekken op de wereld die ik vastleg op mijn manier.<br /><br />Welkom bij Meet the Locals.
+                Beleef de wereld vanuit mijn lens. Als fotograaf en avonturier neem ik je mee naar plekken op de wereld die ik vastleg op mijn manier.<br /><br />Welkom bij Meet the Locals.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4">
                 <Link
@@ -356,8 +356,8 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
       <section
         className="destinations-texture relative bg-forest text-cream overflow-hidden noise-overlay"
         style={{
-          paddingTop: 'calc(6rem + 70px)',
-          paddingBottom: '6rem',
+          paddingTop: 'calc(10rem + 70px)',
+          paddingBottom: '10rem',
           marginTop: '-70px',
         }}
       >

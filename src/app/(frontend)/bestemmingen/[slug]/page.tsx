@@ -5,10 +5,9 @@ import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Destination, Post } from '@/payload-types'
-import { DestinationOverviewMap } from './DestinationOverviewMap'
+import { DestinationHeroClient } from './DestinationHeroClient'
 import { DestinationPhotoSlider } from './DestinationPhotoSlider'
 import { DestinationInfoStrip } from './DestinationInfoStrip'
-import { WorldMapBackground } from './WorldMapBackground'
 import { BreadcrumbJsonLd } from '@/components/JsonLd'
 
 type Props = {
@@ -205,9 +204,17 @@ export default async function DestinationPage({ params }: Props) {
 
   const hasChildren = children.length > 0
   const image = heroUrl(dest.heroImage)
-  const galleryUrls = (dest.gallery ?? [])
-    .map((item) => (typeof item.image === 'object' ? (item.image.url ?? '') : ''))
-    .filter(Boolean) as string[]
+  const galleryImages = (dest.gallery ?? [])
+    .map((item) => {
+      if (typeof item.image !== 'object') return null
+      const img = item.image
+      return {
+        url: img.url ?? '',
+        caption: img.caption ?? null,
+        exif: img.exif ?? null,
+      }
+    })
+    .filter((img): img is NonNullable<typeof img> => !!img?.url)
 
   const breadcrumbs = buildBreadcrumb(dest)
 
@@ -251,61 +258,84 @@ export default async function DestinationPage({ params }: Props) {
     <main className="bg-warm-white">
       <BreadcrumbJsonLd items={breadcrumbItems} />
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[60vh] overflow-hidden bg-forest-dark px-6 pb-20 pt-32 text-cream md:pt-40 lg:px-10">
-        {image && (
-          <Image
-            src={image}
-            alt=""
-            fill
-            priority
-            className="object-cover opacity-20"
-            sizes="100vw"
-          />
-        )}
-        <WorldMapBackground />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest-dark via-forest-dark/95 to-forest-dark" />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,29,15,0.55) 100%)' }} />
-
-        <div className="relative z-10 mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className={mapProps ? 'lg:col-span-6' : 'lg:col-span-10'}>
-            <Breadcrumb crumbs={breadcrumbs} />
-            {!breadcrumbs.length && (
-              <Link
-                href="/bestemmingen"
-                className="mb-10 inline-flex text-[12px] font-semibold uppercase tracking-[0.14em] text-cream/55 transition-colors hover:text-cream"
-              >
-                ← Alle bestemmingen
-              </Link>
-            )}
-            {dest.eyebrow && (
-              <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-cream/70">
-                {dest.eyebrow}
-              </span>
-            )}
-            <h1 className="mb-7 text-5xl leading-[0.98] text-cream! md:text-7xl lg:text-8xl">
-              {dest.name}
-            </h1>
-            {dest.intro && (
-              <p className="max-w-2xl text-[22px] leading-relaxed text-cream/70 md:text-[26px]">
-                {dest.intro}
-              </p>
-            )}
-            <FactItems dest={dest} />
-          </div>
-
-          {mapProps && (
-            <div className="lg:col-span-6">
-              <DestinationOverviewMap {...mapProps} />
-            </div>
-          )}
-        </div>
-      </section>
+      <DestinationHeroClient
+        heroImageUrl={image}
+        mapProps={mapProps}
+        breadcrumbs={breadcrumbs}
+        name={dest.name}
+        eyebrow={dest.eyebrow}
+        intro={dest.intro}
+        factItems={[
+          dest.region ? { label: 'Werelddeel', value: REGION_LABELS[dest.region] ?? dest.region } : null,
+          dest.population ? { label: 'Inwoners', value: dest.population } : null,
+          dest.flightHours ? { label: 'Reistijd', value: dest.flightHours } : null,
+        ].filter(Boolean) as { label: string; value: string }[]}
+      />
 
       {/* ── Fotogalerij ──────────────────────────────────────────────────── */}
-      {galleryUrls.length > 0 && (
-        <div className="-mt-px">
-          <DestinationPhotoSlider images={galleryUrls} name={dest.name} />
+      {galleryImages.length > 0 && (
+        <div className="relative z-[1] -mt-20 md:-mt-28 lg:-mt-36">
+          <DestinationPhotoSlider images={galleryImages} name={dest.name} />
         </div>
+      )}
+
+      {/* ── Gerelateerde blogs (direct onder fotoslider) ──────────────── */}
+      {relatedPosts.length > 0 && (
+        <section className="bg-[#F5EFE8] py-16 md:py-20">
+          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+            <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+              <div>
+                <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
+                  Meer lezen
+                </span>
+                <h2 className="text-4xl leading-tight text-forest md:text-5xl">
+                  Reisblogs over {dest.name}
+                </h2>
+              </div>
+              <Link
+                href="/blog"
+                className="text-sm font-semibold uppercase tracking-[0.1em] text-forest transition-colors hover:text-accent"
+              >
+                Alle reistips bekijken →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              {relatedPosts.map((post) => (
+                <article key={post.id}>
+                  <Link href={`/blog/${post.slug}`} className="group block h-full">
+                    <div className="h-full overflow-hidden rounded-[1.75rem] bg-white natural-shadow-box transition-transform duration-300 group-hover:-translate-y-1">
+                      <div className="relative aspect-[4/3] bg-cream">
+                        {postImageUrl(post.heroImage) && (
+                          <Image
+                            src={postImageUrl(post.heroImage)}
+                            alt={post.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                          />
+                        )}
+                      </div>
+                      <div className="p-6">
+                        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
+                          {formatDate(post.publishedDate)}
+                        </p>
+                        <h3 className="mb-3 text-2xl leading-tight text-forest transition-colors group-hover:text-accent">
+                          {post.title}
+                        </h3>
+                        <p className="mb-5 line-clamp-3 text-[16px] leading-relaxed text-text-muted">
+                          {post.excerpt}
+                        </p>
+                        <span className="text-sm font-semibold uppercase tracking-[0.1em] text-forest">
+                          Lees verder →
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
       )}
 
       {/* ── Reisinfo-strip ───────────────────────────────────────────────── */}
@@ -490,77 +520,6 @@ export default async function DestinationPage({ params }: Props) {
         </section>
       )}
 
-      {/* ── Gerelateerde blogs ────────────────────────────────────────────── */}
-      <section className="bg-[#F5EFE8] py-20 md:py-28">
-        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-          <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-            <div>
-              <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-                Meer lezen
-              </span>
-              <h2 className="text-4xl leading-tight text-forest md:text-5xl">
-                Reisblogs over {dest.name}
-              </h2>
-            </div>
-            <Link
-              href="/blog"
-              className="text-sm font-semibold uppercase tracking-[0.1em] text-forest transition-colors hover:text-accent"
-            >
-              Alle reistips bekijken →
-            </Link>
-          </div>
-
-          {relatedPosts.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {relatedPosts.map((post) => (
-                <article key={post.id}>
-                  <Link href={`/blog/${post.slug}`} className="group block h-full">
-                    <div className="h-full overflow-hidden rounded-[1.75rem] bg-white natural-shadow-box transition-transform duration-300 group-hover:-translate-y-1">
-                      <div className="relative aspect-[4/3] bg-cream">
-                        {postImageUrl(post.heroImage) && (
-                          <Image
-                            src={postImageUrl(post.heroImage)}
-                            alt={post.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                          />
-                        )}
-                      </div>
-                      <div className="p-6">
-                        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
-                          {formatDate(post.publishedDate)}
-                        </p>
-                        <h3 className="mb-3 text-2xl leading-tight text-forest transition-colors group-hover:text-accent">
-                          {post.title}
-                        </h3>
-                        <p className="mb-5 line-clamp-3 text-[16px] leading-relaxed text-text-muted">
-                          {post.excerpt}
-                        </p>
-                        <span className="text-sm font-semibold uppercase tracking-[0.1em] text-forest">
-                          Lees verder →
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-[1.75rem] bg-white p-8 natural-shadow-box md:p-10">
-              <p className="max-w-3xl text-[19px] leading-relaxed text-text-muted">
-                Binnenkort verschijnen hier de reisblogs die bij {dest.name} horen.
-              </p>
-              <Link
-                href="/blog"
-                className="mt-7 inline-flex rounded-full bg-forest px-7 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-accent"
-              >
-                Bekijk alle reistips
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
     </main>
   )
 }

@@ -50,9 +50,9 @@ export const photoMeta: Record<string, PhotoMeta> = {
   },
 
   // over-puglia-steeg — IMG_8823.jpeg
-  // GPS: 40°45'10"N, 17°19'45"E (Alberobello, Puglia, Italie)
+  // GPS: 40°45'10"N, 17°19'45"E (Locorotondo, Puglia, Italie)
   'over-puglia-steeg': {
-    location: 'Alberobello, Puglia, Italie',
+    location: 'Locorotondo, Puglia, Italie',
     camera: 'iPhone 11',
     iso: 80,
     shutter: '1/121',

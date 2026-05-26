@@ -2,7 +2,7 @@
 
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 
-const GEO_URL = '/countries-110m.json'
+const GEO_URL = '/countries-10m.json'
 
 export function WorldMapBackground() {
   return (
