@@ -227,11 +227,11 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
   return (
     <main>
       {/* HERO */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-forest-dark">
+      <section className="relative h-svh flex items-center justify-center overflow-hidden bg-forest-dark">
         <HeroSlideshow />
         <div className="absolute inset-0 bg-gradient-to-t from-forest/60 via-transparent to-transparent z-[1]" />
         <div className="absolute inset-0 z-[1]" style={{ background: 'radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0.58) 0%, transparent 65%)' }} />
-        <div className="relative z-10 w-full pt-16 md:pt-20">
+        <div className="relative z-10 w-full pt-16 md:pt-20 -mt-0">
           <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
             <div className="w-full">
               <h1 className="font-display text-white! leading-[1.1] mb-5 md:mb-8 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]" style={{ fontSize: 'clamp(1.9rem, 6vw, 4.75rem)' }}>
