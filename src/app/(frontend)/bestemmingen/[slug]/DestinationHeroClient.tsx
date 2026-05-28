@@ -34,7 +34,7 @@ export function DestinationHeroClient({
 }) {
   return (
     <section
-      className="relative z-[2] min-h-[60vh] overflow-x-hidden bg-forest-dark px-6 pb-32 pt-32 text-cream md:pt-40 md:pb-40 lg:px-10"
+      className="relative z-[2] min-h-[72vh] overflow-x-hidden bg-forest-dark px-6 pb-32 pt-32 text-cream md:pt-40 md:pb-40 lg:px-10"
       style={{ clipPath: 'url(#heroWaveClip)' }}
     >
       {/* Clip-path definitie: organische onderrand */}
