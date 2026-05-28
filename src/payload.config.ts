@@ -52,7 +52,10 @@ export default buildConfig({
   plugins: [
     s3Storage({
       collections: {
-        media: true,
+        media: {
+          // Serve media directly from S3 — skips Payload proxy (faster, no auth overhead)
+          disablePayloadAccessControl: true,
+        },
       },
       bucket: process.env.S3_BUCKET || '',
       config: {
