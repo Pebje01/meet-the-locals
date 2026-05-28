@@ -349,34 +349,36 @@ export default async function BlogPostPage({ params }: Props) {
               )}
 
               {/* Auteur */}
-              <div className="bg-forest rounded-2xl overflow-hidden relative">
+              <div className="bg-accent rounded-2xl p-7 overflow-hidden relative">
                 <div className="absolute inset-0 pointer-events-none"
                   style={{ backgroundImage: "url('/textures/grain.webp')", backgroundSize: '600px', backgroundRepeat: 'repeat', opacity: 0.5, mixBlendMode: 'overlay' as const }} />
-                <div className="relative z-10 flex items-stretch">
-                  {/* Foto */}
-                  <div className="w-28 flex-shrink-0 relative">
-                    <Image
-                      src="/media/portretje-400x300.png"
-                      alt="Daley Jansen"
-                      fill
-                      className="object-cover object-top"
-                    />
+                <div className="relative z-10">
+                  {/* Bovenste rij: foto links, naam rechts */}
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-cream/30">
+                      <Image
+                        src="/media/portretje-400x300.png"
+                        alt="Daley Jansen"
+                        width={80} height={80}
+                        className="object-cover object-top w-full h-full"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-cream/60 mb-1">Over de auteur</p>
+                      <p className="font-display text-cream text-base font-light">Daley Jansen</p>
+                    </div>
                   </div>
-                  {/* Tekst */}
-                  <div className="flex-1 px-5 py-5">
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-cream/40 mb-1">Over de auteur</p>
-                    <p className="font-display text-cream text-lg font-light mb-2">Daley Jansen</p>
-                    <p className="text-cream/55 text-[12px] leading-relaxed mb-4">
-                      Fotograaf, marketeer en vormgever. Legt de wereld vast zoals zij hem ziet. Wil in een wereld vol AI juist de echtheid laten zien.
-                    </p>
-                    <Link href="/over"
-                      className="inline-flex items-center gap-1.5 text-accent text-[11px] uppercase tracking-[0.1em] font-semibold hover:gap-2.5 transition-all">
-                      Lees mijn verhaal
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </Link>
-                  </div>
+                  {/* Bio tekst onder, volle breedte */}
+                  <p className="text-cream/75 text-[12px] leading-relaxed mb-5">
+                    Fotograaf, marketeer en vormgever. Legt de wereld vast zoals zij hem ziet. Wil in een wereld vol AI juist de echtheid laten zien.
+                  </p>
+                  <Link href="/over"
+                    className="inline-flex items-center gap-1.5 text-cream text-[11px] uppercase tracking-[0.1em] font-semibold hover:gap-2.5 transition-all">
+                    Lees mijn verhaal
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </Link>
                 </div>
               </div>
 

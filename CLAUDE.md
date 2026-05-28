@@ -81,6 +81,19 @@ De site heeft scroll-lag door deze componenten. Pas ze voorzichtig aan:
 - Tailwind 4: gebruik `@theme` in `globals.css` voor design tokens. Geen `tailwind.config.js`.
 - Afbeeldingen altijd via Next.js `<Image>` met `sizes` prop. Hero-afbeeldingen krijgen `priority`.
 
+## Fotosliders: EXIF op hover
+
+In **alle fotosliders** op de site geldt: toon EXIF-metadata bij hover over een foto. Verplicht in elke slider-component die je aanmaakt of aanpast.
+
+Wat tonen (als de data beschikbaar is in de Media-collectie of als prop):
+- Camera (Make + Model)
+- Lens
+- Sluitertijd, diafragma (f/), ISO
+- Brandpuntsafstand
+- Locatie (GPS of tekstuele naam)
+
+Implementatie: een absoluut gepositioneerde overlay (`opacity-0 group-hover:opacity-100 transition-opacity`) onderaan of rechtsboven de foto. Gebruik `text-[11px]` of kleiner, lichte achtergrond (`bg-black/50 backdrop-blur-sm`) of donkere glasmorfiek stijl passend bij de context. De overlay mag subtiel zijn maar moet leesbaar zijn op zowel lichte als donkere foto's.
+
 ## CSS utilities
 
 ### Schaduwen

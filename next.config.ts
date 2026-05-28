@@ -17,6 +17,12 @@ const nextConfig: NextConfig = {
         hostname: 'meetthelocals.nl',
         pathname: '/api/media/file/**',
       },
+      {
+        // Hetzner Object Storage — media files served directly from S3
+        protocol: 'https',
+        hostname: 'fsn1.your-objectstorage.com',
+        pathname: '/meetthelocals-media/**',
+      },
     ],
   },
 }
