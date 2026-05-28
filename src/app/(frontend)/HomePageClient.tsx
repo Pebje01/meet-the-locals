@@ -261,8 +261,8 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
           </div>
         </div>
         <div className="absolute bottom-0 left-0 right-0 z-2">
-          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[50px] md:h-[80px] block">
-            <path d="M0,80 L0,65 C240,55 480,72 720,62 C960,52 1200,68 1440,60 L1440,80 Z" fill="#F5EFE8" />
+          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[20px] md:h-[32px] block">
+            <path d="M0,80 L0,76 C360,72 720,78 1080,74 C1200,73 1320,75 1440,73 L1440,80 Z" fill="#F5EFE8" />
           </svg>
         </div>
       </section>

@@ -26,7 +26,7 @@ export function DestinationHeroMapBackground({
   center: [number, number]
 }) {
   return (
-    <div className="absolute inset-x-0 top-0 -bottom-20 md:-bottom-24 lg:-bottom-32 pointer-events-none select-none z-[1] overflow-hidden opacity-80">
+    <div className="absolute inset-x-0 top-0 -bottom-20 md:-bottom-24 lg:-bottom-32 pointer-events-none select-none z-[1] overflow-hidden">
       <ComposableMap
         projection="geoNaturalEarth1"
         projectionConfig={{ scale: scale * 5, center }}
@@ -58,8 +58,8 @@ export function DestinationHeroMapBackground({
 
         <Marker coordinates={marker}>
           <g>
-            <circle r={18} fill="none" stroke="rgba(255,255,255,0.25)" strokeDasharray="3 3" strokeWidth={1} />
-            <circle r={4} fill="#c87952" />
+            <circle r={22} fill="none" stroke="rgba(255,255,255,0.35)" strokeDasharray="4 3" strokeWidth={1.2} />
+            <circle r={5} fill="#c87952" />
           </g>
         </Marker>
       </ComposableMap>

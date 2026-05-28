@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 type SliderImage = {
   url: string
   caption?: string | null
+  objectPosition?: string | null
   exif?: {
     camera?: string | null
     lens?: string | null
@@ -99,6 +100,7 @@ export function DestinationPhotoSlider({
             alt={`${name} foto ${current + 1}`}
             fill
             className="object-cover"
+            style={{ objectPosition: images[current].objectPosition ?? 'center' }}
             sizes="100vw"
             priority={current === 0}
           />

@@ -41,7 +41,7 @@ export function DestinationHeroClient({
       <svg width="0" height="0" className="absolute" aria-hidden="true">
         <defs>
           <clipPath id="heroWaveClip" clipPathUnits="objectBoundingBox">
-            <path d="M 0,0 L 1,0 L 1,0.90 C 0.88,0.90 0.82,1.0 0.72,0.97 C 0.62,0.93 0.54,0.83 0.44,0.86 C 0.34,0.89 0.27,1.0 0.17,0.97 C 0.07,0.94 0.03,0.87 0,0.90 L 0,0 Z" />
+            <path d="M 0,0 L 1,0 L 1,0.95 C 0.88,0.95 0.82,0.98 0.72,0.97 C 0.62,0.965 0.54,0.94 0.44,0.95 C 0.34,0.96 0.27,0.98 0.17,0.97 C 0.07,0.965 0.03,0.945 0,0.95 L 0,0 Z" />
           </clipPath>
         </defs>
       </svg>
@@ -65,19 +65,24 @@ export function DestinationHeroClient({
         <WorldMapBackground />
       )}
 
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,29,15,0.55) 100%)' }}
-      />
-      {/* Uitfaden van kaart/achtergrond vóór de clip-rand zodat er geen kaartrand-artefacten zichtbaar zijn */}
-      <div
-        className="absolute inset-x-0 bottom-0 z-[5] pointer-events-none"
-        style={{ height: '35%', background: 'linear-gradient(to bottom, transparent, #0f1d0f 70%)' }}
-      />
+      {/* Vignette: alleen tonen als er geen kaart is (kaart heeft eigen zichtbaarheid) */}
+      {!mapProps && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse at center, transparent 50%, rgba(15,29,15,0.35) 100%)' }}
+        />
+      )}
+      {/* Uitfaden vóór de clip-rand — alleen bij geen kaart */}
+      {!mapProps && (
+        <div
+          className="absolute inset-x-0 bottom-0 z-[5] pointer-events-none"
+          style={{ height: '15%', background: 'linear-gradient(to bottom, transparent, rgba(15,29,15,0.7) 95%)' }}
+        />
+      )}
 
       {/* Inhoud */}
       <div className="relative z-10 mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
-        <div className="lg:col-span-7">
+        <div className="lg:col-span-10">
           {breadcrumbs.length > 0 ? (
             <nav className="mb-6 flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-cream/55">
               <Link href="/bestemmingen" className="transition-colors hover:text-cream">Alle bestemmingen</Link>
@@ -109,7 +114,7 @@ export function DestinationHeroClient({
           </h1>
 
           {intro && (
-            <p className="max-w-2xl text-[22px] leading-relaxed text-cream/70 md:text-[26px]">
+            <p className="max-w-4xl text-[22px] leading-relaxed text-cream/70 md:text-[26px]">
               {intro}
             </p>
           )}

@@ -204,13 +204,21 @@ export default async function DestinationPage({ params }: Props) {
 
   const hasChildren = children.length > 0
   const image = heroUrl(dest.heroImage)
+  // Per-filename object-position overrides for the photo slider
+  const objectPositionMap: Record<string, string> = {
+    'singapore-12.webp': 'top',   // Fullerton Hotel: hotel visible at top
+    'singapore-23.webp': 'top',   // Supertrees by night: colorful tops
+  }
+
   const galleryImages = (dest.gallery ?? [])
     .map((item) => {
       if (typeof item.image !== 'object') return null
       const img = item.image
+      const filename = img.filename ?? ''
       return {
         url: img.url ?? '',
         caption: img.caption ?? null,
+        objectPosition: objectPositionMap[filename] ?? null,
         exif: img.exif ?? null,
       }
     })
