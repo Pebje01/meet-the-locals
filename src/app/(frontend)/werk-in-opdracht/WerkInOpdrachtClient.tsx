@@ -147,27 +147,9 @@ function ProjectCard({
               ...(hovered ? {} : {}),
             }}
           >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-              {/* Schacht — licht gebogen voor handgetekend gevoel */}
-              <path
-                d="M5.5 15 C6.5 12 9.5 7.5 14.5 5"
-                stroke="white"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-              />
-              {/* Pijlpunt */}
-              <path
-                d="M14.5 5 L9.8 5.9"
-                stroke="white"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-              />
-              <path
-                d="M14.5 5 L13.6 9.7"
-                stroke="white"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-              />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 17L17 7" />
+              <path d="M7 7h10v10" />
             </svg>
           </div>
         </div>
