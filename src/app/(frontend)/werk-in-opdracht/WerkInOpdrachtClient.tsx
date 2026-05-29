@@ -6,9 +6,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 export type Commission = {
-  /** Korte koptekst die verschijnt bij hover onder de afbeelding */
   cardTitle: string
-  /** Volledige beschrijving (optioneel, voor intern gebruik) */
   description?: string
   image: string
   imageAlt: string
@@ -29,6 +27,8 @@ export const commissions: Commission[] = [
   // Voeg hier nieuwe opdrachten toe
 ]
 
+const TEXT_HEIGHT = 76 // px — hoogte van de tekstbalk bij hover
+
 function ProjectCard({ project, index }: { project: Commission; index: number }) {
   const [hovered, setHovered] = useState(false)
 
@@ -43,45 +43,70 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
         href={project.link?.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="block cursor-pointer"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          borderRadius: '1.5rem',
+          overflow: 'hidden',
+          aspectRatio: '3/4',
+          cursor: 'pointer',
+          textDecoration: 'none',
+        }}
       >
-        {/* Afbeelding — schuift omhoog op hover */}
-        <div className="relative overflow-hidden rounded-3xl aspect-[3/4]">
+        {/* Afbeelding — krimpt automatisch als tekst groeit */}
+        <div
+          style={{
+            flex: '1 1 auto',
+            position: 'relative',
+            overflow: 'hidden',
+            minHeight: 0,
+          }}
+        >
           <Image
             src={project.image}
             alt={project.imageAlt}
             fill
-            className="object-cover"
             style={{
+              objectFit: 'cover',
               transition: 'transform 700ms ease-out',
-              transform: hovered ? 'scale(1.06) translateY(-4%)' : 'scale(1) translateY(0)',
+              transform: hovered ? 'scale(1.04)' : 'scale(1)',
             }}
             sizes="(max-width: 768px) 100vw, 50vw"
             priority={index === 0}
           />
         </div>
 
-        {/* Koptekst — schuift in onder de afbeelding op hover */}
+        {/* Tekst — groeit van 0 naar TEXT_HEIGHT op hover */}
         <div
           style={{
-            display: 'grid',
-            gridTemplateRows: hovered ? '1fr' : '0fr',
-            transition: 'grid-template-rows 500ms ease-out',
+            height: hovered ? `${TEXT_HEIGHT}px` : '0px',
+            overflow: 'hidden',
+            transition: 'height 500ms ease',
+            backgroundColor: '#2b4a2a',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 1.5rem',
+            flexShrink: 0,
           }}
         >
-          <div style={{ overflow: 'hidden', minHeight: 0 }}>
-            <h3
-              className="font-display font-bold text-white leading-tight"
-              style={{
-                fontSize: 'clamp(17px, 2vw, 22px)',
-                paddingTop: '1.25rem',
-              }}
-            >
-              {project.cardTitle}
-            </h3>
-          </div>
+          <h3
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 700,
+              color: 'white',
+              fontSize: 'clamp(14px, 1.6vw, 19px)',
+              lineHeight: 1.25,
+              margin: 0,
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+            }}
+          >
+            {project.cardTitle}
+          </h3>
         </div>
       </a>
     </motion.div>
