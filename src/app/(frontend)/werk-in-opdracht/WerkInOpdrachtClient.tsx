@@ -26,19 +26,23 @@ export const commissions: Commission[] = [
       'Content reis naar Noorwegen voor Kip Caravans. Fotografie, dronefotografie en video van de Kip Kompakt polar blue in het Noorse fjordenlandschap.',
     client: 'Kip Caravans',
     tags: ['Fotografie', 'Content', 'Drone', 'Video', 'Dronefotografie'],
-    image: '/media/kip-caravans.webp',
+    image: 'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/a07e40239930507.693376d2b9c8a.png',
     imageAlt: 'Kip Kompakt caravan in een Noors landschap',
     images: [
+      // Landschap/Noorwegen
       'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/1a2c90239930507.69337c3b41f24.jpg',
-      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/cee9e8239930507.69337c3b416ef.jpg',
       'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/e57107239930507.69337c3c39f83.jpg',
-      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/c6e05f239930507.69337c3c39879.jpg',
-      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/18547a239930507.693376d189bca.jpg',
       'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/2b116e239930507.693376d18a367.jpg',
-      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/b8916c239930507.693376d188ead.jpg',
-      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/9a3e6c239930507.69337c3e75beb.jpg',
-      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/50548f239930507.69337c43c525e.jpg',
-      'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/5ea60f239930507.69337c4537808.jpg',
+      // Met mensen
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/c6e05f239930507.69337c3c39879.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/50548f239930507.69337c43c525e.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/4f5d78239930507.69337c43c5bf0.jpg',
+      // Drone
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/f71c67239930507.69337c4238b4a.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/472bd4239930507.69337c4238607.jpg',
+      // Portret/detail
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/9a3e6c239930507.69337c3e75beb.jpg',
+      'https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/c52a13239930507.69337c3e76c6c.jpg',
     ],
     link: {
       url: 'https://www.behance.net/gallery/239930507/Kip-Caravans-Content',
