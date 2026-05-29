@@ -11,6 +11,7 @@ const navItems = [
   { label: 'Bestemmingen', href: '/bestemmingen' },
   { label: 'Reisnieuws', href: '/reisnieuws' },
   { label: 'Fotografie', href: '/fotografie' },
+  { label: 'Werk in opdracht', href: '/werk-in-opdracht' },
   { label: 'Over', href: '/over' },
   { label: 'Contact', href: '/contact' },
 ]
@@ -28,7 +29,7 @@ export function Header() {
   }, [])
 
   const isTransparent = hasDarkHero && !scrolled && !isOpen
-  const isDark = true
+  const isDark = isOpen || isTransparent
 
   return (
     <header
@@ -37,7 +38,7 @@ export function Header() {
           ? 'top-0 left-0 right-0 bg-forest-dark noise-overlay overflow-hidden'
           : isTransparent
             ? 'top-0 left-0 right-0 bg-transparent'
-            : 'top-0 left-0 right-0 bg-forest-dark/90 backdrop-blur-xl border-b border-forest/20'
+            : 'top-0 left-0 right-0 bg-[#e8f2e8]/95 backdrop-blur-xl border-b border-forest/15'
       }`}
     >
       <div className="max-w-[1400px] mx-auto pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-6 lg:pr-8 flex items-center justify-between h-16 md:h-20 py-2">
@@ -49,7 +50,7 @@ export function Header() {
             width={320}
             height={96}
             className={`h-16 md:h-20 w-auto transition-all duration-500 group-hover:scale-[1.02] ${
-              isOpen ? 'logo-light-green' : 'brightness-0 invert'
+              isOpen ? 'logo-light-green' : isDark ? 'brightness-0 invert' : 'logo-forest'
             }`}
             priority
           />
