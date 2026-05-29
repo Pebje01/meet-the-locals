@@ -63,7 +63,7 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
         <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-8 bg-gradient-to-t from-forest-dark/95 via-forest-dark/60 to-forest-dark/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 
           <span
-            className="absolute top-5 right-6 font-display font-bold text-cream/15 select-none leading-none pointer-events-none"
+            className="absolute top-5 right-6 font-display font-bold text-white/15 select-none leading-none pointer-events-none"
             style={{ fontSize: 96 }}
           >
             {num}
@@ -74,11 +74,11 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
               {project.role}{project.location ? ` · ${project.location}` : ''}
             </span>
 
-            <h3 className="font-display font-bold text-cream leading-tight mb-3" style={{ fontSize: 24 }}>
+            <h3 className="font-display font-bold text-white leading-tight mb-3" style={{ fontSize: 24 }}>
               {project.title}
             </h3>
 
-            <p className="text-cream/65 text-[13px] leading-relaxed mb-5 line-clamp-3">
+            <p className="text-white/65 text-[13px] leading-relaxed mb-5 line-clamp-3">
               {project.description}
             </p>
 
@@ -86,7 +86,7 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2.5 py-1 rounded-full border border-cream/20 text-cream/55 text-[11px]"
+                  className="px-2.5 py-1 rounded-full border border-cream/20 text-white/55 text-[11px]"
                 >
                   {tag}
                 </span>
@@ -98,7 +98,7 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
                 href={project.link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-cream text-[12px] font-semibold uppercase tracking-[0.12em] hover:gap-3 transition-all duration-200"
+                className="inline-flex items-center gap-2 text-white text-[12px] font-semibold uppercase tracking-[0.12em] hover:gap-3 transition-all duration-200"
               >
                 {project.link.label}
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -113,17 +113,17 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
       {/* Minimale info onder de kaart */}
       <div className="mt-4 px-1 flex items-start justify-between gap-4">
         <div>
-          <span className="block text-cream/20 text-[10px] font-bold tracking-[0.25em] uppercase mb-0.5">
+          <span className="block text-white/20 text-[10px] font-bold tracking-[0.25em] uppercase mb-0.5">
             {num}
           </span>
-          <h3 className="font-display font-bold text-cream text-[16px] leading-snug">
+          <h3 className="font-display font-bold text-white text-[16px] leading-snug">
             {project.title}
           </h3>
-          <span className="text-cream/45 text-[12px] mt-0.5 block">
+          <span className="text-white/45 text-[12px] mt-0.5 block">
             {project.role}
           </span>
         </div>
-        <span className="text-cream/30 text-[12px] font-medium mt-1 whitespace-nowrap">
+        <span className="text-white/30 text-[12px] font-medium mt-1 whitespace-nowrap">
           {project.year}
         </span>
       </div>
@@ -154,24 +154,24 @@ export function WerkInOpdrachtClient() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: 0.06 }}
-            className="font-display font-bold text-cream leading-[0.92] tracking-[-0.02em]"
+            className="font-display font-bold text-white leading-[0.92] tracking-[-0.02em]"
             style={{ fontSize: 'clamp(52px, 9vw, 112px)' }}
           >
             Geselecteerde
             <br />
-            <span className="text-cream/35">opdrachten</span>
+            <span className="text-white/35">opdrachten</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.12 }}
-            className="mt-10 max-w-xl text-cream/55 text-base md:text-lg leading-relaxed"
+            className="mt-10 max-w-xl text-white/55 text-base md:text-lg leading-relaxed"
           >
             Reis, content en fotografie in opdracht. Van contentreizen tot
             merkverhalen, hier vind je een selectie van het werk dat ik voor
             klanten maak.{' '}
-            <Link href="/contact" className="text-cream/75 underline underline-offset-4 hover:text-cream transition-colors">
+            <Link href="/contact" className="text-white/75 underline underline-offset-4 hover:text-white transition-colors">
               Iets in gedachten?
             </Link>
           </motion.p>
@@ -183,7 +183,7 @@ export function WerkInOpdrachtClient() {
         <div className="max-w-[1400px] mx-auto">
           {commissions.length === 0 ? (
             <div className="py-32 text-center border border-cream/10 rounded-3xl">
-              <p className="text-cream/30 text-lg">De eerste opdrachten komen eraan.</p>
+              <p className="text-white/30 text-lg">De eerste opdrachten komen eraan.</p>
             </div>
           ) : commissions.length === 1 ? (
             <div className="max-w-lg mx-auto">
@@ -226,24 +226,24 @@ export function WerkInOpdrachtClient() {
                 Contact
               </span>
               <h2
-                className="font-display font-bold text-cream leading-tight"
+                className="font-display font-bold text-white leading-tight"
                 style={{ fontSize: 'clamp(36px, 5vw, 64px)' }}
               >
                 Iets moois
                 <br />
-                <span className="text-cream/35">te vertellen?</span>
+                <span className="text-white/35">te vertellen?</span>
               </h2>
             </div>
 
             <div className="flex flex-col gap-5 md:items-end">
-              <p className="text-cream/50 text-base leading-relaxed max-w-sm md:text-right">
+              <p className="text-white/50 text-base leading-relaxed max-w-sm md:text-right">
                 Of het nu om een contentreis, fotografie of een compleet
                 merkverhaal gaat: stuur een bericht en we kijken samen
                 wat er mogelijk is.
               </p>
               <Link
                 href="/contact"
-                className="self-start md:self-auto inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-cream text-forest font-semibold text-sm uppercase tracking-[0.1em] hover:bg-accent hover:text-white transition-all duration-300"
+                className="self-start md:self-auto inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-white text-forest font-semibold text-sm uppercase tracking-[0.1em] hover:bg-accent hover:text-white transition-all duration-300"
               >
                 Neem contact op
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
