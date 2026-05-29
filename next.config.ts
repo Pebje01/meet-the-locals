@@ -23,6 +23,12 @@ const nextConfig: NextConfig = {
         hostname: 'fsn1.your-objectstorage.com',
         pathname: '/meetthelocals-media/**',
       },
+      {
+        // Behance CDN — voor project afbeeldingen in popups
+        protocol: 'https',
+        hostname: 'mir-s3-cdn-cf.behance.net',
+        pathname: '/project_modules/**',
+      },
     ],
   },
 }
