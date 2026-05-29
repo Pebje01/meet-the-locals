@@ -10,7 +10,7 @@ const footerLinks = {
   ],
   info: [
     { label: 'Samenwerken', href: '/contact' },
-    { label: 'Portfolio', href: '/fotografie' },
+    { label: 'Portfolio', href: '/werk-in-opdracht' },
     { label: 'Over MTL', href: '/over' },
     { label: 'Reisnieuws', href: '/reisnieuws' },
     { label: 'Contact', href: '/contact' },

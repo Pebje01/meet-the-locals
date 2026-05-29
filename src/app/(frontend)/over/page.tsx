@@ -8,6 +8,7 @@ import { photoMeta } from '@/data/photoMeta'
 const quickLinks = [
   { label: 'Samenwerken?', href: '#samenwerken' },
   { label: 'Bekijk fotografie', href: '/fotografie' },
+  { label: 'Portfolio', href: '/werk-in-opdracht' },
   { label: 'Mijn fotospots', href: '/kaart' },
   { label: 'Neem contact op', href: '/contact' },
 ]
@@ -526,7 +527,13 @@ export default function OverPage() {
                 Bekijk mijn werk.
               </h2>
             </div>
-            <div className="lg:col-span-5 lg:text-right">
+            <div className="flex flex-wrap gap-3 lg:col-span-5 lg:justify-end">
+              <Link
+                href="/werk-in-opdracht"
+                className="inline-flex items-center gap-2 rounded-full bg-forest px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-forest-dark"
+              >
+                Bekijk portfolio
+              </Link>
               <a
                 href="https://thedaleyedit.nl"
                 target="_blank"

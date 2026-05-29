@@ -343,7 +343,7 @@ function ProjectModal({
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-[11px] font-semibold uppercase tracking-[0.1em] px-3 py-1 rounded-full"
+                    className="text-[11px] font-semibold uppercase tracking-[0.1em] px-3 py-1 organic-btn-alt"
                     style={{ border: '1.5px solid #2b4a2a', color: '#2b4a2a' }}
                   >
                     {tag}
@@ -379,7 +379,7 @@ function ProjectModal({
               href={project.link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200"
+              className="inline-flex items-center gap-2 px-5 py-2.5 organic-btn text-white text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200"
               style={{ backgroundColor: '#2b4a2a' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#3d6b3c' }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#2b4a2a' }}

@@ -11,7 +11,6 @@ const navItems = [
   { label: 'Bestemmingen', href: '/bestemmingen' },
   { label: 'Reisnieuws', href: '/reisnieuws' },
   { label: 'Fotografie', href: '/fotografie' },
-  { label: 'Werk in opdracht', href: '/werk-in-opdracht' },
   { label: 'Over', href: '/over' },
   { label: 'Contact', href: '/contact' },
 ]
