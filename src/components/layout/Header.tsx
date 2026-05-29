@@ -21,6 +21,8 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   const hasDarkHero = pathname !== '/over'
+  // Pagina's met een donkere achtergrond door de hele pagina — header blijft altijd donker
+  const hasAlwaysDarkBg = pathname === '/werk-in-opdracht'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
@@ -29,14 +31,14 @@ export function Header() {
   }, [])
 
   const isTransparent = hasDarkHero && !scrolled && !isOpen
-  const isDark = isOpen || isTransparent
+  const isDark = isOpen || isTransparent || hasAlwaysDarkBg
 
   return (
     <header
       className={`fixed z-50 transition-all duration-500 ${
         isOpen
           ? 'top-0 left-0 right-0 bg-forest-dark noise-overlay overflow-hidden'
-          : isTransparent
+          : isTransparent || hasAlwaysDarkBg
             ? 'top-0 left-0 right-0 bg-transparent'
             : 'top-0 left-0 right-0 bg-[#e8f2e8]/95 backdrop-blur-xl border-b border-forest/15'
       }`}
@@ -71,7 +73,7 @@ export function Header() {
                   isActive
                     ? `${activeColor} text-white`
                     : isDark
-                      ? `text-white/90 ${hoverColor} hover:text-white`
+                      ? `text-white ${hoverColor} hover:text-white`
                       : `text-forest ${hoverColor} hover:text-white`
                 }`}
               >
