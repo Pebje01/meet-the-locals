@@ -59,7 +59,7 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
           priority={index === 0}
         />
 
-        {/* Overlay */}
+        {/* Overlay — blijft donker want staat over een foto */}
         <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-8 bg-gradient-to-t from-forest-dark/95 via-forest-dark/60 to-forest-dark/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 
           {/* Groot projectnummer op achtergrond */}
@@ -114,17 +114,17 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
       {/* Minimale info onder de kaart */}
       <div className="mt-4 px-1 flex items-start justify-between gap-4">
         <div>
-          <span className="block text-cream/20 text-[10px] font-bold tracking-[0.25em] uppercase mb-0.5">
+          <span className="block text-forest-dark/20 text-[10px] font-bold tracking-[0.25em] uppercase mb-0.5">
             {num}
           </span>
-          <h3 className="font-display font-bold text-cream text-[16px] leading-snug">
+          <h3 className="font-display font-bold text-forest-dark text-[16px] leading-snug">
             {project.title}
           </h3>
-          <span className="text-cream/35 text-[12px] mt-0.5 block">
+          <span className="text-forest-dark/40 text-[12px] mt-0.5 block">
             {project.role}
           </span>
         </div>
-        <span className="text-cream/25 text-[12px] font-medium mt-1 whitespace-nowrap">
+        <span className="text-forest-dark/30 text-[12px] font-medium mt-1 whitespace-nowrap">
           {project.year}
         </span>
       </div>
@@ -137,11 +137,10 @@ export function WerkInOpdrachtClient() {
   const rightCol = commissions.filter((_, i) => i % 2 === 1)
 
   return (
-    <main className="min-h-screen bg-forest-dark">
+    <main className="min-h-screen" style={{ backgroundColor: '#e8f2e8' }}>
 
       {/* Hero */}
       <section className="relative overflow-hidden px-6 pt-36 pb-20 md:pt-48 md:pb-24 lg:px-10">
-        <div className="absolute inset-0 noise-overlay pointer-events-none" />
         <div className="relative z-10 max-w-[1400px] mx-auto">
           <motion.span
             initial={{ opacity: 0, y: 8 }}
@@ -156,24 +155,24 @@ export function WerkInOpdrachtClient() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: 0.06 }}
-            className="font-display font-bold text-cream leading-[0.92] tracking-[-0.02em]"
+            className="font-display font-bold text-forest-dark leading-[0.92] tracking-[-0.02em]"
             style={{ fontSize: 'clamp(52px, 9vw, 112px)' }}
           >
             Geselecteerde
             <br />
-            <span className="text-cream/35">opdrachten</span>
+            <span className="text-forest-dark/30">opdrachten</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.12 }}
-            className="mt-10 max-w-xl text-cream/50 text-base md:text-lg leading-relaxed"
+            className="mt-10 max-w-xl text-forest-dark/55 text-base md:text-lg leading-relaxed"
           >
             Reis, content en fotografie in opdracht. Van contentreizen tot
             merkverhalen, hier vind je een selectie van het werk dat ik voor
             klanten maak.{' '}
-            <Link href="/contact" className="text-cream/75 underline underline-offset-4 hover:text-cream transition-colors">
+            <Link href="/contact" className="text-forest-dark/70 underline underline-offset-4 hover:text-forest-dark transition-colors">
               Iets in gedachten?
             </Link>
           </motion.p>
@@ -184,8 +183,8 @@ export function WerkInOpdrachtClient() {
       <section className="px-6 pb-32 md:pb-40 lg:px-10">
         <div className="max-w-[1400px] mx-auto">
           {commissions.length === 0 ? (
-            <div className="py-32 text-center border border-cream/10 rounded-3xl">
-              <p className="text-cream/30 text-lg">De eerste opdrachten komen eraan.</p>
+            <div className="py-32 text-center border border-forest-dark/10 rounded-3xl">
+              <p className="text-forest-dark/30 text-lg">De eerste opdrachten komen eraan.</p>
             </div>
           ) : commissions.length === 1 ? (
             <div className="max-w-lg mx-auto">
@@ -210,7 +209,7 @@ export function WerkInOpdrachtClient() {
 
       {/* Scheidingslijn */}
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-        <div className="border-t border-cream/10" />
+        <div className="border-t border-forest-dark/10" />
       </div>
 
       {/* CTA */}
@@ -228,24 +227,24 @@ export function WerkInOpdrachtClient() {
                 Contact
               </span>
               <h2
-                className="font-display font-bold text-cream leading-tight"
+                className="font-display font-bold text-forest-dark leading-tight"
                 style={{ fontSize: 'clamp(36px, 5vw, 64px)' }}
               >
                 Iets moois
                 <br />
-                <span className="text-cream/35">te vertellen?</span>
+                <span className="text-forest-dark/30">te vertellen?</span>
               </h2>
             </div>
 
             <div className="flex flex-col gap-5 md:items-end">
-              <p className="text-cream/45 text-base leading-relaxed max-w-sm md:text-right">
+              <p className="text-forest-dark/50 text-base leading-relaxed max-w-sm md:text-right">
                 Of het nu om een contentreis, fotografie of een compleet
-                merkverhaal gaat — stuur een bericht en we kijken samen
+                merkverhaal gaat: stuur een bericht en we kijken samen
                 wat er mogelijk is.
               </p>
               <Link
                 href="/contact"
-                className="self-start md:self-auto inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-cream text-forest-dark font-semibold text-sm uppercase tracking-[0.1em] hover:bg-accent hover:text-white transition-all duration-300"
+                className="self-start md:self-auto inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-forest-dark text-cream font-semibold text-sm uppercase tracking-[0.1em] hover:bg-accent hover:text-white transition-all duration-300"
               >
                 Neem contact op
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
