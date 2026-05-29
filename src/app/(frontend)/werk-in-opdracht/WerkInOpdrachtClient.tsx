@@ -87,16 +87,16 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
             backgroundColor: '#2b4a2a',
             display: 'flex',
             alignItems: 'center',
-            padding: '0 1.5rem',
+            padding: '0',
             flexShrink: 0,
           }}
         >
           <h3
             style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 700,
+              fontFamily: "'oslla', Georgia, serif",
+              fontWeight: 400,
               color: 'white',
-              fontSize: 'clamp(14px, 1.6vw, 19px)',
+              fontSize: 'clamp(15px, 1.7vw, 20px)',
               lineHeight: 1.25,
               margin: 0,
               overflow: 'hidden',
