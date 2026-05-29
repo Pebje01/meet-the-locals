@@ -64,14 +64,16 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
           />
         </div>
 
-        {/* Koptekst — verschijnt onder de afbeelding bij hover */}
-        <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-hover:max-h-32 group-hover:opacity-100">
-          <h3
-            className="pt-4 font-display font-bold text-white leading-tight"
-            style={{ fontSize: 'clamp(16px, 2vw, 22px)' }}
-          >
-            {project.cardTitle}
-          </h3>
+        {/* Koptekst — verschijnt onder de afbeelding bij hover (grid-rows techniek) */}
+        <div className="grid [grid-template-rows:0fr] group-hover:[grid-template-rows:1fr] transition-[grid-template-rows] duration-500 ease-out">
+          <div className="overflow-hidden min-h-0">
+            <h3
+              className="pt-5 font-display font-bold text-white leading-tight"
+              style={{ fontSize: 'clamp(17px, 2vw, 22px)' }}
+            >
+              {project.cardTitle}
+            </h3>
+          </div>
         </div>
       </CardWrapper>
     </motion.div>
