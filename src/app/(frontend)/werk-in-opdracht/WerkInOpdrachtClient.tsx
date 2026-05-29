@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 export type Commission = {
@@ -29,20 +30,7 @@ export const commissions: Commission[] = [
 ]
 
 function ProjectCard({ project, index }: { project: Commission; index: number }) {
-  const CardWrapper = project.link
-    ? ({ children }: { children: React.ReactNode }) => (
-        <a
-          href={project.link!.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group block focus:outline-none"
-        >
-          {children}
-        </a>
-      )
-    : ({ children }: { children: React.ReactNode }) => (
-        <div className="group block">{children}</div>
-      )
+  const [hovered, setHovered] = useState(false)
 
   return (
     <motion.div
@@ -51,31 +39,51 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.4, delay: 0.06 * index }}
     >
-      <CardWrapper>
-        {/* Afbeelding — inkort visueel op hover door upward shift */}
+      <a
+        href={project.link?.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block cursor-pointer"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {/* Afbeelding — schuift omhoog op hover */}
         <div className="relative overflow-hidden rounded-3xl aspect-[3/4]">
           <Image
             src={project.image}
             alt={project.imageAlt}
             fill
-            className="object-cover transition-all duration-700 ease-out group-hover:scale-[1.06] group-hover:-translate-y-[4%]"
+            className="object-cover"
+            style={{
+              transition: 'transform 700ms ease-out',
+              transform: hovered ? 'scale(1.06) translateY(-4%)' : 'scale(1) translateY(0)',
+            }}
             sizes="(max-width: 768px) 100vw, 50vw"
             priority={index === 0}
           />
         </div>
 
-        {/* Koptekst — verschijnt onder de afbeelding bij hover (grid-rows techniek) */}
-        <div className="grid [grid-template-rows:0fr] group-hover:[grid-template-rows:1fr] transition-[grid-template-rows] duration-500 ease-out">
-          <div className="overflow-hidden min-h-0">
+        {/* Koptekst — schuift in onder de afbeelding op hover */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateRows: hovered ? '1fr' : '0fr',
+            transition: 'grid-template-rows 500ms ease-out',
+          }}
+        >
+          <div style={{ overflow: 'hidden', minHeight: 0 }}>
             <h3
-              className="pt-5 font-display font-bold text-white leading-tight"
-              style={{ fontSize: 'clamp(17px, 2vw, 22px)' }}
+              className="font-display font-bold text-white leading-tight"
+              style={{
+                fontSize: 'clamp(17px, 2vw, 22px)',
+                paddingTop: '1.25rem',
+              }}
             >
               {project.cardTitle}
             </h3>
           </div>
         </div>
-      </CardWrapper>
+      </a>
     </motion.div>
   )
 }
