@@ -5,32 +5,23 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 export type Commission = {
-  title: string
-  client: string
-  role: string
-  year: string
-  location?: string
-  description: string
+  /** Korte koptekst die verschijnt bij hover onder de afbeelding */
+  cardTitle: string
+  /** Volledige beschrijving (optioneel, voor intern gebruik) */
+  description?: string
   image: string
   imageAlt: string
-  tags: string[]
-  link?: { label: string; url: string }
+  link?: { url: string }
 }
 
 export const commissions: Commission[] = [
   {
-    title: 'Kip Caravans',
-    client: 'Kip Caravans',
-    role: 'Foto, drone & video',
-    year: '2024',
-    location: 'Noorwegen',
+    cardTitle: 'Fotografie, dronefotografie en video voor Kip Caravans',
     description:
-      'Op contentreis voor Kip Caravans naar het indrukwekkende Noorwegen. De gloednieuwe Kip Kompakt caravan gefotografeerd en gefilmd met camera en drone, beelden voornamelijk bedoeld voor hun social media.',
+      'Fotografie, dronefotografie en video van een content reis naar Noorwegen voor Kip Caravans. Kip Kompakt polar blue.',
     image: '/media/kip-caravans.webp',
     imageAlt: 'Kip Kompakt caravan in een Noors landschap',
-    tags: ['Fotografie', 'Dronefotografie', 'Dronevideo', 'Travel content'],
     link: {
-      label: 'Bekijk op Behance',
       url: 'https://www.behance.net/gallery/239930507/Kip-Caravans-Content',
     },
   },
@@ -38,96 +29,52 @@ export const commissions: Commission[] = [
 ]
 
 function ProjectCard({ project, index }: { project: Commission; index: number }) {
-  const num = String(index + 1).padStart(2, '0')
+  const CardWrapper = project.link
+    ? ({ children }: { children: React.ReactNode }) => (
+        <a
+          href={project.link!.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group block focus:outline-none"
+        >
+          {children}
+        </a>
+      )
+    : ({ children }: { children: React.ReactNode }) => (
+        <div className="group block">{children}</div>
+      )
 
   return (
-    <motion.article
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.4, delay: 0.06 * index }}
-      className="group relative"
     >
-      {/* Afbeelding met hover overlay */}
-      <div className="relative overflow-hidden rounded-3xl aspect-[3/4]">
-        <Image
-          src={project.image}
-          alt={project.imageAlt}
-          fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          priority={index === 0}
-        />
+      <CardWrapper>
+        {/* Afbeelding — inkort visueel op hover door upward shift */}
+        <div className="relative overflow-hidden rounded-3xl aspect-[3/4]">
+          <Image
+            src={project.image}
+            alt={project.imageAlt}
+            fill
+            className="object-cover transition-all duration-700 ease-out group-hover:scale-[1.06] group-hover:-translate-y-[4%]"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority={index === 0}
+          />
+        </div>
 
-        {/* Overlay */}
-        <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-8 bg-gradient-to-t from-forest-dark/95 via-forest-dark/60 to-forest-dark/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-
-          <span
-            className="absolute top-5 right-6 font-display font-bold text-white/15 select-none leading-none pointer-events-none"
-            style={{ fontSize: 96 }}
+        {/* Koptekst — verschijnt onder de afbeelding bij hover */}
+        <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-hover:max-h-32 group-hover:opacity-100">
+          <h3
+            className="pt-4 font-display font-bold text-white leading-tight"
+            style={{ fontSize: 'clamp(16px, 2vw, 22px)' }}
           >
-            {num}
-          </span>
-
-          <div>
-            <span className="block text-[11px] uppercase tracking-[0.18em] font-semibold text-accent mb-2">
-              {project.role}{project.location ? ` · ${project.location}` : ''}
-            </span>
-
-            <h3 className="font-display font-bold text-white leading-tight mb-3" style={{ fontSize: 24 }}>
-              {project.title}
-            </h3>
-
-            <p className="text-white/65 text-[13px] leading-relaxed mb-5 line-clamp-3">
-              {project.description}
-            </p>
-
-            <div className="flex flex-wrap gap-2 mb-5">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2.5 py-1 rounded-full border border-cream/20 text-white/55 text-[11px]"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {project.link && (
-              <a
-                href={project.link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white text-[12px] font-semibold uppercase tracking-[0.12em] hover:gap-3 transition-all duration-200"
-              >
-                {project.link.label}
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Minimale info onder de kaart */}
-      <div className="mt-4 px-1 flex items-start justify-between gap-4">
-        <div>
-          <span className="block text-white/20 text-[10px] font-bold tracking-[0.25em] uppercase mb-0.5">
-            {num}
-          </span>
-          <h3 className="font-display font-bold text-white text-[16px] leading-snug">
-            {project.title}
+            {project.cardTitle}
           </h3>
-          <span className="text-white/45 text-[12px] mt-0.5 block">
-            {project.role}
-          </span>
         </div>
-        <span className="text-white/30 text-[12px] font-medium mt-1 whitespace-nowrap">
-          {project.year}
-        </span>
-      </div>
-    </motion.article>
+      </CardWrapper>
+    </motion.div>
   )
 }
 
@@ -182,7 +129,7 @@ export function WerkInOpdrachtClient() {
       <section className="px-6 pb-32 md:pb-40 lg:px-10">
         <div className="max-w-[1400px] mx-auto">
           {commissions.length === 0 ? (
-            <div className="py-32 text-center border border-cream/10 rounded-3xl">
+            <div className="py-32 text-center border border-white/10 rounded-3xl">
               <p className="text-white/30 text-lg">De eerste opdrachten komen eraan.</p>
             </div>
           ) : commissions.length === 1 ? (
@@ -193,12 +140,12 @@ export function WerkInOpdrachtClient() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-7 items-start">
               <div className="flex flex-col gap-5 md:gap-7">
                 {leftCol.map((project, i) => (
-                  <ProjectCard key={project.title} project={project} index={i * 2} />
+                  <ProjectCard key={project.cardTitle} project={project} index={i * 2} />
                 ))}
               </div>
               <div className="flex flex-col gap-5 md:gap-7 md:pt-[100px]">
                 {rightCol.map((project, i) => (
-                  <ProjectCard key={project.title} project={project} index={i * 2 + 1} />
+                  <ProjectCard key={project.cardTitle} project={project} index={i * 2 + 1} />
                 ))}
               </div>
             </div>
@@ -208,7 +155,7 @@ export function WerkInOpdrachtClient() {
 
       {/* Scheidingslijn */}
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-        <div className="border-t border-cream/10" />
+        <div className="border-t border-white/10" />
       </div>
 
       {/* CTA */}
