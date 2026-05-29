@@ -23,9 +23,9 @@ export const commissions: Commission[] = [
     cardTitle: 'Fotografie en dronebeelden voor Kip Caravans',
     modalTitle: 'Fotografie, dronefotografie en video voor Kip Caravans',
     description:
-      'Fotografie, dronefotografie en video van een content reis naar Noorwegen voor Kip Caravans. De Kip Kompakt polar blue caravan in het Noorse fjordenlandschap: van de woeste kustroutes tot de stille bergdalen. Een volledig contentpakket voor social media, website en campagnes.',
+      'Content reis naar Noorwegen voor Kip Caravans. Fotografie, dronefotografie en video van de Kip Kompakt polar blue in het Noorse fjordenlandschap.',
     client: 'Kip Caravans',
-    tags: ['Fotografie', 'Dronefotografie', 'Video'],
+    tags: ['Fotografie', 'Content', 'Drone', 'Video', 'Dronefotografie'],
     image: '/media/kip-caravans.webp',
     imageAlt: 'Kip Kompakt caravan in een Noors landschap',
     link: {
@@ -98,7 +98,7 @@ function ProjectCard({
           />
         </div>
 
-        {/* Tekst — groeit van 0 naar TEXT_HEIGHT op hover */}
+        {/* Tekst + pijl — groeit van 0 naar TEXT_HEIGHT op hover */}
         <div
           style={{
             height: hovered ? `${TEXT_HEIGHT}px` : '0px',
@@ -107,7 +107,8 @@ function ProjectCard({
             backgroundColor: '#2b4a2a',
             display: 'flex',
             alignItems: 'center',
-            padding: '0',
+            justifyContent: 'space-between',
+            paddingRight: '16px',
             flexShrink: 0,
           }}
         >
@@ -119,6 +120,8 @@ function ProjectCard({
               fontSize: 'clamp(15px, 1.7vw, 20px)',
               lineHeight: 1.25,
               margin: 0,
+              flex: 1,
+              minWidth: 0,
               overflow: 'hidden',
               display: '-webkit-box',
               WebkitLineClamp: 2,
@@ -127,6 +130,46 @@ function ProjectCard({
           >
             {project.cardTitle}
           </h3>
+
+          {/* Handgetekende pijl — schuin omhoog rechts */}
+          <div
+            style={{
+              flexShrink: 0,
+              marginLeft: '14px',
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              border: '1.5px solid rgba(255,255,255,0.35)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'border-color 300ms ease, background 300ms ease',
+              ...(hovered ? {} : {}),
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+              {/* Schacht — licht gebogen voor handgetekend gevoel */}
+              <path
+                d="M5.5 15 C6.5 12 9.5 7.5 14.5 5"
+                stroke="white"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+              {/* Pijlpunt */}
+              <path
+                d="M14.5 5 L9.8 5.9"
+                stroke="white"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+              <path
+                d="M14.5 5 L13.6 9.7"
+                stroke="white"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
         </div>
       </div>
     </motion.div>
