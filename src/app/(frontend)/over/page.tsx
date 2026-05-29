@@ -96,7 +96,7 @@ export default function OverPage() {
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="rounded-full border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-white/60 hover:bg-white/20"
+                      className="organic-btn border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-white/60 hover:bg-white/20"
                     >
                       {link.label}
                     </Link>
@@ -343,7 +343,7 @@ export default function OverPage() {
 
           <Link
             href="/contact"
-            className="inline-flex rounded-full bg-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-accent-dark"
+            className="inline-flex organic-btn bg-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-accent-dark"
           >
             Neem contact op
           </Link>
@@ -530,7 +530,7 @@ export default function OverPage() {
             <div className="flex flex-wrap gap-3 lg:col-span-5 lg:justify-end">
               <Link
                 href="/werk-in-opdracht"
-                className="inline-flex items-center gap-2 rounded-full bg-forest px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-forest-dark"
+                className="inline-flex items-center gap-2 organic-btn bg-forest px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-forest-dark"
               >
                 Bekijk portfolio
               </Link>
@@ -538,7 +538,7 @@ export default function OverPage() {
                 href="https://thedaleyedit.nl"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-accent-dark"
+                className="inline-flex items-center gap-2 organic-btn-alt bg-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-accent-dark"
               >
                 Naar The Daley Edit
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

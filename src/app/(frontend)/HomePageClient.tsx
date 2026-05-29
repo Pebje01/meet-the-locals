@@ -443,7 +443,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
               </div>
               <div className="relative z-10 flex min-h-[145px] flex-wrap items-center gap-3 md:min-h-[165px]">
                 {continents.map((item) => (
-                  <Link key={item.value} href={`/blog?werelddeel=${item.value}`} className="px-6 py-3 bg-cream-dark/75 text-forest/75 rounded-full text-sm font-medium backdrop-blur-[1px] hover:bg-accent hover:text-white transition-all duration-300">
+                  <Link key={item.value} href={`/blog?werelddeel=${item.value}`} className="px-6 py-3 bg-cream-dark/75 text-forest/75 organic-btn text-sm font-medium backdrop-blur-[1px] hover:bg-accent hover:text-white transition-all duration-300">
                     {item.label}
                   </Link>
                 ))}

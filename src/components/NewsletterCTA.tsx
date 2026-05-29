@@ -90,7 +90,7 @@ export function NewsletterCTA() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="group/btn flex-shrink-0 rounded-full bg-cream px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#8a3f1e] whitespace-nowrap transition-colors duration-300 hover:bg-cream/90 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="group/btn flex-shrink-0 organic-btn bg-cream px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#8a3f1e] whitespace-nowrap transition-colors duration-300 hover:bg-cream/90 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     <span className="inline-flex items-center gap-1.5">
                       <span className="transition-transform duration-300 ease-out group-hover/btn:translate-x-0.5">

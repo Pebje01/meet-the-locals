@@ -82,7 +82,7 @@ export function BlogExplorer({
                 type="button"
                 onClick={() => setActiveFilter({ type: '', value: '' })}
                 aria-pressed={!hasActiveFilter}
-                className={`flex-shrink-0 px-5 py-2 rounded-full text-[12px] uppercase tracking-[0.1em] font-semibold transition-colors ${
+                className={`flex-shrink-0 px-5 py-2 organic-btn text-[12px] uppercase tracking-[0.1em] font-semibold transition-colors ${
                   !hasActiveFilter
                     ? 'bg-forest text-cream'
                     : 'bg-cream text-forest hover:bg-cream-dark/50'
@@ -101,7 +101,7 @@ export function BlogExplorer({
                       setActiveFilter({ type: option.filterType, value: option.value })
                     }
                     aria-pressed={isActive}
-                    className={`flex-shrink-0 px-5 py-2 rounded-full text-[12px] uppercase tracking-[0.1em] font-semibold transition-colors ${
+                    className={`flex-shrink-0 px-5 py-2 organic-btn text-[12px] uppercase tracking-[0.1em] font-semibold transition-colors ${
                       isActive
                         ? 'bg-forest text-cream'
                         : 'bg-cream text-forest hover:bg-cream-dark/50'

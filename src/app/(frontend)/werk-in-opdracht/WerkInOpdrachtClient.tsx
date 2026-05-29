@@ -534,7 +534,7 @@ export function WerkInOpdrachtClient() {
               </p>
               <Link
                 href="/contact"
-                className="self-start md:self-auto inline-flex items-center gap-3 px-7 py-3.5 rounded-full bg-white text-forest font-semibold text-sm uppercase tracking-[0.1em] hover:bg-accent hover:text-white transition-all duration-300"
+                className="self-start md:self-auto inline-flex items-center gap-3 px-7 py-3.5 organic-btn bg-white text-forest font-semibold text-sm uppercase tracking-[0.1em] hover:bg-accent hover:text-white transition-all duration-300"
               >
                 Neem contact op
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
