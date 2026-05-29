@@ -450,7 +450,7 @@ export function WerkInOpdrachtClient() {
           >
             Geselecteerde
             <br />
-            <span className="text-white/35">opdrachten</span>
+            <span className="text-white">opdrachten</span>
           </motion.h1>
 
           <motion.p
