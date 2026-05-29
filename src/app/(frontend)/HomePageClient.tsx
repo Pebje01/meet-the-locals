@@ -43,11 +43,11 @@ const continents = [
 ]
 
 const HERO_SLIDES = [
-  { src: '/media/Shirakawago-3.webp',                    alt: 'Shirakawago Japan',         kb: 'animate-ken-burns' },
-  { src: '/media/DJI_20240517152816_0082_D-scaled.webp', alt: 'Indonesië vanuit de lucht', kb: 'animate-ken-burns-b' },
-  { src: '/media/cusco-12-scaled.webp',                  alt: 'Cusco Peru',                kb: 'animate-ken-burns-c' },
-  { src: '/media/Malaysia-1-7-1-scaled.webp',            alt: 'Maleisië',                  kb: 'animate-ken-burns-d' },
-  { src: '/media/Dansenmaloca-scaled.webp',              alt: 'Colombia',                  kb: 'animate-ken-burns-e' },
+  { src: '/media/Shirakawago-3.webp',                    alt: 'Shirakawago, Japan',           kb: 'animate-ken-burns' },
+  { src: '/media/singapore-skyline.webp',                alt: 'Skyline Singapore',            kb: 'animate-ken-burns-b' },
+  { src: '/media/purmerend-drone-4.webp',                alt: 'Purmerend, Nederland',         kb: 'animate-ken-burns-c' },
+  { src: '/media/DJI_20240517152816_0082_D-scaled.webp', alt: 'Indonesië vanuit de lucht',    kb: 'animate-ken-burns-d' },
+  { src: '/media/cusco-12-scaled.webp',                  alt: 'Cusco, Peru',                  kb: 'animate-ken-burns-e' },
 ]
 
 function HeroSlideshow() {
@@ -401,7 +401,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
                   </div>
                 ))}
               </div>
-              <Link href="/fotografie" className="group inline-flex items-center gap-3 bg-accent text-white px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300">
+              <Link href="/werk-in-opdracht" className="group inline-flex items-center gap-3 bg-accent text-white px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300">
                 <span>Bekijk mijn werk</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
                   <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

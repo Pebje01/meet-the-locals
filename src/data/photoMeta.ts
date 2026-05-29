@@ -10,7 +10,6 @@ export const photoMeta: Record<string, PhotoMeta> = {
     shutter: '1/173',
     aperture: 1.5,
     focalLength: '54mm',
-    year: '2022',
   },
 
   // over-fotograaf-kust — IMG_7444.jpeg
@@ -22,7 +21,6 @@ export const photoMeta: Record<string, PhotoMeta> = {
     shutter: '1/5076',
     aperture: 1.5,
     focalLength: '26mm',
-    year: '2022',
   },
 
   // over-tempel-lantaarns — IMG_9455.jpeg
@@ -34,7 +32,6 @@ export const photoMeta: Record<string, PhotoMeta> = {
     shutter: '1/100',
     aperture: 1.8,
     focalLength: '21mm',
-    year: '2023',
   },
 
   // over-zwembad-lezen — IMG_0494.jpeg
@@ -46,7 +43,6 @@ export const photoMeta: Record<string, PhotoMeta> = {
     shutter: '1/2841',
     aperture: 1.5,
     focalLength: '42mm',
-    year: '2023',
   },
 
   // over-puglia-steeg — IMG_8823.jpeg
@@ -58,7 +54,6 @@ export const photoMeta: Record<string, PhotoMeta> = {
     shutter: '1/121',
     aperture: 2.4,
     focalLength: '13mm',
-    year: '2021',
   },
 
   // over-kleur-trappen — IMG_9901.jpeg
@@ -70,7 +65,6 @@ export const photoMeta: Record<string, PhotoMeta> = {
     shutter: '1/196',
     aperture: 1.8,
     focalLength: '19mm',
-    year: '2023',
   },
 
   // over-new-york — IMG_1878 copy.jpg
@@ -82,7 +76,6 @@ export const photoMeta: Record<string, PhotoMeta> = {
     shutter: '1/836',
     aperture: 1.6,
     focalLength: '26mm',
-    year: '2021',
   },
 
   // over-durian-mural — IMG_9498.jpeg
@@ -94,6 +87,5 @@ export const photoMeta: Record<string, PhotoMeta> = {
     shutter: '1/33',
     aperture: 1.5,
     focalLength: '38mm',
-    year: '2023',
   },
 }

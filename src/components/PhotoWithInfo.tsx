@@ -9,7 +9,6 @@ export interface PhotoMeta {
   shutter: string
   aperture: number
   focalLength: string
-  year: string
 }
 
 interface PhotoWithInfoProps {
@@ -85,7 +84,7 @@ export function PhotoWithInfo({
             <ExifChip icon="shutter" value={`${meta.shutter}s`} />
             <ExifChip icon="iso" value={`ISO ${meta.iso}`} />
             <ExifChip icon="focal" value={meta.focalLength} />
-            <span className="ml-auto text-[10px] text-white/50">{meta.camera} &middot; {meta.year}</span>
+            <span className="ml-auto text-[10px] text-white/50">{meta.camera}</span>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import { ComposableMap, Geographies, Geography, Marker, type GeoFeature } from 'react-simple-maps'
 
-const GEO_URL = '/countries-10m.json'
+const GEO_URL = '/countries-50m.json'
 
 function normalizedId(geo: GeoFeature): string {
   return String(geo.id).padStart(3, '0')
@@ -26,7 +26,7 @@ export function DestinationHeroMapBackground({
   center: [number, number]
 }) {
   return (
-    <div className="absolute inset-x-0 top-0 -bottom-20 md:-bottom-24 lg:-bottom-32 pointer-events-none select-none z-[1] overflow-hidden">
+    <div className="absolute inset-x-0 top-16 md:top-0 -bottom-20 md:-bottom-24 lg:-bottom-32 pointer-events-none select-none z-[1] overflow-hidden">
       <ComposableMap
         projection="geoNaturalEarth1"
         projectionConfig={{ scale: scale * 5, center }}

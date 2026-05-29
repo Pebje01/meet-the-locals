@@ -147,12 +147,11 @@ a.text-link:hover,
   0%   { transform: scale(1.06) translate(0, 8px); }
   100% { transform: scale(1.18) translate(0, -8px); }
 }
-/* 2s delay = crossfade duur, fill-mode both = direct op startpositie wachten */
-.animate-ken-burns   { animation: kb-zoom-in-pan-left   9s 2s linear both; will-change: transform; }
-.animate-ken-burns-b { animation: kb-zoom-out-pan-right 9s 2s linear both; will-change: transform; }
-.animate-ken-burns-c { animation: kb-zoom-in-pan-right  9s 2s linear both; will-change: transform; }
-.animate-ken-burns-d { animation: kb-zoom-out-pan-left  9s 2s linear both; will-change: transform; }
-.animate-ken-burns-e { animation: kb-zoom-in-pan-up     9s 2s linear both; will-change: transform; }
+.animate-ken-burns   { animation: kb-zoom-in-pan-left   9s 0s linear both; will-change: transform; }
+.animate-ken-burns-b { animation: kb-zoom-out-pan-right 9s 0s linear both; will-change: transform; }
+.animate-ken-burns-c { animation: kb-zoom-in-pan-right  9s 0s linear both; will-change: transform; }
+.animate-ken-burns-d { animation: kb-zoom-out-pan-left  9s 0s linear both; will-change: transform; }
+.animate-ken-burns-e { animation: kb-zoom-in-pan-up     9s 0s linear both; will-change: transform; }
 
 /* ─── Radar ─── */
 @keyframes radar-sweep {

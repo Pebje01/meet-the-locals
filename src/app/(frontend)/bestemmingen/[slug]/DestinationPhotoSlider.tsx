@@ -19,18 +19,8 @@ type SliderImage = {
   } | null
 }
 
-function getYear(takenAt?: string | null): string | null {
-  if (!takenAt) return null
-  try {
-    return new Date(takenAt).getFullYear().toString()
-  } catch {
-    return null
-  }
-}
-
 function MetaBar({ image }: { image: SliderImage }) {
   const exif = image.exif
-  const year = getYear(exif?.takenAt)
 
   const leftParts = [
     exif?.camera,
@@ -42,7 +32,7 @@ function MetaBar({ image }: { image: SliderImage }) {
   ].filter(Boolean) as string[]
 
   const hasLeft = leftParts.length > 0
-  const hasRight = !!(image.caption || year)
+  const hasRight = !!image.caption
 
   if (!hasLeft && !hasRight) return null
 
@@ -55,10 +45,10 @@ function MetaBar({ image }: { image: SliderImage }) {
         </p>
       )}
 
-      {/* Rechts: locatie + jaar */}
+      {/* Rechts: locatie */}
       {hasRight && (
         <p className="text-right italic text-[11px] md:text-[12px] tracking-wide text-white leading-none rounded-lg bg-white/20 backdrop-blur-md px-3 py-2 ml-auto">
-          {[image.caption, year].filter(Boolean).join(', ')}
+          {image.caption}
         </p>
       )}
     </div>

@@ -117,6 +117,35 @@ Noise via grain texture (`/textures/grain.webp`) werkt het best met `mix-blend-m
 
 De `.noise-overlay` CSS klasse gebruikt `::before` met `top: -80px` — dit wordt afgeknipt door `overflow: hidden` containers. Gebruik in dat geval een inline `<div>` met dezelfde stijl als directe child.
 
+## Media importeren (foto's en video's toevoegen aan sliders/pagina's)
+
+**Standaard workflow** wanneer Daley vraagt om foto's of video's toe te voegen aan de website, slider of bestemming:
+
+1. **Zoek bestanden** in `~/Developer/` (root of submap die Daley noemt). Controleer ook `~/Downloads/` als ze er niet staan.
+2. **Converteer naar WebP** (foto's) of **AVI/WebM** (video's):
+   - Foto: `cwebp -resize 1920 0 -q 78 input.jpg -o public/media/naam.webp`
+   - Te groot voor cwebp (> 30MP panorama): Python PIL resize eerst naar 1920px breed, dan cwebp
+   - Genereer ook maatversies: 400x300 (thumbnail), 800px breed (medium), 1200px breed (large)
+   - Naamgeving variants: `naam-400x300.webp`, `naam-800x532.webp`, `naam-1200x799.webp`
+3. **Verplaats origineel** naar `public/media/` (JPG/PNG worden genegeerd door git via `.gitignore`)
+4. **Upload naar S3**: alle webp-bestanden (origineel + variants) via AWS CLI of script naar `meetthelocals-media` bucket op `fsn1.your-objectstorage.com`
+5. **EXIF extracten** uit het origineel (PIL of exiftool): camera, lens, diafragma, sluitertijd, ISO, brandpuntsafstand, datum
+6. **Media-record aanmaken** in BEIDE databases (lokaal + productie via SSH/docker exec):
+   - Gebruik volgende beschikbare ID (check `SELECT max(id) FROM media`)
+   - Sla alle size-variant gegevens op (breedte, hoogte, bestandsgrootte, bestandsnaam)
+   - Vul EXIF-velden in, voeg caption toe als locatienaam
+   - Update de sequence: `SELECT setval(pg_get_serial_sequence('media', 'id'), <nieuw_max>)`
+7. **Toevoegen aan gallery/slider**: `INSERT INTO destinations_gallery` of de relevante koppeltabel, met `_parent_id` van de bestemming en oplopende `_order`
+8. **Verificeer live**: curl de productiepagina en check of de S3-URL's en het juiste aantal dots/items aanwezig zijn
+
+**Productie DB** bereiken via:
+```bash
+ssh root@178.104.41.26 "docker cp script.cjs <container_id>:/app/script.cjs && docker exec -w /app <container_id> node script.cjs"
+```
+Container ID vinden: `ssh root@178.104.41.26 "docker ps"` — zoek op PAYLOAD_SECRET in env.
+
+**Let op**: gebruik altijd `.cjs` extensie voor scripts in de container (package.json heeft `"type": "module"`).
+
 ## Payload schema wijzigen
 
 Na elke wijziging aan een collection of global:

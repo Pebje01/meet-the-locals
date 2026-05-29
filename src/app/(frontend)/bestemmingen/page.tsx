@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
 import type { Destination } from '@/payload-types'
+import { DestinationsWorldMap } from './DestinationsWorldMap'
 
 function heroUrl(img: Destination['heroImage']): string {
   return img && typeof img === 'object' ? (img.url ?? '') : ''
@@ -38,6 +39,14 @@ export default async function DestinatiesPage() {
     limit: 100,
   })
 
+  const mapData = countries
+    .filter((d) => d.countryIds && d.countryIds.length > 0)
+    .map((d) => ({
+      slug: d.slug,
+      name: d.name,
+      countryCode: d.countryIds![0].countryCode,
+    }))
+
   return (
     <main>
       <PageHero
@@ -47,6 +56,15 @@ export default async function DestinatiesPage() {
         imageAlt="Weg door de jungle in Maleisië"
         variant="dark"
       />
+
+      <section className="bg-forest-dark py-10 md:py-14">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+          <p className="mb-4 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-cream/35">
+            Klik op een land om te verkennen
+          </p>
+          <DestinationsWorldMap destinations={mapData} />
+        </div>
+      </section>
 
       <section className="mx-auto max-w-[1400px] px-6 py-16 md:py-20 lg:px-10">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
