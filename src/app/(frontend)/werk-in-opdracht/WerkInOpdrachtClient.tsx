@@ -13,6 +13,7 @@ export type Commission = {
   tags?: string[]
   image: string
   imageAlt: string
+  images?: string[]   // extra foto's voor de slider
   link?: { url: string }
   linkLabel?: string
 }
@@ -133,6 +134,92 @@ function ProjectCard({
 }
 
 // ─────────────────────────────────────────────────────────────────
+// ImageSlider — gebruikt in de modal
+// ─────────────────────────────────────────────────────────────────
+function ImageSlider({ slides }: { slides: { src: string; alt: string }[] }) {
+  const [current, setCurrent] = useState(0)
+
+  const prev = () => setCurrent(i => (i - 1 + slides.length) % slides.length)
+  const next = () => setCurrent(i => (i + 1) % slides.length)
+
+  return (
+    <div className="relative overflow-hidden w-full" style={{ aspectRatio: '16/9' }}>
+      {/* Slides */}
+      {slides.map((slide, i) => (
+        <div
+          key={slide.src + i}
+          className="absolute inset-0"
+          style={{
+            transform: `translateX(${(i - current) * 100}%)`,
+            transition: 'transform 420ms cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+        >
+          <Image
+            src={slide.src}
+            alt={slide.alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 680px"
+          />
+        </div>
+      ))}
+
+      {/* Pijlknoppen — alleen bij meer dan 1 foto */}
+      {slides.length > 1 && (
+        <>
+          <button
+            onClick={prev}
+            aria-label="Vorige foto"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
+            style={{ backgroundColor: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)' }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+
+          <button
+            onClick={next}
+            aria-label="Volgende foto"
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
+            style={{ backgroundColor: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)' }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+
+          {/* Puntjes */}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                aria-label={`Foto ${i + 1}`}
+                className="rounded-full transition-all duration-200"
+                style={{
+                  width: i === current ? '20px' : '6px',
+                  height: '6px',
+                  backgroundColor: i === current ? 'white' : 'rgba(255,255,255,0.45)',
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Teller */}
+          <div
+            className="absolute top-3 right-3 text-[11px] font-semibold text-white px-2 py-0.5 rounded-full"
+            style={{ backgroundColor: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(4px)' }}
+          >
+            {current + 1} / {slides.length}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────
 // ProjectModal
 // ─────────────────────────────────────────────────────────────────
 function ProjectModal({
@@ -199,17 +286,13 @@ function ProjectModal({
 
         {/* ── Scrollable body ── */}
         <div className="overflow-y-auto flex-1">
-          {/* Hero image */}
-          <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
-            <Image
-              src={project.image}
-              alt={project.imageAlt}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 680px"
-              priority
-            />
-          </div>
+          {/* Slider */}
+          <ImageSlider
+            slides={[
+              { src: project.image, alt: project.imageAlt },
+              ...(project.images ?? []).map((src) => ({ src, alt: project.imageAlt })),
+            ]}
+          />
 
           {/* Content */}
           <div className="px-6 pt-5 pb-6">
