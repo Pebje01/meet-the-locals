@@ -2,34 +2,53 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export type Commission = {
   cardTitle: string
+  modalTitle?: string
   description?: string
+  client?: string
+  tags?: string[]
   image: string
   imageAlt: string
   link?: { url: string }
+  linkLabel?: string
 }
 
 export const commissions: Commission[] = [
   {
-    cardTitle: 'Fotografie, dronefotografie en video voor Kip Caravans',
+    cardTitle: 'Fotografie en dronebeelden voor Kip Caravans',
+    modalTitle: 'Fotografie, dronefotografie en video voor Kip Caravans',
     description:
-      'Fotografie, dronefotografie en video van een content reis naar Noorwegen voor Kip Caravans. Kip Kompakt polar blue.',
+      'Fotografie, dronefotografie en video van een content reis naar Noorwegen voor Kip Caravans. De Kip Kompakt polar blue caravan in het Noorse fjordenlandschap: van de woeste kustroutes tot de stille bergdalen. Een volledig contentpakket voor social media, website en campagnes.',
+    client: 'Kip Caravans',
+    tags: ['Fotografie', 'Dronefotografie', 'Video'],
     image: '/media/kip-caravans.webp',
     imageAlt: 'Kip Kompakt caravan in een Noors landschap',
     link: {
       url: 'https://www.behance.net/gallery/239930507/Kip-Caravans-Content',
     },
+    linkLabel: 'Bekijk op Behance',
   },
   // Voeg hier nieuwe opdrachten toe
 ]
 
 const TEXT_HEIGHT = 76 // px — hoogte van de tekstbalk bij hover
 
-function ProjectCard({ project, index }: { project: Commission; index: number }) {
+// ─────────────────────────────────────────────────────────────────
+// ProjectCard
+// ─────────────────────────────────────────────────────────────────
+function ProjectCard({
+  project,
+  index,
+  onOpen,
+}: {
+  project: Commission
+  index: number
+  onOpen: (project: Commission) => void
+}) {
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -39,10 +58,11 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.4, delay: 0.06 * index }}
     >
-      <a
-        href={project.link?.url}
-        target="_blank"
-        rel="noopener noreferrer"
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => onOpen(project)}
+        onKeyDown={(e) => e.key === 'Enter' && onOpen(project)}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
@@ -52,7 +72,6 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
           overflow: 'hidden',
           aspectRatio: '3/4',
           cursor: 'pointer',
-          textDecoration: 'none',
         }}
       >
         {/* Afbeelding — krimpt automatisch als tekst groeit */}
@@ -108,17 +127,179 @@ function ProjectCard({ project, index }: { project: Commission; index: number })
             {project.cardTitle}
           </h3>
         </div>
-      </a>
+      </div>
     </motion.div>
   )
 }
 
+// ─────────────────────────────────────────────────────────────────
+// ProjectModal
+// ─────────────────────────────────────────────────────────────────
+function ProjectModal({
+  project,
+  onClose,
+}: {
+  project: Commission
+  onClose: () => void
+}) {
+  // Sluit met Escape
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [onClose])
+
+  // Vergrendel body scroll
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  const title = project.modalTitle || project.cardTitle
+
+  return (
+    <div
+      className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-8"
+      style={{ backgroundColor: 'rgba(0,0,0,0.72)' }}
+      onClick={onClose}
+    >
+      {/* Modal panel */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 12 }}
+        transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative bg-white rounded-2xl w-full overflow-hidden flex flex-col"
+        style={{ maxWidth: '680px', maxHeight: '90vh' }}
+      >
+        {/* ── Sticky header ── */}
+        <div className="sticky top-0 z-10 bg-white flex items-center justify-between px-6 py-5 border-b border-gray-100">
+          <h2
+            className="font-display font-bold leading-tight pr-4"
+            style={{ fontSize: 'clamp(18px, 2.5vw, 24px)', color: '#2b4a2a' }}
+          >
+            {title}
+          </h2>
+          <button
+            onClick={onClose}
+            aria-label="Sluiten"
+            className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200"
+            style={{ backgroundColor: '#2b4a2a' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#3d6b3c' }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2b4a2a' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
+              <path d="M2 2l10 10M12 2L2 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* ── Scrollable body ── */}
+        <div className="overflow-y-auto flex-1">
+          {/* Hero image */}
+          <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
+            <Image
+              src={project.image}
+              alt={project.imageAlt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 680px"
+              priority
+            />
+          </div>
+
+          {/* Content */}
+          <div className="px-6 pt-5 pb-6">
+            {/* Tags */}
+            {project.tags && project.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-[11px] font-semibold uppercase tracking-[0.1em] px-3 py-1 rounded-full"
+                    style={{ border: '1.5px solid #2b4a2a', color: '#2b4a2a' }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Description */}
+            {project.description && (
+              <p className="text-gray-700 text-[15px] leading-relaxed mb-4">
+                {project.description}
+              </p>
+            )}
+
+            {/* Client */}
+            {project.client && (
+              <p className="text-[13px] text-gray-400">
+                <span className="font-semibold text-gray-500">Klant:</span>{' '}
+                {project.client}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* ── Sticky footer ── */}
+        {project.link && (
+          <div className="sticky bottom-0 z-10 bg-white border-t border-gray-100 px-6 py-4 flex items-center justify-between">
+            <span className="text-[13px] text-gray-400">
+              Bekijk het volledige project
+            </span>
+            <a
+              href={project.link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200"
+              style={{ backgroundColor: '#2b4a2a' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#3d6b3c' }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#2b4a2a' }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              {project.linkLabel || 'Bekijk op Behance'}
+            </a>
+          </div>
+        )}
+      </motion.div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Main page component
+// ─────────────────────────────────────────────────────────────────
 export function WerkInOpdrachtClient() {
+  const [activeProject, setActiveProject] = useState<Commission | null>(null)
+
+  const openProject = useCallback((project: Commission) => {
+    setActiveProject(project)
+  }, [])
+
+  const closeProject = useCallback(() => {
+    setActiveProject(null)
+  }, [])
+
   const leftCol = commissions.filter((_, i) => i % 2 === 0)
   const rightCol = commissions.filter((_, i) => i % 2 === 1)
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#2b4a2a' }}>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {activeProject && (
+          <ProjectModal project={activeProject} onClose={closeProject} />
+        )}
+      </AnimatePresence>
 
       {/* Hero */}
       <section className="relative overflow-hidden px-6 pt-36 pb-20 md:pt-48 md:pb-24 lg:px-10">
@@ -169,18 +350,18 @@ export function WerkInOpdrachtClient() {
             </div>
           ) : commissions.length === 1 ? (
             <div className="max-w-lg mx-auto">
-              <ProjectCard project={commissions[0]!} index={0} />
+              <ProjectCard project={commissions[0]!} index={0} onOpen={openProject} />
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-7 items-start">
               <div className="flex flex-col gap-5 md:gap-7">
                 {leftCol.map((project, i) => (
-                  <ProjectCard key={project.cardTitle} project={project} index={i * 2} />
+                  <ProjectCard key={project.cardTitle} project={project} index={i * 2} onOpen={openProject} />
                 ))}
               </div>
               <div className="flex flex-col gap-5 md:gap-7 md:pt-[100px]">
                 {rightCol.map((project, i) => (
-                  <ProjectCard key={project.cardTitle} project={project} index={i * 2 + 1} />
+                  <ProjectCard key={project.cardTitle} project={project} index={i * 2 + 1} onOpen={openProject} />
                 ))}
               </div>
             </div>
