@@ -4,10 +4,61 @@ import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
+import type { Metadata } from 'next'
 import type { Story } from '@/payload-types'
+import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd'
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://meetthelocals.nl'
 
 type Props = {
   params: Promise<{ slug: string }>
+}
+
+async function getStory(slug: string): Promise<Story | null> {
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'stories',
+    where: {
+      slug: { equals: slug },
+      status: { equals: 'published' },
+    },
+    depth: 1,
+    limit: 1,
+  })
+  return docs[0] ?? null
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const story = await getStory(slug)
+  if (!story) return {}
+
+  const title = story.seo?.metaTitle || `${story.title} | Meet the Locals`
+  const description = story.seo?.metaDescription || story.intro || ''
+  const ogImg =
+    story.seo?.ogImage && typeof story.seo.ogImage === 'object'
+      ? (story.seo.ogImage.url ?? '')
+      : imageUrl(story.heroImage)
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `${SITE_URL}/verhalen/${slug}` },
+    openGraph: {
+      type: 'article',
+      title,
+      description,
+      url: `${SITE_URL}/verhalen/${slug}`,
+      ...(ogImg && { images: [{ url: ogImg, alt: story.title }] }),
+      ...(story.publishedDate && { publishedTime: story.publishedDate }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      ...(ogImg && { images: [ogImg] }),
+    },
+  }
 }
 
 function imageUrl(img: Story['heroImage']): string {
@@ -25,22 +76,28 @@ function formatDate(date?: string | null): string {
 
 export default async function VerhaalDetailPage({ params }: Props) {
   const { slug } = await params
-  const payload = await getPayload({ config })
-  const { docs } = await payload.find({
-    collection: 'stories',
-    where: {
-      slug: { equals: slug },
-      status: { equals: 'published' },
-    },
-    depth: 1,
-    limit: 1,
-  })
-
-  const story = docs[0]
+  const story = await getStory(slug)
   if (!story) notFound()
 
   return (
     <main>
+      <ArticleJsonLd
+        title={story.title}
+        description={story.seo?.metaDescription || story.intro || ''}
+        slug={slug}
+        image={imageUrl(story.heroImage)}
+        datePublished={story.publishedDate ?? story.createdAt}
+        dateModified={story.updatedAt}
+        basePath="/verhalen"
+        {...(story.thema?.length && { category: story.thema[0] })}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Verhalen', url: '/verhalen' },
+          { name: story.title, url: `/verhalen/${slug}` },
+        ]}
+      />
       {/* Full-screen hero — links gradient, tekst links, foto rechts zichtbaar */}
       <section className="relative min-h-screen w-full overflow-hidden">
         {imageUrl(story.heroImage) && (

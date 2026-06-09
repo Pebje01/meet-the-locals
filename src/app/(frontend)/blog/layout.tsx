@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Reistips voor echte trips | Meet the Locals',
+  title: 'Reistips voor echte trips',
   description:
     'Reistips voor normale mensen die ook maar proberen iets van de wereld te zien, tussen werk, afspraken en andere verplichtingen door.',
   openGraph: {

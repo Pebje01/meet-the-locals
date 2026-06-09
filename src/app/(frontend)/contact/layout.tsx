@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Contact | Meet the Locals',
+  title: 'Contact',
   description:
     'Heb je een vraag, samenwerking in gedachten of wil je gewoon even hallo zeggen? Stuur me een bericht, ik reageer altijd.',
   openGraph: {

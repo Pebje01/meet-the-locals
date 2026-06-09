@@ -76,6 +76,7 @@ export function ArticleJsonLd({
   datePublished,
   dateModified,
   category,
+  basePath = '/blog',
 }: {
   title: string
   description: string
@@ -84,13 +85,14 @@ export function ArticleJsonLd({
   datePublished: string
   dateModified: string
   category?: string
+  basePath?: string
 }) {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: title,
     description,
-    url: `${SITE_URL}/blog/${slug}`,
+    url: `${SITE_URL}${basePath}/${slug}`,
     image: image.startsWith('http') ? image : `${SITE_URL}${image}`,
     datePublished,
     dateModified,
@@ -101,7 +103,7 @@ export function ArticleJsonLd({
     ...(category && { articleSection: category }),
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${SITE_URL}/blog/${slug}`,
+      '@id': `${SITE_URL}${basePath}/${slug}`,
     },
   }
 

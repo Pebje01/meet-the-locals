@@ -15,6 +15,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
+      url: `${baseUrl}/verhalen`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/blog`,
       lastModified: now,
       changeFrequency: 'daily',
@@ -33,13 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/fotografie/galerij`,
-      lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/fotografie/gear`,
+      url: `${baseUrl}/werk-in-opdracht`,
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.6,
@@ -88,6 +88,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }))
 
+    // Published stories (verhalen)
+    const { docs: stories } = await payload.find({
+      collection: 'stories',
+      where: { status: { equals: 'published' } },
+      limit: 1000,
+      depth: 0,
+    })
+
+    const storyUrls: MetadataRoute.Sitemap = stories.map((story) => ({
+      url: `${baseUrl}/verhalen/${story.slug}`,
+      lastModified: story.updatedAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.85,
+    }))
+
     // All destinations
     const { docs: destinations } = await payload.find({
       collection: 'destinations',
@@ -102,7 +117,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     }))
 
-    return [...staticPages, ...postUrls, ...destinationUrls]
+    return [...staticPages, ...postUrls, ...storyUrls, ...destinationUrls]
   } catch {
     // Fallback to static-only if Payload is unavailable (e.g. during static export)
     return staticPages
