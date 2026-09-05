@@ -8,6 +8,7 @@ import type { Metadata } from 'next'
 import type { Story } from '@/payload-types'
 import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd'
 import { AuthorByline } from '@/components/AuthorByline'
+import { CREDIT } from '@/lib/credit'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://meetthelocals.nl'
 
@@ -180,11 +181,11 @@ export default async function VerhaalDetailPage({ params }: Props) {
                         sizes="(max-width: 768px) 100vw, 50vw"
                       />
                     </div>
-                    {item.caption && (
-                      <figcaption className="mt-2 text-[12px] text-text-muted/60 uppercase tracking-[0.1em]">
-                        {item.caption}
-                      </figcaption>
-                    )}
+                    {/* Naamsvermelding staat er altijd, de locatie alleen als die bekend is */}
+                    <figcaption className="mt-2 flex flex-wrap gap-x-2 text-[12px] uppercase tracking-[0.1em] text-text-muted/60">
+                      {item.caption && <span>{item.caption}</span>}
+                      <span className="ml-auto">© {CREDIT.creator}</span>
+                    </figcaption>
                   </figure>
                 )
               })}

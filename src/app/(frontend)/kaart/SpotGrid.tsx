@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { MapSpot } from './PhotoMap'
+import { CREDIT } from '@/lib/credit'
 
 function ExifChip({ label }: { label: string }) {
   return (
@@ -11,7 +12,8 @@ function ExifChip({ label }: { label: string }) {
 }
 
 function SpotCard({ spot }: { spot: MapSpot }) {
-  const hasExif = spot.camera || spot.lens || spot.aperture || spot.shutterSpeed || spot.iso || spot.focalLength
+  // De overlay verschijnt altijd: ook zonder camera-informatie hoort de naam
+  // van de maker op de foto te staan.
 
   const inner = (
     <>
@@ -24,10 +26,9 @@ function SpotCard({ spot }: { spot: MapSpot }) {
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
 
-        {/* EXIF hover overlay */}
-        {hasExif && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-1 opacity-0 transition-all duration-300 group-hover/photo:translate-y-0 group-hover/photo:opacity-100">
-            <div className="bg-gradient-to-t from-black/70 to-transparent px-3 pb-3 pt-6">
+        {/* Naamsvermelding, met camera-instellingen erbij als die bekend zijn */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-1 opacity-0 transition-all duration-300 group-hover/photo:translate-y-0 group-hover/photo:opacity-100">
+          <div className="bg-gradient-to-t from-black/70 to-transparent px-3 pb-3 pt-6">
               {spot.camera && (
                 <p className="mb-1.5 truncate text-[11px] font-medium text-white/90">
                   {spot.camera}{spot.lens ? ` · ${spot.lens}` : ''}
@@ -39,9 +40,9 @@ function SpotCard({ spot }: { spot: MapSpot }) {
                 {spot.shutterSpeed && <ExifChip label={spot.shutterSpeed} />}
                 {spot.iso && <ExifChip label={`ISO ${spot.iso}`} />}
               </div>
+              <p className="mt-1.5 text-[10px] tracking-wide text-white/70">© {CREDIT.creator}</p>
             </div>
           </div>
-        )}
 
         {spot.country && (
           <span className="absolute bottom-3 left-3 rounded-full bg-forest-dark/65 px-3 py-1 text-[11px] uppercase tracking-[0.07em] text-warm-white backdrop-blur-sm">

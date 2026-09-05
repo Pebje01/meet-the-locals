@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { CREDIT } from '@/lib/credit'
 
 type SliderImage = {
   url: string
@@ -22,7 +23,11 @@ type SliderImage = {
 function MetaBar({ image }: { image: SliderImage }) {
   const exif = image.exif
 
+  // De naam staat altijd vooraan en is niet afhankelijk van EXIF. Van veel
+  // oudere beelden is de camera-informatie bij de WordPress-migratie verloren
+  // gegaan; de maker is dat niet, en die hoort op elke foto zichtbaar te zijn.
   const leftParts = [
+    `© ${CREDIT.creator}`,
     exif?.camera,
     exif?.lens,
     exif?.focalLength,
@@ -31,19 +36,14 @@ function MetaBar({ image }: { image: SliderImage }) {
     exif?.iso ? `ISO ${exif.iso}` : null,
   ].filter(Boolean) as string[]
 
-  const hasLeft = leftParts.length > 0
   const hasRight = !!image.caption
-
-  if (!hasLeft && !hasRight) return null
 
   return (
     <div className="absolute bottom-0 inset-x-0 z-20 flex items-end justify-between gap-4 px-5 pb-8 md:px-8 md:pb-10 pointer-events-none opacity-0 group-hover/slider:opacity-100 transition-opacity duration-300">
-      {/* Links: camera metadata */}
-      {hasLeft && (
-        <p className="font-mono text-[11px] md:text-[12px] tracking-wide text-white leading-none rounded-lg bg-white/20 backdrop-blur-md px-3 py-2">
-          {leftParts.join(' · ')}
-        </p>
-      )}
+      {/* Links: naamsvermelding, gevolgd door camera-instellingen indien bekend */}
+      <p className="font-mono text-[11px] md:text-[12px] tracking-wide text-white leading-none rounded-lg bg-white/20 backdrop-blur-md px-3 py-2">
+        {leftParts.join(' · ')}
+      </p>
 
       {/* Rechts: locatie */}
       {hasRight && (

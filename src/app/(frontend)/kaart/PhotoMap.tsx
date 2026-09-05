@@ -9,6 +9,7 @@ import type {
 } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { SpotGrid } from './SpotGrid'
+import { CREDIT } from '@/lib/credit'
 
 export type MapSpot = {
   id: number
@@ -321,19 +322,19 @@ function MapCard({
             <span>{spot.country}</span>
           </span>
         )}
-        {(chips.length > 0 || gearText) && (
-          <div className="mtl-card__photo-meta">
-            {chips.map((c) => (
-              <span key={c} className="mtl-card__chip">{c}</span>
-            ))}
-            {gearText && (
-              <span className="mtl-card__gear-chip">
-                <span dangerouslySetInnerHTML={{ __html: ICON_CAMERA }} />
-                <span>{gearText}</span>
-              </span>
-            )}
-          </div>
-        )}
+        {/* Altijd zichtbaar, ook als de camera-informatie ontbreekt */}
+        <div className="mtl-card__photo-meta">
+          {chips.map((c) => (
+            <span key={c} className="mtl-card__chip">{c}</span>
+          ))}
+          {gearText && (
+            <span className="mtl-card__gear-chip">
+              <span dangerouslySetInnerHTML={{ __html: ICON_CAMERA }} />
+              <span>{gearText}</span>
+            </span>
+          )}
+          <span className="mtl-card__chip">© {CREDIT.creator}</span>
+        </div>
       </div>
       <div className="mtl-card__body">
         <h3 className="mtl-card__title">{spot.title}</h3>

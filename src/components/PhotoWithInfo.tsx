@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { CREDIT } from '@/lib/credit'
 
 export interface PhotoMeta {
   location: string
@@ -32,16 +33,23 @@ export function PhotoWithInfo({
   priority,
   objectPosition,
 }: PhotoWithInfoProps) {
+  // Zonder camera-informatie tonen we alleen de naamsvermelding. Die hoort
+  // op elke foto te staan, ook op beelden waarvan de EXIF verloren is gegaan.
   if (!meta) {
     return (
-      <Image
-        src={src}
-        alt={alt}
-        fill={fill}
-        className={className}
-        sizes={sizes}
-        priority={priority}
-      />
+      <div className="group absolute inset-0">
+        <Image
+          src={src}
+          alt={alt}
+          fill={fill}
+          className={className}
+          sizes={sizes}
+          priority={priority}
+        />
+        <p className="pointer-events-none absolute bottom-2 right-2 rounded bg-black/40 px-2 py-1 text-[10px] tracking-wide text-white/80 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+          © {CREDIT.creator}
+        </p>
+      </div>
     )
   }
 
@@ -86,6 +94,9 @@ export function PhotoWithInfo({
             <ExifChip icon="focal" value={meta.focalLength} />
             <span className="ml-auto text-[10px] text-white/50">{meta.camera}</span>
           </div>
+
+          {/* Naamsvermelding, altijd zichtbaar en los van de EXIF */}
+          <p className="mt-2 text-[10px] tracking-wide text-white/70">© {CREDIT.creator}</p>
         </div>
       </div>
     </div>
