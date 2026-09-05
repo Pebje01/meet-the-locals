@@ -28,6 +28,11 @@ FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
+# exiftool schrijft de credit in geüploade beelden (src/hooks/writeCredit.ts).
+# Zonder dit pakket slaat die hook zichzelf stil over en gaan uploads
+# anoniem de deur uit.
+RUN apk add --no-cache exiftool
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 

@@ -1,0 +1,62 @@
+{
+  "creator": "Daley Jansen",
+  "creditLine": "Daley Jansen / Daley Photography",
+  "copyrightHolder": "Daley Photography",
+  "copyrightTemplate": "© {year} Daley Photography. Alle rechten voorbehouden.",
+  "usageTerms": "Gebruik zonder schriftelijke toestemming is niet toegestaan. Licentie aanvragen via meetthelocals.nl/contact.",
+  "siteName": "Meet the Locals",
+  "siteUrl": "https://meetthelocals.nl",
+  "webStatementPath": "/over",
+  "acquireLicensePath": "/contact",
+  "jobTitle": "Fotograaf en webdesigner voor de reisbranche",
+  "definingSentence": "Daley Jansen is een Nederlandse fotograaf en webdesigner voor de reisbranche. Op Meet the Locals bundelt zij haar eigen reizen in verhalen en fotografie, allemaal zelf gemaakt en niets met AI gegenereerd. Voor hotels, accommodaties, touroperators en reismerken werkt zij in opdracht aan beeld en websites.",
+  "partOfLine": "Meet the Locals is onderdeel van The Daley Edit",
+  "brands": {
+    "parent": {
+      "id": "https://thedaleyedit.nl/#organization",
+      "name": "The Daley Edit",
+      "url": "https://thedaleyedit.nl",
+      "description": "Creatief bureau voor merkidentiteit, branding, vormgeving en online aanwezigheid."
+    },
+    "site": {
+      "id": "https://meetthelocals.nl/#organization",
+      "name": "Meet the Locals",
+      "url": "https://meetthelocals.nl",
+      "description": "Reisplatform met eigen fotografie en verhalen, en fotografie en websites voor de reisbranche."
+    },
+    "rightsHolder": {
+      "id": "https://thedaleyedit.nl/#daley-photography",
+      "name": "Daley Photography",
+      "url": "https://thedaleyedit.nl",
+      "description": "Professionele fotografie in opdracht: bedrijfsfotografie, branding- en portretfotografie, productfotografie en drone. Rechthebbende op alle beelden."
+    },
+    "others": [
+      {
+        "id": "https://wegrowbrands.online/#organization",
+        "name": "We Grow Brands",
+        "url": "https://wegrowbrands.online",
+        "description": "Webdesign en online groei voor merken."
+      }
+    ]
+  },
+  "knowsAbout": [
+    "Reisfotografie",
+    "Accommodatiefotografie",
+    "Interieurfotografie",
+    "Hospitality-fotografie",
+    "Dronefotografie",
+    "Websites voor reisbedrijven",
+    "Webdesign",
+    "Marketing voor reismerken",
+    "SEO voor reiswebsites",
+    "Reizen"
+  ],
+  "profiles": [
+    "https://www.behance.net/TheDaleyEdit",
+    "https://www.instagram.com/daleyyphotography",
+    "https://linkedin.com/in/daleyjansen",
+    "https://thedaleyedit.nl"
+  ],
+  "digitalSourceType": "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture",
+  "siteProfiles": []
+}

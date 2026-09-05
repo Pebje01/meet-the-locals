@@ -7,6 +7,7 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Metadata } from 'next'
 import type { Story } from '@/payload-types'
 import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd'
+import { AuthorByline } from '@/components/AuthorByline'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://meetthelocals.nl'
 
@@ -189,6 +190,8 @@ export default async function VerhaalDetailPage({ params }: Props) {
               })}
             </div>
           )}
+
+          <AuthorByline />
         </div>
       </article>
     </main>

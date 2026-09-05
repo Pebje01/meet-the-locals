@@ -2,6 +2,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import type { CollectionConfig } from 'payload'
 import { extractExif } from '../hooks/extractExif'
+import { writeCredit } from '../hooks/writeCredit'
 
 // Absoluut pad naar public/media, los van de werkmap waarvandaan Payload draait.
 const mediaDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../public/media')
@@ -15,10 +16,21 @@ export const Media: CollectionConfig = {
     useAsTitle: 'alt',
   },
   hooks: {
+    // writeCredit moet vóór het resizen draaien, anders krijgen de
+    // maatvarianten geen credit. Payload roept generateFileData aan tussen
+    // beforeOperation en beforeChange in.
+    beforeOperation: [writeCredit],
     beforeChange: [extractExif],
   },
   upload: {
     staticDir: mediaDir,
+    // Zorgt dat sharp de XMP, IPTC en EXIF meeneemt naar elke maatvariant.
+    // Standaard staat dit op false en strijkt sharp alle metadata weg, waardoor
+    // je thumbnails en hero-beelden anoniem de deur uit gaan.
+    // Let op: hiermee blijven ook de GPS-coördinaten in de gepubliceerde
+    // beelden staan. Voor reisfoto's is dat gewenst, voor beelden dicht bij huis
+    // iets om bewust van te zijn.
+    withMetadata: true,
     imageSizes: [
       { name: 'thumbnail', width: 400, height: 300, position: 'centre' },
       { name: 'medium', width: 800, height: undefined, position: 'centre' },
