@@ -176,9 +176,10 @@ async function main() {
       await db.query('update destinations set hero_image_id = $1 where id = $2', [heroId, destId])
 
       if (stock.length) {
+        // destinations_gallery.id is character varying, geen integer.
         await db.query(
-          `delete from destinations_gallery where id = any($1::int[])`,
-          [stock.map((r) => r.id)],
+          `delete from destinations_gallery where id = any($1::text[])`,
+          [stock.map((r) => String(r.id))],
         )
       }
 
