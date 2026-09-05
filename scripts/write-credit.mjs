@@ -57,6 +57,16 @@ const tags = [
 ]
 
 const extArgs = EXTENSIONS.flatMap((ext) => ['-ext', ext])
+
+// Niet alles in public/media is van Daley. Er staat nog materiaal uit de oude
+// WordPress-site: stockfoto's van Unsplash en een paar met DALL-E gegenereerde
+// banners. Die mogen NOOIT haar naam of copyright krijgen, en een AI-beeld mag
+// al helemaal niet als 'met een camera vastgelegd' worden gemarkeerd.
+// Zie ook: node scripts/audit-credit.mjs
+// exiftool kent geen glob om bestanden uit te sluiten ('--' is voor tags),
+// dus dit gaat via een -if op de bestandsnaam.
+const NOT_MINE = 'unsplash|dall|pexels|shutterstock|istock|getty|freepik|adobestock'
+const excludeArgs = ['-if', `not ($FileName =~ /${NOT_MINE}/i)`]
 // Let op: exiftool laat een -if expressie falen zodra de tag niet bestaat.
 // `$XMP-dc:Creator ne "..."` matcht daarom juist NIET op bestanden zonder
 // credit, precies de bestanden die we zoeken. `not $tag` doet het wel goed.
@@ -82,11 +92,13 @@ async function count(extra = []) {
   return out.split('\n').filter(Boolean).length
 }
 
-const total = await count()
-const missing = await count(notCredited)
+const total = await count(excludeArgs)
+const missing = await count([...notCredited, ...excludeArgs])
+const skipped = (await count()) - total
 
-console.log(`Beeldbestanden gevonden : ${total}`)
-console.log(`Zonder credit           : ${missing}`)
+console.log(`Beeldbestanden van Daley : ${total}`)
+console.log(`Zonder credit            : ${missing}`)
+if (skipped > 0) console.log(`Overgeslagen (niet van jou): ${skipped}`)
 
 if (dry) {
   console.log('\n--dry, er is niets gewijzigd.')
@@ -103,9 +115,9 @@ console.log(`\nSchrijven naar ${target} bestand(en)...`)
 
 const args = ['-overwrite_original', '-preserve', ...tags]
 if (!force) args.push(...notCredited)
-args.push(...extArgs, '-r', MEDIA_DIR)
+args.push(...excludeArgs, ...extArgs, '-r', MEDIA_DIR)
 
 console.log(await exiftool(args))
 
-const left = await count(notCredited)
+const left = await count([...notCredited, ...excludeArgs])
 console.log(`Controle: ${total - left} van ${total} bestanden dragen nu de credit.`)
