@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { DestinationHeroMapBackground } from './DestinationHeroMapBackground'
-import { WorldMapBackground } from './WorldMapBackground'
+import { HeroDecorMap } from './HeroDecorMap'
 
 type FactItem = { label: string; value: string }
 
@@ -59,11 +58,7 @@ export function DestinationHeroClient({
       )}
 
       {/* Ingezoomde bestemmingskaart als achtergrond — loopt door tot in de golf */}
-      {mapProps ? (
-        <DestinationHeroMapBackground {...mapProps} />
-      ) : (
-        <WorldMapBackground />
-      )}
+      <HeroDecorMap mapProps={mapProps ?? null} />
 
       {/* Vignette: alleen tonen als er geen kaart is (kaart heeft eigen zichtbaarheid) */}
       {!mapProps && (

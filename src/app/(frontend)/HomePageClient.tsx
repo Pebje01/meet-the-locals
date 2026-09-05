@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRef, useCallback, useState, useEffect } from 'react'
 import { ComposableMap, Geographies, Geography, type GeoFeature } from 'react-simple-maps'
 import { NewsletterCTA } from '@/components/NewsletterCTA'
+import { Marquee } from '@/components/Marquee'
 
 /* ─── Data ─── */
 const GEO_URL = '/countries-110m.json'
@@ -43,11 +44,11 @@ const continents = [
 ]
 
 const HERO_SLIDES = [
-  { src: '/media/Shirakawago-3.webp',                    alt: 'Shirakawago, Japan',           kb: 'animate-ken-burns' },
-  { src: '/media/singapore-skyline.webp',                alt: 'Skyline Singapore',            kb: 'animate-ken-burns-b' },
-  { src: '/media/purmerend-drone-4.webp',                alt: 'Purmerend, Nederland',         kb: 'animate-ken-burns-c' },
-  { src: '/media/DJI_20240517152816_0082_D-scaled.webp', alt: 'Indonesië vanuit de lucht',    kb: 'animate-ken-burns-d' },
-  { src: '/media/cusco-12-scaled.webp',                  alt: 'Cusco, Peru',                  kb: 'animate-ken-burns-e' },
+  { src: '/media/Shirakawago-3.webp',                    alt: 'Shirakawago, Japan',           kb: 'animate-ken-burns',   blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCtHCY2Pl5PNEyP1bIPSqZlckAsSM0rOwTIYg46im1HsZRpytrIkKy/wgEetFOjmk28tn6gUUuWIrT7n//Z' },
+  { src: '/media/singapore-skyline.webp',                alt: 'Skyline Singapore',            kb: 'animate-ken-burns-b', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAANABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCU6qzj9wyt6nrirDai6Sx/NlcfMvAzXO2p2xKR95snNPi3NITIxIOQQOM0ru41E6ZdYtGztZ8A46UVzyH5RjAHoBRRzFezP//Z' },
+  { src: '/media/purmerend-drone-4.webp',                alt: 'Purmerend, Nederland',         kb: 'animate-ken-burns-c', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCEalfZ/wBfwPQg0/8AtO+OAJyc9OlYs+ftKJk7fTNWpOXZf4QOAO1Tyl8zLLanf5IEjHHtRWdHcTKuBIcZopaE3Z//2Q==' },
+  { src: '/media/DJI_20240517152816_0082_D-scaled.webp', alt: 'Indonesië vanuit de lucht',    kb: 'animate-ken-burns-d', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDPR9rdTjvSzSBwMAjmkIpo4YD2rGL0JEyPb86KjcfOaKQj/9k=' },
+  { src: '/media/cusco-12-scaled.webp',                  alt: 'Cusco, Peru',                  kb: 'animate-ken-burns-e', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAPABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCy/ieZxsjh+cjIKjOayX1++jLJPJIwJyDnBFWI4IrUNIWZ9oOATjH5VBNai5gDIy/Ocg7evrQquui0F7N21YwapcOMpM5H+9RUEmiXO87Ixj2eitfbIy9kz//Z' },
 ]
 
 function HeroSlideshow() {
@@ -84,6 +85,9 @@ function HeroSlideshow() {
               className="object-cover"
               sizes="100vw"
               priority={i === 0}
+              placeholder="blur"
+              blurDataURL={slide.blur}
+              unoptimized
             />
           </div>
         </div>
@@ -411,18 +415,18 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
             <div className="grid grid-cols-2 md:grid-cols-12 gap-3 md:gap-4">
               <div className="col-span-1 md:col-span-7 space-y-3 md:space-y-4">
                 <div className="aspect-[3/4] organic-img overflow-hidden relative">
-                  <Image src="/media/Ayuthayya-1-9-scaled.webp" alt="Reisfotografie voorbeeld" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 58vw, 29vw" />
+                  <Image src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/a07e40239930507.693376d2b9c8a.png" alt="Kip Kompakt caravan in een Noors landschap" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 58vw, 29vw" />
                 </div>
                 <div className="aspect-square organic-img-alt overflow-hidden relative">
-                  <Image src="/media/Franksunset-scaled.webp" alt="Zonsondergang fotografie" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 58vw, 29vw" />
+                  <Image src="/media/trulli-home-1.webp" alt="Trulli Lupoli, vooraanzicht in Ceglie Messapica, Apulië" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 58vw, 29vw" />
                 </div>
               </div>
               <div className="col-span-1 md:col-span-5 space-y-3 md:space-y-4 pt-8 md:pt-12">
                 <div className="aspect-square organic-img overflow-hidden relative">
-                  <Image src="/media/Batucaves-6-scaled.webp" alt="Batu Caves Maleisië" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 42vw, 21vw" />
+                  <Image src="https://mir-s3-cdn-cf.behance.net/project_modules/max_3840_webp/c6e05f239930507.69337c3c39879.jpg" alt="Kip Caravans bij de haven in Noorwegen" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 42vw, 21vw" />
                 </div>
                 <div className="aspect-[3/4] organic-img-alt overflow-hidden relative">
-                  <Image src="/media/DJI_20240517152816_0082_D-scaled.webp" alt="Drone fotografie Indonesië" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 42vw, 21vw" />
+                  <Image src="/media/trulli-home-2.webp" alt="Trulli Lupoli, blauwe deur en terras in Apulië" fill className="object-cover" sizes="(max-width: 768px) 50vw, (max-width: 1024px) 42vw, 21vw" />
                 </div>
               </div>
             </div>
@@ -455,7 +459,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
 
       {/* MARQUEE */}
       <div className="relative py-6 bg-accent overflow-hidden">
-        <div className="animate-marquee flex whitespace-nowrap">
+        <Marquee className="flex whitespace-nowrap">
           {Array.from({ length: 2 }).map((_, i) => (
             <span key={i} className="flex items-center gap-8 mr-8">
               {['Maleisië', 'Peru', 'Thailand', 'Indonesië', 'Japan', 'Colombia', 'Marokko', 'Sri Lanka'].map((place) => (
@@ -466,7 +470,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
               ))}
             </span>
           ))}
-        </div>
+        </Marquee>
       </div>
 
       {/* HIGHLIGHTS */}

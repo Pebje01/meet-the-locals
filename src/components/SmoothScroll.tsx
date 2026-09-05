@@ -16,7 +16,10 @@ export function SmoothScroll() {
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 2,
+      // Stond op 2, wat de scrollsnelheid op touch verdubbelde. Daardoor
+      // moesten de reveal-animaties twee keer zo snel bijhouden en liep het
+      // op telefoon en tablet achter.
+      touchMultiplier: 1,
     })
     lenisRef.current = lenis
 

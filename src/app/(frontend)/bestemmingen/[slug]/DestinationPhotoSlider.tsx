@@ -73,6 +73,9 @@ export function DestinationPhotoSlider({
   const prev = () => goTo((current - 1 + images.length) % images.length)
   const next = () => goTo((current + 1) % images.length)
 
+  /** Index van de buur, met omslag aan beide kanten. */
+  const buur = (stap: number) => (current + stap + images.length) % images.length
+
   return (
     <section className="group/slider relative h-[55vh] md:h-[72vh] lg:h-[88vh] min-h-[400px] md:min-h-[560px] overflow-hidden">
       <AnimatePresence initial={false} custom={direction}>
@@ -96,6 +99,28 @@ export function DestinationPhotoSlider({
           />
         </motion.div>
       </AnimatePresence>
+
+      {/*
+        De volgende en vorige foto alvast ophalen. Zonder dit begint de
+        overgang terwijl het beeld nog moet downloaden, en dat is precies wat
+        de slider traag laat aanvoelen. Ze staan buiten beeld en zonder
+        prioriteit, dus ze verdringen de zichtbare foto niet.
+      */}
+      {images.length > 1 && (
+        <div aria-hidden="true" className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0">
+          {[buur(1), buur(-1)].map((i) => (
+            <Image
+              key={images[i].url}
+              src={images[i].url}
+              alt=""
+              width={16}
+              height={9}
+              sizes="100vw"
+              loading="lazy"
+            />
+          ))}
+        </div>
+      )}
 
 
       {/* Arrows */}

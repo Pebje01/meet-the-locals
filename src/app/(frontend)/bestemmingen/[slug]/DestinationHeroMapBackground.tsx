@@ -2,7 +2,10 @@
 
 import { ComposableMap, Geographies, Geography, Marker, type GeoFeature } from 'react-simple-maps'
 
-const GEO_URL = '/countries-50m.json'
+// 110m in plaats van 50m: 105 kB tegenover 739 kB. Deze kaart staat op
+// hooguit 12 procent dekking achter een foto, dus het detailverschil is niet
+// te zien maar de winst op een telefoon wel.
+const GEO_URL = '/countries-110m.json'
 
 function normalizedId(geo: GeoFeature): string {
   return String(geo.id).padStart(3, '0')

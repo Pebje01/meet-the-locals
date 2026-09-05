@@ -4,7 +4,10 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ComposableMap, Geographies, Geography, type GeoFeature } from 'react-simple-maps'
 
-const GEO_URL = '/countries-50m.json'
+// Deze kaart is wel inhoud: bezochte landen lichten op. Toch volstaat 110m,
+// want op wereldschaal zijn de landsgrenzen nagenoeg gelijk terwijl het
+// bestand zeven keer kleiner is.
+const GEO_URL = '/countries-110m.json'
 
 type DestEntry = {
   slug: string

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Marquee } from '@/components/Marquee'
 import type { Destination } from '@/payload-types'
 
 type TravelInfo = NonNullable<Destination['travelInfo']>
@@ -178,7 +179,7 @@ export function DestinationInfoStrip({
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-accent to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-accent to-transparent" />
 
-        <div className="animate-marquee flex whitespace-nowrap">
+        <Marquee className="flex whitespace-nowrap">
           {[0, 1].map((copy) => (
             <span key={copy} className="flex items-center">
               {displayItems.map((item, i) => (
@@ -205,7 +206,7 @@ export function DestinationInfoStrip({
               ))}
             </span>
           ))}
-        </div>
+        </Marquee>
       </div>
     </div>
   )
