@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Story } from '@/payload-types'
+import { OrganicClipDefs } from '@/components/OrganicEdge'
 
 function imageUrl(img: Story['heroImage']): string {
   return img && typeof img === 'object' ? (img.url ?? '') : ''
@@ -30,7 +31,19 @@ export default async function VerhalenPage() {
   return (
     <main className="min-h-screen bg-warm-white">
 
-      <section className="relative h-[75vh] min-h-[500px] flex flex-col items-center justify-center overflow-hidden bg-forest-dark">
+      {/*
+        De hero krijgt zelf een golvende onderrand via clip-path, in plaats van
+        er een gevulde golf overheen te leggen. Die golf was crèmekleurig,
+        terwijl eronder een foto staat, en dat gaf een witte strook.
+        Nu is het gebied onder de golf gewoon weggeknipt en schuift het eerste
+        verhaal er met een negatieve marge onder, zodat de foto doorloopt.
+      */}
+      <OrganicClipDefs id="verhalenWaveClip" diepte={0.13} />
+
+      <section
+        className="relative z-10 h-[75vh] min-h-[500px] flex flex-col items-center justify-center overflow-hidden bg-forest-dark"
+        style={{ clipPath: 'url(#verhalenWaveClip)' }}
+      >
         <Image
           src="/media/maleisie-5-scaled.webp"
           alt="Reizen"
@@ -56,22 +69,16 @@ export default async function VerhalenPage() {
             Meer dan een blog, minder dan een boek.
           </p>
         </div>
-
-        <div className="absolute bottom-0 left-0 right-0 z-2">
-          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[50px] md:h-[80px] block">
-            <path d="M0,80 L0,65 C240,55 480,72 720,62 C960,52 1200,68 1440,60 L1440,80 Z" fill="var(--color-warm-white)" />
-          </svg>
-        </div>
       </section>
 
       {stories.length === 0 ? (
-        <section className="py-24 md:py-32">
+        <section className="relative z-0 -mt-[9vh] py-24 md:py-32">
           <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
             <p className="text-text-muted text-lg">De eerste verhalen komen er aan. Snel terug.</p>
           </div>
         </section>
       ) : (
-        <section className="divide-y divide-black/10">
+        <section className="relative z-0 -mt-[9vh] divide-y divide-black/10">
           {stories.map((story) => (
             <Link
               key={story.id}
