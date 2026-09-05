@@ -20,8 +20,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 
 /** Alles wat deze sessie is aangeraakt. */
 const DESTINATIONS = [
-  'apulie', 'valle-ditria', 'italie', 'comomeer', 'new-york', 'java', 'indonesie',
-  'cameron-highlands', 'langkawi', 'bangkok', 'maleisie', 'japan',
+  'apulie', 'valle-ditria', 'italie', 'comomeer', 'lombardije', 'new-york', 'java',
+  'indonesie', 'cameron-highlands', 'langkawi', 'bangkok', 'maleisie', 'japan',
 ]
 const POSTS = [
   'apulie-regio-overzicht', 'apulie-leukste-dorpjes', 'locorotondo-wit-en-stil',

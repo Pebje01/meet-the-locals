@@ -245,48 +245,6 @@ const MEDIA = [
     }
   },
   {
-    "filename": "como-italia086-1920.webp",
-    "alt": "Uitzicht over het Comomeer, Italië",
-    "caption": null,
-    "width": 1920,
-    "height": 1440,
-    "mimeType": "image/webp",
-    "filesize": 619174,
-    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/como-italia086-1920.webp",
-    "exif": {
-      "camera": null,
-      "lens": null,
-      "aperture": null,
-      "shutterSpeed": null,
-      "iso": null,
-      "focalLength": null,
-      "takenAt": null,
-      "latitude": null,
-      "longitude": null
-    }
-  },
-  {
-    "filename": "como-italia086.webp",
-    "alt": "Uitzicht over het Comomeer, Italië",
-    "caption": null,
-    "width": 4032,
-    "height": 3024,
-    "mimeType": "image/webp",
-    "filesize": 2012784,
-    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/como-italia086.webp",
-    "exif": {
-      "camera": null,
-      "lens": null,
-      "aperture": null,
-      "shutterSpeed": null,
-      "iso": null,
-      "focalLength": null,
-      "takenAt": null,
-      "latitude": null,
-      "longitude": null
-    }
-  },
-  {
     "filename": "newyork-1-scaled.webp",
     "alt": "newyork (1)",
     "caption": "",
@@ -623,22 +581,169 @@ const MEDIA = [
     }
   },
   {
-    "filename": "Shirakawago-3.webp",
-    "alt": "Boerderijen met rieten daken in Shirakawa-go",
-    "caption": null,
-    "width": 3716,
-    "height": 2090,
+    "filename": "japan-fuji-chureito.webp",
+    "alt": "De Chureito-pagode met de berg Fuji op de achtergrond",
+    "caption": "Chureito-pagode, Fujiyoshida",
+    "width": 1920,
+    "height": 1278,
     "mimeType": "image/webp",
-    "filesize": 2417366,
-    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/Shirakawago-3.webp",
+    "filesize": 360320,
+    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/japan-fuji-chureito.webp",
     "exif": {
-      "camera": "Sony A7 IV",
-      "lens": "Sony FE 24-70mm f/2.8 GM",
-      "aperture": "f/9",
-      "shutterSpeed": "1/200s",
+      "camera": "NIKON D780",
+      "lens": "24-70mm f/2.8G",
+      "aperture": "f/11",
+      "shutterSpeed": "1/500s",
+      "iso": "80",
+      "focalLength": "36mm",
+      "takenAt": "2024-03-21T11:51:37.000Z",
+      "latitude": null,
+      "longitude": null
+    }
+  },
+  {
+    "filename": "japan-fuji-drone.webp",
+    "alt": "De berg Fuji boven het Kawaguchiko-meer, gezien vanuit de lucht",
+    "caption": "Kawaguchiko, Yamanashi",
+    "width": 1920,
+    "height": 1080,
+    "mimeType": "image/webp",
+    "filesize": 290540,
+    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/japan-fuji-drone.webp",
+    "exif": {
+      "camera": "DJI FC8482",
+      "lens": "24.0 mm f/1.7",
+      "aperture": "f/1.7",
+      "shutterSpeed": "1/80s",
       "iso": "100",
-      "focalLength": "28mm",
-      "takenAt": null,
+      "focalLength": "7mm",
+      "takenAt": "2024-03-21T15:31:35.000Z",
+      "latitude": null,
+      "longitude": null
+    }
+  },
+  {
+    "filename": "japan-shirakawago-winter.webp",
+    "alt": "Het dorp Shirakawa-go in de sneeuw, gezien vanuit de lucht",
+    "caption": "Shirakawa-go, Gifu",
+    "width": 1920,
+    "height": 1080,
+    "mimeType": "image/webp",
+    "filesize": 498968,
+    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/japan-shirakawago-winter.webp",
+    "exif": {
+      "camera": "DJI FC8482",
+      "lens": "24.0 mm f/1.7",
+      "aperture": "f/1.7",
+      "shutterSpeed": "1/80s",
+      "iso": "100",
+      "focalLength": "7mm",
+      "takenAt": "2024-03-16T14:42:39.000Z",
+      "latitude": null,
+      "longitude": null
+    }
+  },
+  {
+    "filename": "japan-shirakawago-daken.webp",
+    "alt": "Rieten daken van Shirakawa-go onder een laag sneeuw",
+    "caption": "Shirakawa-go, Gifu",
+    "width": 1920,
+    "height": 1080,
+    "mimeType": "image/webp",
+    "filesize": 576726,
+    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/japan-shirakawago-daken.webp",
+    "exif": {
+      "camera": "DJI FC8482",
+      "lens": "24.0 mm f/1.7",
+      "aperture": "f/1.7",
+      "shutterSpeed": "1/80s",
+      "iso": "100",
+      "focalLength": "7mm",
+      "takenAt": "2024-03-16T14:48:03.000Z",
+      "latitude": null,
+      "longitude": null
+    }
+  },
+  {
+    "filename": "japan-nara-hert.webp",
+    "alt": "Een hert bij een informatiebord in het park van Nara",
+    "caption": "Nara-park, Nara",
+    "width": 1920,
+    "height": 1278,
+    "mimeType": "image/webp",
+    "filesize": 225860,
+    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/japan-nara-hert.webp",
+    "exif": {
+      "camera": "NIKON D780",
+      "lens": "24-70mm f/2.8G",
+      "aperture": "f/2.8",
+      "shutterSpeed": "1/500s",
+      "iso": "80",
+      "focalLength": "24mm",
+      "takenAt": "2024-03-11T04:44:14.000Z",
+      "latitude": null,
+      "longitude": null
+    }
+  },
+  {
+    "filename": "japan-tokyo-rivier.webp",
+    "alt": "Gebouwen langs de Sumida-rivier in Tokio met een rondvaartboot",
+    "caption": "Sumida, Tokio",
+    "width": 1920,
+    "height": 1278,
+    "mimeType": "image/webp",
+    "filesize": 495596,
+    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/japan-tokyo-rivier.webp",
+    "exif": {
+      "camera": "NIKON D780",
+      "lens": "80-200mm f/2.8",
+      "aperture": "f/9",
+      "shutterSpeed": "1/125s",
+      "iso": "50",
+      "focalLength": "200mm",
+      "takenAt": "2024-03-20T12:11:57.000Z",
+      "latitude": null,
+      "longitude": null
+    }
+  },
+  {
+    "filename": "japan-tokyo-uitzicht.webp",
+    "alt": "Bezoekers bij het raam met uitzicht over Tokio",
+    "caption": "Tokyo Skytree, Tokio",
+    "width": 1920,
+    "height": 1278,
+    "mimeType": "image/webp",
+    "filesize": 307218,
+    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/japan-tokyo-uitzicht.webp",
+    "exif": {
+      "camera": "NIKON D780",
+      "lens": "24-70mm f/2.8G",
+      "aperture": "f/7.1",
+      "shutterSpeed": "1/160s",
+      "iso": "50",
+      "focalLength": "50mm",
+      "takenAt": "2024-03-20T13:29:16.000Z",
+      "latitude": null,
+      "longitude": null
+    }
+  },
+  {
+    "filename": "japan-kersenbloesem.webp",
+    "alt": "Bruidspaar onder bloeiende kersenbomen in het park",
+    "caption": "Shioiri-park, Tokio",
+    "width": 1920,
+    "height": 2561,
+    "mimeType": "image/webp",
+    "filesize": 502382,
+    "url": "https://fsn1.your-objectstorage.com/meetthelocals-media/japan-kersenbloesem.webp",
+    "exif": {
+      "camera": "NIKON D780",
+      "lens": "80-200mm f/2.8",
+      "aperture": "f/2.8",
+      "shutterSpeed": "1/200s",
+      "iso": "50",
+      "focalLength": "116mm",
+      "takenAt": "2024-03-20T10:53:17.000Z",
       "latitude": null,
       "longitude": null
     }
@@ -694,17 +799,18 @@ const PLAN = {
       "hero": "como-italia086-correct.webp",
       "gallery": [
         "trulli-home-3.webp",
-        "trulli-lupoli-33.webp",
-        "como-italia086-1920.webp"
+        "trulli-lupoli-33.webp"
       ]
     },
     {
       "slug": "comomeer",
       "hero": "como-italia086-correct.webp",
-      "gallery": [
-        "como-italia086-1920.webp",
-        "como-italia086.webp"
-      ]
+      "gallery": []
+    },
+    {
+      "slug": "lombardije",
+      "hero": "como-italia086-correct.webp",
+      "gallery": []
     },
     {
       "slug": "new-york",
@@ -765,8 +871,16 @@ const PLAN = {
     },
     {
       "slug": "japan",
-      "hero": "Shirakawago-3.webp",
-      "gallery": []
+      "hero": "japan-fuji-chureito.webp",
+      "gallery": [
+        "japan-fuji-drone.webp",
+        "japan-shirakawago-winter.webp",
+        "japan-shirakawago-daken.webp",
+        "japan-nara-hert.webp",
+        "japan-tokyo-rivier.webp",
+        "japan-tokyo-uitzicht.webp",
+        "japan-kersenbloesem.webp"
+      ]
     }
   ],
   "posts": [
