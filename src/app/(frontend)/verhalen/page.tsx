@@ -67,7 +67,7 @@ export default async function VerhalenPage() {
             Verhalen
           </h1>
           <p className="text-white/75 text-lg md:text-xl max-w-xl mx-auto leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.3)]">
-            Meer dan een blog, minder dan een boek.
+            Persoonlijke verhalen en fotografie van de meest bijzondere plekken ter wereld.
           </p>
         </div>
       </section>
