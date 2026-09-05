@@ -39,6 +39,7 @@ export default async function VerhalenPage() {
         verhaal er met een negatieve marge onder, zodat de foto doorloopt.
       */}
       <OrganicClipDefs id="verhalenWaveClip" diepte={0.13} />
+      <OrganicClipDefs id="verhaalKaartClip" diepte={0.075} />
 
       <section
         className="relative z-10 h-[75vh] min-h-[500px] flex flex-col items-center justify-center overflow-hidden bg-forest-dark"
@@ -78,12 +79,25 @@ export default async function VerhalenPage() {
           </div>
         </section>
       ) : (
-        <section className="relative z-0 -mt-[9vh] divide-y divide-black/10">
-          {stories.map((story) => (
+        <section className="relative z-0 -mt-[9vh]">
+        {/*
+          Elke kaart knipt zijn eigen onderrand en de volgende schuift eronder,
+          zodat de foto's in elkaar overlopen in plaats van met een rechte naad
+          op elkaar te stapelen. De z-index loopt af, want anders schildert een
+          latere kaart met haar rechte bovenkant over de golf van de vorige.
+          De laatste kaart blijft ongeknipt: daaronder zit geen foto meer.
+        */}
+          {stories.map((story, i) => {
+            const isLaatste = i === stories.length - 1
+            return (
             <Link
               key={story.id}
               href={`/verhalen/${story.slug}`}
-              className="group block relative overflow-hidden"
+              className={`group block relative overflow-hidden ${i > 0 ? '-mt-[6vh]' : ''}`}
+              style={{
+                zIndex: stories.length - i,
+                clipPath: isLaatste ? undefined : 'url(#verhaalKaartClip)',
+              }}
             >
               {/* Kaart: min 70vh, foto rechts zichtbaar, tekst links */}
               <div className="relative h-screen">
@@ -141,7 +155,8 @@ export default async function VerhalenPage() {
                 </div>
               </div>
             </Link>
-          ))}
+            )
+          })}
         </section>
       )}
     </main>
