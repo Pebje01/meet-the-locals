@@ -340,8 +340,9 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
           </div>
         </div>
 
-        {/* Waar de foto die nu in beeld is gemaakt is */}
-        <div className="absolute bottom-14 right-6 z-10 hidden items-center gap-2 border border-white/20 bg-white/12 px-4 py-2.5 backdrop-blur-sm organic-btn-alt md:flex lg:right-10">
+        {/* Waar de foto die nu in beeld is gemaakt is. Blijft boven de golf:
+           die is 80px hoog en piekt tot zo'n 66px boven de sectierand. */}
+        <div className="absolute bottom-28 right-6 z-10 hidden items-center gap-2 border border-white/20 bg-white/12 px-4 py-2.5 backdrop-blur-sm organic-btn-alt md:flex lg:right-10">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-accent">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
             <circle cx="12" cy="10" r="3" />
@@ -353,7 +354,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
 
         {/* Organische onderrand in de kleur van de sectie eronder. De vorige
             golf had nauwelijks amplitude en oogde daardoor als een rechte lijn. */}
-        <OrganicEdge fill="var(--color-cream-dark)" className="h-[44px] md:h-[80px]" />
+        <OrganicEdge fill="var(--color-cream-dark)" texture className="h-[44px] md:h-[80px]" />
       </section>
 
       {/* INTRO: krijgt de opmaak die de hero eerst had */}
@@ -369,10 +370,6 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
             backgroundRepeat: 'repeat',
             opacity: 0.7,
             mixBlendMode: 'overlay',
-            // De korrel begint precies op de sectiegrens, en dat gaf een rechte
-            // streep onder de golf. Boven- en onderin dus laten opkomen.
-            maskImage: 'linear-gradient(to bottom, transparent 0, black 110px, black calc(100% - 110px), transparent 100%)',
-            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, black 110px, black calc(100% - 110px), transparent 100%)',
           }}
         />
         {/* Zachte organische vlek achter de tekst */}
