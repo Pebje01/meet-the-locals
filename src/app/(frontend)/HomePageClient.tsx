@@ -51,7 +51,7 @@ const HERO_SLIDES = [
   { src: '/media/cusco-12-scaled.webp',                  alt: 'Cusco, Peru',                  kb: 'animate-ken-burns-e', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAPABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCy/ieZxsjh+cjIKjOayX1++jLJPJIwJyDnBFWI4IrUNIWZ9oOATjH5VBNai5gDIy/Ocg7evrQquui0F7N21YwapcOMpM5H+9RUEmiXO87Ixj2eitfbIy9kz//Z' },
 ]
 
-function HeroSlideshow() {
+function HeroVisual() {
   const [active, setActive] = useState(0)
   const [slideKeys, setSlideKeys] = useState([0, 1, 2, 3, 4])
 
@@ -71,28 +71,57 @@ function HeroSlideshow() {
   }, [])
 
   return (
-    <>
-      {HERO_SLIDES.map((slide, i) => (
-        <div
-          key={i}
-          className={`absolute inset-0 transition-opacity duration-[2000ms] ease-in-out ${i === active ? 'opacity-100' : 'opacity-0'}`}
-        >
-          <div key={slideKeys[i]} className={`absolute inset-0 ${slide.kb}`}>
-            <Image
-              src={slide.src}
-              alt={slide.alt}
-              fill
-              className="object-cover"
-              sizes="100vw"
-              priority={i === 0}
-              placeholder="blur"
-              blurDataURL={slide.blur}
-              unoptimized
-            />
+    <div className="relative">
+      {/* Kader in bosgroen, iets verschoven achter de foto */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 translate-x-3 translate-y-3 md:translate-x-4 md:translate-y-4 organic-card border-2 border-forest/70"
+      />
+
+      <div className="relative organic-card natural-shadow-box aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/3.3] bg-forest-dark">
+        {HERO_SLIDES.map((slide, i) => (
+          <div
+            key={i}
+            className={`absolute inset-0 transition-opacity duration-[2000ms] ease-in-out ${i === active ? 'opacity-100' : 'opacity-0'}`}
+          >
+            <div key={slideKeys[i]} className={`absolute inset-0 ${slide.kb}`}>
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 46vw"
+                priority={i === 0}
+                placeholder="blur"
+                blurDataURL={slide.blur}
+                unoptimized
+              />
+            </div>
           </div>
-        </div>
-      ))}
-    </>
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/40 via-transparent to-transparent" />
+      </div>
+
+      {/* Zegel: alles op de site is eigen beeld */}
+      <div className="absolute -top-6 -right-2 md:-top-8 md:-right-6 w-[6.5rem] h-[6.5rem] md:w-[8rem] md:h-[8rem] rotate-[-8deg] rounded-full bg-sand flex flex-col items-center justify-center text-center natural-shadow-box">
+        <span aria-hidden className="absolute inset-[8px] rounded-full border border-dashed border-forest/35" />
+        <span className="font-display text-forest-dark text-2xl md:text-3xl leading-none">100%</span>
+        <span className="mt-1.5 text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.14em] text-forest-dark/75">
+          eigen beeld
+        </span>
+      </div>
+
+      {/* Waar de foto die nu in beeld is gemaakt is */}
+      <div className="absolute -bottom-5 left-4 md:left-7 flex items-center gap-2 organic-btn-alt border border-forest/15 bg-cream px-4 py-2.5 natural-shadow-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+        <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-forest whitespace-nowrap">
+          {HERO_SLIDES[active].alt}
+        </span>
+      </div>
+    </div>
   )
 }
 
@@ -184,7 +213,7 @@ function DestinationSlider() {
             <div className="w-px h-5 bg-cream/20" />
             <Link href="/bestemmingen" className="group inline-flex items-center gap-2 text-cream/70 font-semibold text-sm uppercase tracking-[0.1em] hover:text-cream transition-colors">
               <span>Alle bestemmingen</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="hidden sm:block transition-transform duration-300 group-hover:translate-x-1">
                 <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
@@ -231,40 +260,94 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
   return (
     <main>
       {/* HERO */}
-      <section className="relative h-svh flex items-center justify-center overflow-hidden bg-forest-dark">
-        <HeroSlideshow />
-        <div className="absolute inset-0 bg-gradient-to-t from-forest/60 via-transparent to-transparent z-[1]" />
-        <div className="absolute inset-0 z-[1]" style={{ background: 'radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0.58) 0%, transparent 65%)' }} />
-        <div className="relative z-10 w-full pt-16 md:pt-20 -mt-0">
-          <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
-            <div className="w-full">
-              <h1 className="font-display text-white! leading-[1.1] mb-5 md:mb-8 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]" style={{ fontSize: 'clamp(1.9rem, 6vw, 4.75rem)' }}>
-                De wereld in<br />beeld en verhalen
+      <section className="relative overflow-hidden bg-cream-dark pt-28 pb-28 md:pt-36 md:pb-36 lg:min-h-svh lg:flex lg:items-center">
+        {/* Stippenraster */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(42,74,42,0.13) 1.1px, transparent 1.1px)',
+            backgroundSize: '22px 22px',
+          }}
+        />
+        {/* Zachte organische vlek achter de tekst */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 -top-40 h-[34rem] w-[34rem] blob-1 bg-water-muted/50"
+        />
+
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12 lg:gap-14">
+            {/* Tekst */}
+            <div className="lg:col-span-6">
+              <span className="mb-6 flex items-center gap-2.5 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="shrink-0">
+                  <path d="M12 3v18M4.5 7.5l15 9M19.5 7.5l-15 9" />
+                </svg>
+                Welkom bij Meet the Locals
+              </span>
+
+              <h1 className="font-display text-forest leading-[1.05] mb-6" style={{ fontSize: 'clamp(2.2rem, 4.3vw, 3.9rem)' }}>
+                De wereld in
+                <br />
+                <span className="text-accent">beeld en verhalen</span>
               </h1>
-              <p className="text-white text-[20px] md:text-[22px] max-w-2xl mx-auto leading-relaxed mb-7 md:mb-10 drop-shadow-[0_2px_15px_rgba(0,0,0,0.4)]">
-                Beleef de wereld vanuit mijn lens. Als fotograaf en avonturier neem ik je mee naar plekken op de wereld die ik vastleg op mijn manier.<br /><br />Welkom bij Meet the Locals.
+
+              <p className="text-text-muted text-[19px] md:text-[21px] leading-relaxed max-w-xl mb-9">
+                Beleef de wereld vanuit mijn lens. Als fotograaf en avonturier neem ik je mee naar
+                plekken die ik op mijn manier vastleg: niet alleen wat mooi is, maar wat echt is.
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-4">
+
+              <div className="flex flex-wrap items-center gap-4">
                 <Link
                   href="/blog"
-                  className="group inline-flex items-center gap-3 bg-accent text-white px-6 py-3 md:px-8 md:py-4 organic-btn text-xs md:text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300 hover:shadow-[0_8px_30px_-6px_rgba(200,121,82,0.35)]"
+                  className="group inline-flex items-center gap-2 sm:gap-3 bg-accent text-white px-4 sm:px-7 py-3 sm:py-4 organic-btn text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.06em] sm:tracking-[0.1em] whitespace-nowrap font-semibold hover:bg-accent-light transition-all duration-300 natural-shadow-box"
                 >
                   <span>Ontdek verhalen</span>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="hidden sm:block transition-transform duration-300 group-hover:translate-x-1">
                     <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Link>
                 <Link
                   href="/bestemmingen"
-                  className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm text-white px-6 py-3 md:px-8 md:py-4 organic-btn-alt text-xs md:text-sm uppercase tracking-[0.1em] font-semibold hover:bg-white/20 transition-all duration-300 border border-white/20"
+                  className="inline-flex items-center gap-2 sm:gap-3 bg-white text-forest px-4 sm:px-7 py-3 sm:py-4 organic-btn-alt text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.06em] sm:tracking-[0.1em] whitespace-nowrap font-semibold border-2 border-forest hover:bg-forest hover:text-white transition-all duration-300"
                 >
-                  Bestemmingen
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span>Bekijk bestemmingen</span>
                 </Link>
               </div>
+
+              <ul className="mt-8 flex flex-wrap gap-2.5">
+                {[
+                  'Eigen fotografie',
+                  'Echte en unieke plekken en mensen',
+                  'Reistips uit ervaring',
+                  'Reizen op eigen wijze',
+                ].map((item) => (
+                  <li
+                    key={item}
+                    className="inline-flex items-center gap-2 rounded-full border border-forest/15 bg-water-muted px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-forest"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0">
+                      <path d="M4 12.5l5 5L20 6.5" />
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Beeld */}
+            <div className="lg:col-span-6 lg:pl-6">
+              <HeroVisual />
             </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 z-2">
+
+        <div className="absolute bottom-0 left-0 right-0 z-[2]">
           <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[20px] md:h-[32px] block">
             <path d="M0,80 L0,76 C360,72 720,78 1080,74 C1200,73 1320,75 1440,73 L1440,80 Z" fill="#F5EFE8" />
           </svg>
@@ -319,7 +402,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
             <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Laatste verhalen</h2>
             <Link href="/blog" className="group inline-flex items-center gap-2 text-forest font-semibold text-sm uppercase tracking-[0.1em]">
               <span>Alle artikelen</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="hidden sm:block transition-transform duration-300 group-hover:translate-x-1">
                 <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
@@ -407,7 +490,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
               </div>
               <Link href="/werk-in-opdracht" className="group inline-flex items-center gap-3 bg-accent text-white px-8 py-4 organic-btn text-sm uppercase tracking-[0.1em] font-semibold hover:bg-accent-light transition-all duration-300">
                 <span>Bekijk mijn werk</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="hidden sm:block transition-transform duration-300 group-hover:translate-x-1">
                   <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </Link>
