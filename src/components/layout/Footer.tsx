@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { OrganicEdge } from '@/components/OrganicEdge'
 
 const footerLinks = {
   ontdek: [
@@ -25,14 +26,22 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <>
-    {/* Wave sits outside footer so it inherits no overlays */}
-    <div className="relative -mb-1">
-      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-[55px] md:h-[85px] block">
-        <path d="M0,120 L0,50 C240,75 420,25 660,55 C900,85 1080,30 1260,50 C1380,65 1420,45 1440,50 L1440,120 Z" fill="var(--color-forest-dark)" />
-      </svg>
-    </div>
     <footer className="bg-forest-dark text-cream relative noise-overlay speckle-overlay">
+      {/*
+        De golf stond eerst als los blok bóven de voet en nam daar zelf hoogte
+        in. Daardoor bleef er een leeg strookje tussen de laatste sectie en de
+        voet staan. Nu ligt hij over de laatste sectie heen, net als de andere
+        randen op de site, en loopt die sectie dus door tot in de voet.
+
+        Hoogte blijft onder 80px. Dat is waar de korrel- en spikkellagen van de
+        voet tot boven de rand uit komen, dus krijgt de golf dezelfde textuur
+        als de voet zelf en zie je geen toonverschil op de naad. Het laat ook
+        genoeg lucht onder de laatste sectie: de nieuwsbriefkaart eindigt 64px
+        boven de rand, en daar moet de golf onder blijven.
+      */}
+      <div className="pointer-events-none absolute inset-x-0 -top-[50px] z-[1] h-[50px] md:-top-[70px] md:h-[70px]">
+        <OrganicEdge fill="var(--color-forest-dark)" className="h-full" />
+      </div>
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pt-20 md:pt-24 pb-16 md:pb-20 relative z-10">
         <div className="grid grid-cols-3 md:grid-cols-12 gap-x-4 gap-y-12 md:gap-8">
@@ -143,6 +152,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-    </>
   )
 }
