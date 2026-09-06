@@ -6,6 +6,7 @@ import { useRef, useCallback, useState, useEffect } from 'react'
 import { ComposableMap, Geographies, Geography, type GeoFeature } from 'react-simple-maps'
 import { NewsletterCTA } from '@/components/NewsletterCTA'
 import { Marquee } from '@/components/Marquee'
+import { OrganicEdge } from '@/components/OrganicEdge'
 
 /* ─── Data ─── */
 const GEO_URL = '/countries-110m.json'
@@ -345,24 +346,6 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
               </Link>
             </div>
 
-            <ul className="mt-8 flex flex-wrap justify-center gap-2.5">
-              {[
-                'Eigen fotografie',
-                'Echte en unieke plekken en mensen',
-                'Reistips uit ervaring',
-                'Reizen op eigen wijze',
-              ].map((item) => (
-                <li
-                  key={item}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/12 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-sm"
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-accent">
-                    <path d="M4 12.5l5 5L20 6.5" />
-                  </svg>
-                  {item}
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
 
@@ -377,28 +360,40 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
           </span>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 z-[2]">
-          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="block w-full h-[20px] md:h-[32px]">
-            <path d="M0,80 L0,76 C360,72 720,78 1080,74 C1200,73 1320,75 1440,73 L1440,80 Z" fill="var(--color-cream-dark)" />
-          </svg>
-        </div>
+        {/* Organische onderrand in de kleur van de sectie eronder. De vorige
+            golf had nauwelijks amplitude en oogde daardoor als een rechte lijn. */}
+        <OrganicEdge fill="var(--color-cream-dark)" className="h-[44px] md:h-[80px]" />
       </section>
 
       {/* INTRO: krijgt de opmaak die de hero eerst had */}
       <section className="relative overflow-hidden bg-cream-dark py-24 md:py-32">
-        {/* Stippenraster */}
+        {/* Korrel in plaats van een stippenraster: dat laatste stond op een
+            regelmatig grid en oogde daardoor mechanisch. */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
           style={{
-            backgroundImage: 'radial-gradient(circle, rgba(42,74,42,0.13) 1.1px, transparent 1.1px)',
-            backgroundSize: '22px 22px',
+            backgroundImage: "url('/textures/grain.webp')",
+            backgroundSize: '800px 533px',
+            backgroundRepeat: 'repeat',
+            opacity: 0.7,
+            mixBlendMode: 'overlay',
+            // De korrel begint precies op de sectiegrens, en dat gaf een rechte
+            // streep onder de golf. Boven- en onderin dus laten opkomen.
+            maskImage: 'linear-gradient(to bottom, transparent 0, black 110px, black calc(100% - 110px), transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, black 110px, black calc(100% - 110px), transparent 100%)',
           }}
         />
         {/* Zachte organische vlek achter de tekst */}
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 -top-40 h-[34rem] w-[34rem] blob-1 bg-water-muted/50"
+          style={{
+            // De vlek steekt boven de sectie uit en werd daar recht afgeknipt,
+            // wat een streep gaf onder de golf. Bovenin dus laten opkomen.
+            maskImage: 'linear-gradient(to bottom, transparent 0, transparent 160px, black 340px)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, transparent 160px, black 340px)',
+          }}
         />
 
         <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-10">
@@ -413,6 +408,27 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
             </div>
 
             <div className="lg:col-span-6 lg:pl-6">
+              {/* De pillen stonden in de hero, maar wit op een foto viel niet op.
+                  Hier staan ze op een rustige achtergrond en lezen ze meteen als
+                  belofte boven de tekst. */}
+              <ul className="mb-7 flex flex-wrap gap-2.5">
+                {[
+                  'Eigen fotografie',
+                  'Echte en unieke plekken en mensen',
+                  'Reistips uit ervaring',
+                  'Reizen op eigen wijze',
+                ].map((item) => (
+                  <li
+                    key={item}
+                    className="inline-flex items-center gap-2 rounded-full border border-forest/15 bg-warm-white/70 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-forest"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-accent">
+                      <path d="M4 12.5l5 5L20 6.5" />
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
               <h2 className="mb-6 font-display text-4xl font-light leading-[1.1] text-forest md:text-5xl lg:text-6xl">
                 Meer dan een <span className="text-accent">reisblog</span>
               </h2>

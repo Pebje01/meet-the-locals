@@ -43,7 +43,10 @@ export function OrganicEdge({
 
   return (
     <div
-      className={`pointer-events-none absolute inset-x-0 z-[2] ${isTop ? 'top-0' : 'bottom-0'}`}
+      // Een pixel over de rand heen: de onderrand van het pad wordt anders
+      // half doorzichtig gerenderd en daar schemert de sectie erachter
+      // doorheen als een dunne streep.
+      className={`pointer-events-none absolute inset-x-0 z-[2] ${isTop ? '-top-px' : '-bottom-px'}`}
       aria-hidden="true"
     >
       <svg
