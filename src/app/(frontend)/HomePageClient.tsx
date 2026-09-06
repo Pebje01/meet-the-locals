@@ -44,11 +44,11 @@ const continents = [
 ]
 
 const HERO_SLIDES = [
-  { src: '/media/Shirakawago-3.webp',                    alt: 'Shirakawago, Japan',           kb: 'animate-ken-burns',   blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCtHCY2Pl5PNEyP1bIPSqZlckAsSM0rOwTIYg46im1HsZRpytrIkKy/wgEetFOjmk28tn6gUUuWIrT7n//Z' },
+  { src: '/media/Shirakawago-3.webp',                    alt: 'Katsura rivier, Japan',           kb: 'animate-ken-burns',   blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCtHCY2Pl5PNEyP1bIPSqZlckAsSM0rOwTIYg46im1HsZRpytrIkKy/wgEetFOjmk28tn6gUUuWIrT7n//Z' },
   { src: '/media/singapore-skyline.webp',                alt: 'Skyline Singapore',            kb: 'animate-ken-burns-b', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAANABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCU6qzj9wyt6nrirDai6Sx/NlcfMvAzXO2p2xKR95snNPi3NITIxIOQQOM0ru41E6ZdYtGztZ8A46UVzyH5RjAHoBRRzFezP//Z' },
-  { src: '/media/purmerend-drone-4.webp',                alt: 'Purmerend, Nederland',         kb: 'animate-ken-burns-c', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCEalfZ/wBfwPQg0/8AtO+OAJyc9OlYs+ftKJk7fTNWpOXZf4QOAO1Tyl8zLLanf5IEjHHtRWdHcTKuBIcZopaE3Z//2Q==' },
+  { src: '/media/purmerend-drone-4.webp',                alt: 'Zuidoostbeemster, Nederland',         kb: 'animate-ken-burns-c', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCEalfZ/wBfwPQg0/8AtO+OAJyc9OlYs+ftKJk7fTNWpOXZf4QOAO1Tyl8zLLanf5IEjHHtRWdHcTKuBIcZopaE3Z//2Q==' },
   { src: '/media/DJI_20240517152816_0082_D-scaled.webp', alt: 'Indonesië vanuit de lucht',    kb: 'animate-ken-burns-d', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDPR9rdTjvSzSBwMAjmkIpo4YD2rGL0JEyPb86KjcfOaKQj/9k=' },
-  { src: '/media/cusco-12-scaled.webp',                  alt: 'Cusco, Peru',                  kb: 'animate-ken-burns-e', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAPABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCy/ieZxsjh+cjIKjOayX1++jLJPJIwJyDnBFWI4IrUNIWZ9oOATjH5VBNai5gDIy/Ocg7evrQquui0F7N21YwapcOMpM5H+9RUEmiXO87Ixj2eitfbIy9kz//Z' },
+  { src: '/media/cusco-12-scaled.webp',                  alt: 'Machu Picchu, Peru',                  kb: 'animate-ken-burns-e', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAPABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCy/ieZxsjh+cjIKjOayX1++jLJPJIwJyDnBFWI4IrUNIWZ9oOATjH5VBNai5gDIy/Ocg7evrQquui0F7N21YwapcOMpM5H+9RUEmiXO87Ixj2eitfbIy9kz//Z' },
 ]
 
 /**
@@ -71,9 +71,10 @@ function HeroBackdrop({ active, slideKeys }: { active: number; slideKeys: number
               className="object-cover"
               sizes="100vw"
               priority={i === 0}
+              loading={i === 0 ? undefined : 'lazy'}
+              quality={72}
               placeholder="blur"
               blurDataURL={slide.blur}
-              unoptimized
             />
           </div>
         </div>
@@ -291,81 +292,82 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
   const { active, slideKeys } = useHeroSlides()
   return (
     <main>
-      {/* HERO: beeldvullend, tekst eroverheen */}
-      <section className="relative flex min-h-svh items-end overflow-hidden bg-forest-dark pb-24 pt-36 md:pb-28 lg:items-center lg:pb-32">
+      {/* HERO: schermvullende foto, gecentreerde tekst eroverheen */}
+      <section className="relative flex h-svh items-center justify-center overflow-hidden bg-forest-dark">
         <HeroBackdrop active={active} slideKeys={slideKeys} />
 
-        {/* Leesbaarheidslaag: donker onderin, waar de tekst staat */}
+        {/* Twee lagen voor leesbaarheid: donker onderin, en een vignet in het midden */}
+        <div aria-hidden className="absolute inset-0 z-[1] bg-gradient-to-t from-forest/60 via-transparent to-transparent" />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-dark/90 via-forest-dark/55 to-forest-dark/25"
+          className="absolute inset-0 z-[1]"
+          style={{ background: 'radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0.58) 0%, transparent 62%)' }}
         />
 
-        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="max-w-3xl">
-              <span className="mb-6 flex items-center gap-2.5 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="shrink-0">
-                  <path d="M12 3v18M4.5 7.5l15 9M19.5 7.5l-15 9" />
+        <div className="relative z-10 w-full pt-16 md:pt-20">
+          <div className="mx-auto max-w-[1400px] px-6 text-center lg:px-10">
+            <span className="mb-6 inline-flex items-center gap-2.5 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="shrink-0">
+                <path d="M12 3v18M4.5 7.5l15 9M19.5 7.5l-15 9" />
+              </svg>
+              Welkom bij Meet the Locals
+            </span>
+
+            <h1
+              className="font-display !text-white leading-[1.1] mb-5 md:mb-8 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]"
+              style={{ fontSize: 'clamp(1.9rem, 6vw, 4.75rem)' }}
+            >
+              De wereld in
+              <br />
+              beeld en verhalen
+            </h1>
+
+            <p className="mx-auto mb-7 max-w-2xl text-[20px] leading-relaxed text-white drop-shadow-[0_2px_15px_rgba(0,0,0,0.35)] md:mb-10 md:text-[22px]">
+              Beleef de wereld vanuit mijn lens. Als fotograaf en avonturier neem ik je mee naar
+              plekken die ik op mijn manier vastleg: niet alleen wat mooi is, maar wat echt is.
+            </p>
+
+            <div className="flex flex-nowrap items-center justify-center gap-2 sm:gap-4">
+              <Link
+                href="/blog"
+                className="group inline-flex items-center gap-2 whitespace-nowrap bg-accent px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.06em] text-white transition-all duration-300 organic-btn hover:bg-accent-light sm:gap-3 sm:px-8 sm:py-4 sm:text-xs sm:tracking-[0.1em] md:text-sm"
+              >
+                <span>Ontdek verhalen</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="hidden transition-transform duration-300 group-hover:translate-x-1 sm:block">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                Welkom bij Meet the Locals
-              </span>
+              </Link>
+              <Link
+                href="/bestemmingen"
+                className="inline-flex items-center gap-2 whitespace-nowrap border border-white/25 bg-white/10 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.06em] text-white backdrop-blur-sm transition-all duration-300 organic-btn-alt hover:bg-white/20 sm:gap-3 sm:px-8 sm:py-4 sm:text-xs sm:tracking-[0.1em] md:text-sm"
+              >
+                Bestemmingen
+              </Link>
+            </div>
 
-              <h1 className="font-display !text-white leading-[1.05] mb-6 drop-shadow-[0_3px_24px_rgba(0,0,0,0.45)]" style={{ fontSize: 'clamp(2.2rem, 4.3vw, 3.9rem)' }}>
-                De wereld in
-                <br />
-                <span className="text-accent">beeld en verhalen</span>
-              </h1>
-
-              <p className="text-white/85 text-[19px] md:text-[21px] leading-relaxed max-w-xl mb-9 drop-shadow-[0_2px_14px_rgba(0,0,0,0.4)]">
-                Beleef de wereld vanuit mijn lens. Als fotograaf en avonturier neem ik je mee naar
-                plekken die ik op mijn manier vastleg: niet alleen wat mooi is, maar wat echt is.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4">
-                <Link
-                  href="/blog"
-                  className="group inline-flex items-center gap-2 sm:gap-3 bg-accent text-white px-4 sm:px-7 py-3 sm:py-4 organic-btn text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.06em] sm:tracking-[0.1em] whitespace-nowrap font-semibold hover:bg-accent-light transition-all duration-300 natural-shadow-box"
+            <ul className="mt-8 flex flex-wrap justify-center gap-2.5">
+              {[
+                'Eigen fotografie',
+                'Echte en unieke plekken en mensen',
+                'Reistips uit ervaring',
+                'Reizen op eigen wijze',
+              ].map((item) => (
+                <li
+                  key={item}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/12 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-sm"
                 >
-                  <span>Ontdek verhalen</span>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="hidden sm:block transition-transform duration-300 group-hover:translate-x-1">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-accent">
+                    <path d="M4 12.5l5 5L20 6.5" />
                   </svg>
-                </Link>
-                <Link
-                  href="/bestemmingen"
-                  className="inline-flex items-center gap-2 sm:gap-3 bg-white text-forest px-4 sm:px-7 py-3 sm:py-4 organic-btn-alt text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.06em] sm:tracking-[0.1em] whitespace-nowrap font-semibold border-2 border-forest hover:bg-forest hover:text-white transition-all duration-300"
-                >
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                  <span>Bekijk bestemmingen</span>
-                </Link>
-              </div>
-
-              <ul className="mt-8 flex flex-wrap gap-2.5">
-                {[
-                  'Eigen fotografie',
-                  'Echte en unieke plekken en mensen',
-                  'Reistips uit ervaring',
-                  'Reizen op eigen wijze',
-                ].map((item) => (
-                  <li
-                    key={item}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/12 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-sm"
-                  >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0">
-                      <path d="M4 12.5l5 5L20 6.5" />
-                    </svg>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
         {/* Waar de foto die nu in beeld is gemaakt is */}
-        <div className="absolute bottom-16 right-6 z-10 hidden items-center gap-2 organic-btn-alt border border-white/20 bg-white/12 px-4 py-2.5 backdrop-blur-sm md:flex lg:right-10">
+        <div className="absolute bottom-14 right-6 z-10 hidden items-center gap-2 border border-white/20 bg-white/12 px-4 py-2.5 backdrop-blur-sm organic-btn-alt md:flex lg:right-10">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-accent">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
             <circle cx="12" cy="10" r="3" />
