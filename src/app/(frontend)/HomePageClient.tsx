@@ -134,15 +134,6 @@ function FramedPhoto({
         <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/40 via-transparent to-transparent" />
       </div>
 
-      {/* Zegel: alles op de site is eigen beeld */}
-      <div className="absolute -top-6 -right-2 md:-top-8 md:-right-6 w-[6.5rem] h-[6.5rem] md:w-[8rem] md:h-[8rem] rotate-[-8deg] rounded-full bg-sand flex flex-col items-center justify-center text-center natural-shadow-box">
-        <span aria-hidden className="absolute inset-[8px] rounded-full border border-dashed border-forest/35" />
-        <span className="font-display text-forest-dark text-2xl md:text-3xl leading-none">100%</span>
-        <span className="mt-1.5 text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.14em] text-forest-dark/75">
-          eigen beeld
-        </span>
-      </div>
-
       {caption && (
         <div className="absolute -bottom-5 left-4 md:left-7 flex items-center gap-2 organic-btn-alt border border-forest/15 bg-cream px-4 py-2.5 natural-shadow-box">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0">
@@ -399,11 +390,10 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
         <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-6">
-              {/* Geen bijschrift: de locatie van dit beeld is niet vastgesteld.
-                  Vul caption pas in als je zeker weet waar het is gemaakt. */}
               <FramedPhoto
                 src="/media/DSC_3016-copy-scaled.webp"
-                alt="Daley op reis, op een blauwe trap"
+                alt="Daley op de trap in de tuin van Yves Saint Laurent in Marrakesh, Marokko"
+                caption="Yves Saint Laurent tuin, Marrakesh"
               />
             </div>
 
