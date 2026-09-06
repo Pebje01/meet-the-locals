@@ -24,7 +24,9 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   // Pagina's met een lichte hero: header staat daar meteen in de lichte variant
-  const lightHeroPages = ['/', '/over']
+  // De homepage heeft nu een beeldvullende, donkere hero, dus daar hoort de
+  // donkere header bij. Alleen /over houdt nog een lichte hero.
+  const lightHeroPages = ['/over']
   const hasDarkHero = !lightHeroPages.includes(pathname)
   // Pagina's met een donkere achtergrond door de hele pagina — header blijft altijd donker
   const hasAlwaysDarkBg = pathname === '/werk-in-opdracht'

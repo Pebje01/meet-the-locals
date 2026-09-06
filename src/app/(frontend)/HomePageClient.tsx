@@ -51,15 +51,47 @@ const HERO_SLIDES = [
   { src: '/media/cusco-12-scaled.webp',                  alt: 'Cusco, Peru',                  kb: 'animate-ken-burns-e', blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAPABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCy/ieZxsjh+cjIKjOayX1++jLJPJIwJyDnBFWI4IrUNIWZ9oOATjH5VBNai5gDIy/Ocg7evrQquui0F7N21YwapcOMpM5H+9RUEmiXO87Ixj2eitfbIy9kz//Z' },
 ]
 
-function HeroVisual() {
+/**
+ * Beeldvullende achtergrond voor de hero: de reeks wisselt om de zeven
+ * seconden met een langzame Ken Burns eroverheen.
+ */
+function HeroBackdrop({ active, slideKeys }: { active: number; slideKeys: number[] }) {
+  return (
+    <div aria-hidden className="absolute inset-0 overflow-hidden bg-forest-dark">
+      {HERO_SLIDES.map((slide, i) => (
+        <div
+          key={i}
+          className={`absolute inset-0 transition-opacity duration-[2000ms] ease-in-out ${i === active ? 'opacity-100' : 'opacity-0'}`}
+        >
+          <div key={slideKeys[i]} className={`absolute inset-0 ${slide.kb}`}>
+            <Image
+              src={slide.src}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority={i === 0}
+              placeholder="blur"
+              blurDataURL={slide.blur}
+              unoptimized
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/** Houdt bij welke dia in beeld is. Gedeeld door de hero en het locatielabel. */
+function useHeroSlides() {
   const [active, setActive] = useState(0)
   const [slideKeys, setSlideKeys] = useState([0, 1, 2, 3, 4])
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setActive(prev => {
+      setActive((prev) => {
         const next = (prev + 1) % HERO_SLIDES.length
-        setSlideKeys(keys => {
+        setSlideKeys((keys) => {
           const updated = [...keys]
           updated[next] = Math.max(...keys) + 1
           return updated
@@ -70,6 +102,23 @@ function HeroVisual() {
     return () => clearInterval(timer)
   }, [])
 
+  return { active, slideKeys }
+}
+
+/**
+ * Ingelijst beeld met het verschoven kader, de zegel en een bijschrift.
+ * Dit was de opmaak van de hero; die verhuist nu naar de introsectie.
+ */
+function FramedPhoto({
+  src,
+  alt,
+  caption,
+}: {
+  src: string
+  alt: string
+  /** Laat weg als de locatie niet zeker is: liever geen bijschrift dan een verkeerd. */
+  caption?: string
+}) {
   return (
     <div className="relative">
       {/* Kader in bosgroen, iets verschoven achter de foto */}
@@ -79,26 +128,7 @@ function HeroVisual() {
       />
 
       <div className="relative organic-card natural-shadow-box aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/3.3] bg-forest-dark">
-        {HERO_SLIDES.map((slide, i) => (
-          <div
-            key={i}
-            className={`absolute inset-0 transition-opacity duration-[2000ms] ease-in-out ${i === active ? 'opacity-100' : 'opacity-0'}`}
-          >
-            <div key={slideKeys[i]} className={`absolute inset-0 ${slide.kb}`}>
-              <Image
-                src={slide.src}
-                alt={slide.alt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 46vw"
-                priority={i === 0}
-                placeholder="blur"
-                blurDataURL={slide.blur}
-                unoptimized
-              />
-            </div>
-          </div>
-        ))}
+        <Image src={src} alt={alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 46vw" />
         <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/40 via-transparent to-transparent" />
       </div>
 
@@ -111,16 +141,17 @@ function HeroVisual() {
         </span>
       </div>
 
-      {/* Waar de foto die nu in beeld is gemaakt is */}
-      <div className="absolute -bottom-5 left-4 md:left-7 flex items-center gap-2 organic-btn-alt border border-forest/15 bg-cream px-4 py-2.5 natural-shadow-box">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" />
-        </svg>
-        <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-forest whitespace-nowrap">
-          {HERO_SLIDES[active].alt}
-        </span>
-      </div>
+      {caption && (
+        <div className="absolute -bottom-5 left-4 md:left-7 flex items-center gap-2 organic-btn-alt border border-forest/15 bg-cream px-4 py-2.5 natural-shadow-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-forest whitespace-nowrap">
+            {caption}
+          </span>
+        </div>
+      )}
     </div>
   )
 }
@@ -257,43 +288,35 @@ type HomePageClientProps = {
 }
 
 export function HomePageClient({ recentPosts }: HomePageClientProps) {
+  const { active, slideKeys } = useHeroSlides()
   return (
     <main>
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-cream-dark pt-28 pb-28 md:pt-36 md:pb-36 lg:min-h-svh lg:flex lg:items-center">
-        {/* Stippenraster */}
+      {/* HERO: beeldvullend, tekst eroverheen */}
+      <section className="relative flex min-h-svh items-end overflow-hidden bg-forest-dark pb-24 pt-36 md:pb-28 lg:items-center lg:pb-32">
+        <HeroBackdrop active={active} slideKeys={slideKeys} />
+
+        {/* Leesbaarheidslaag: donker onderin, waar de tekst staat */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage: 'radial-gradient(circle, rgba(42,74,42,0.13) 1.1px, transparent 1.1px)',
-            backgroundSize: '22px 22px',
-          }}
-        />
-        {/* Zachte organische vlek achter de tekst */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -left-40 -top-40 h-[34rem] w-[34rem] blob-1 bg-water-muted/50"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-dark/90 via-forest-dark/55 to-forest-dark/25"
         />
 
         <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12 lg:gap-14">
-            {/* Tekst */}
-            <div className="lg:col-span-6">
-              <span className="mb-6 flex items-center gap-2.5 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
+          <div className="max-w-3xl">
+              <span className="mb-6 flex items-center gap-2.5 text-[12px] font-semibold uppercase tracking-[0.16em] text-accent drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="shrink-0">
                   <path d="M12 3v18M4.5 7.5l15 9M19.5 7.5l-15 9" />
                 </svg>
                 Welkom bij Meet the Locals
               </span>
 
-              <h1 className="font-display text-forest leading-[1.05] mb-6" style={{ fontSize: 'clamp(2.2rem, 4.3vw, 3.9rem)' }}>
+              <h1 className="font-display !text-white leading-[1.05] mb-6 drop-shadow-[0_3px_24px_rgba(0,0,0,0.45)]" style={{ fontSize: 'clamp(2.2rem, 4.3vw, 3.9rem)' }}>
                 De wereld in
                 <br />
                 <span className="text-accent">beeld en verhalen</span>
               </h1>
 
-              <p className="text-text-muted text-[19px] md:text-[21px] leading-relaxed max-w-xl mb-9">
+              <p className="text-white/85 text-[19px] md:text-[21px] leading-relaxed max-w-xl mb-9 drop-shadow-[0_2px_14px_rgba(0,0,0,0.4)]">
                 Beleef de wereld vanuit mijn lens. Als fotograaf en avonturier neem ik je mee naar
                 plekken die ik op mijn manier vastleg: niet alleen wat mooi is, maar wat echt is.
               </p>
@@ -329,7 +352,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
                 ].map((item) => (
                   <li
                     key={item}
-                    className="inline-flex items-center gap-2 rounded-full border border-forest/15 bg-water-muted px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-forest"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/12 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-sm"
                   >
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-accent shrink-0">
                       <path d="M4 12.5l5 5L20 6.5" />
@@ -338,47 +361,71 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
                   </li>
                 ))}
               </ul>
-            </div>
-
-            {/* Beeld */}
-            <div className="lg:col-span-6 lg:pl-6">
-              <HeroVisual />
-            </div>
           </div>
         </div>
 
+        {/* Waar de foto die nu in beeld is gemaakt is */}
+        <div className="absolute bottom-16 right-6 z-10 hidden items-center gap-2 organic-btn-alt border border-white/20 bg-white/12 px-4 py-2.5 backdrop-blur-sm md:flex lg:right-10">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-accent">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          <span className="whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.12em] text-white">
+            {HERO_SLIDES[active].alt}
+          </span>
+        </div>
+
         <div className="absolute bottom-0 left-0 right-0 z-[2]">
-          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[20px] md:h-[32px] block">
-            <path d="M0,80 L0,76 C360,72 720,78 1080,74 C1200,73 1320,75 1440,73 L1440,80 Z" fill="#F5EFE8" />
+          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="block w-full h-[20px] md:h-[32px]">
+            <path d="M0,80 L0,76 C360,72 720,78 1080,74 C1200,73 1320,75 1440,73 L1440,80 Z" fill="var(--color-cream-dark)" />
           </svg>
         </div>
       </section>
 
-      {/* INTRO */}
-      <section className="relative py-24 md:py-32 bg-[#F5EFE8] noise-overlay overflow-hidden">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-            <div className="lg:col-span-6 relative">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-[2.75rem]">
-                <Image src="/media/DSC_3016-copy-scaled.webp" alt="Reizen" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 42vw" />
-              </div>
+      {/* INTRO: krijgt de opmaak die de hero eerst had */}
+      <section className="relative overflow-hidden bg-cream-dark py-24 md:py-32">
+        {/* Stippenraster */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(42,74,42,0.13) 1.1px, transparent 1.1px)',
+            backgroundSize: '22px 22px',
+          }}
+        />
+        {/* Zachte organische vlek achter de tekst */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 -top-40 h-[34rem] w-[34rem] blob-1 bg-water-muted/50"
+        />
+
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12 lg:gap-14">
+            <div className="lg:col-span-6">
+              {/* Geen bijschrift: de locatie van dit beeld is niet vastgesteld.
+                  Vul caption pas in als je zeker weet waar het is gemaakt. */}
+              <FramedPhoto
+                src="/media/DSC_3016-copy-scaled.webp"
+                alt="Daley op reis, op een blauwe trap"
+              />
             </div>
-            <div className="lg:col-span-6 lg:pl-8">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-light text-forest leading-[1.1] mb-6">
+
+            <div className="lg:col-span-6 lg:pl-6">
+              <h2 className="mb-6 font-display text-4xl font-light leading-[1.1] text-forest md:text-5xl lg:text-6xl">
                 Meer dan een <span className="text-accent">reisblog</span>
               </h2>
-              <p className="text-text-muted text-[20px] leading-relaxed mb-6 max-w-5xl">
+              <p className="mb-6 max-w-xl text-[19px] leading-relaxed text-text-muted md:text-[20px]">
                 Welkom, ik ben Daley. Als fotograaf leg ik al jaren de wereld vast, van leuke dorpjes vlakbij mijn huis tot regenwoud in het Amazonegebied van Peru.
               </p>
-              <p className="text-text-muted text-[20px] leading-relaxed mb-6 max-w-5xl">
-                Op deze website vind je alles over reizen. De mooiste plekken, afgelegen bestemmingen, reisfotografie en reistips. Ook deel ik graag de ins-and-outs in de reiswereld. Daarom is dit meer dan een reisblog. Het is mijn persoonlijke reisplatform, waarop ik de wereld deel vanuit mijn lens en visie. Fotografie staat centraal in alles wat ik doe. Ik zoek hierbij niet alleen fotogenieke landschappen, maar hou juist van het échte leven vastleggen.
+              <p className="mb-6 max-w-xl text-[19px] leading-relaxed text-text-muted md:text-[20px]">
+                Op deze website vind je alles over reizen. De mooiste plekken, afgelegen bestemmingen, reisfotografie en reistips. Ook deel ik graag de ins-and-outs in de reiswereld. Daarom is dit meer dan een reisblog. Het is mijn persoonlijke reisplatform, waarop ik de wereld deel vanuit mijn lens en visie.
               </p>
-              <p className="text-text-muted text-[20px] leading-relaxed mb-8 max-w-5xl">
+              <p className="mb-8 max-w-xl text-[19px] leading-relaxed text-text-muted md:text-[20px]">
                 Niet alleen wat mooi is, maar wat echt is. Want echt is zoveel mooier.
               </p>
               <Link
                 href="/over"
-                className="group inline-flex items-center gap-3 text-forest font-semibold text-sm uppercase tracking-[0.1em] hover:text-water transition-colors"
+                className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.1em] text-forest transition-colors hover:text-water"
               >
                 <span>Lees mijn verhaal</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
@@ -388,8 +435,9 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
             </div>
           </div>
         </div>
+
         <div className="absolute bottom-0 left-0 right-0 z-10">
-          <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="w-full h-[60px] md:h-[90px] block">
+          <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="block w-full h-[60px] md:h-[90px]">
             <path d="M0,120 L0,70 C180,45 300,85 480,60 C660,35 780,75 960,50 C1140,25 1260,65 1440,45 L1440,120 Z" fill="var(--color-cream)" />
           </svg>
         </div>
