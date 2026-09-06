@@ -7,7 +7,11 @@ import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const navItems = [
-  { label: 'Verhalen', href: '/verhalen' },
+  // Twee soorten verhalen, onderscheiden op diepte. 'Reportages' in plaats van
+  // 'Verhalen' voorkomt de botsing met de korte verhalen op /blog, die tot nu
+  // toe helemaal niet in het menu stonden.
+  { label: 'Reportages', href: '/verhalen' },
+  { label: 'Korte verhalen', href: '/blog' },
   { label: 'Bestemmingen', href: '/bestemmingen' },
   { label: 'Reisnieuws', href: '/reisnieuws' },
   { label: 'Fotografie', href: '/fotografie' },
@@ -19,7 +23,9 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-  const hasDarkHero = pathname !== '/over'
+  // Pagina's met een lichte hero: header staat daar meteen in de lichte variant
+  const lightHeroPages = ['/', '/over']
+  const hasDarkHero = !lightHeroPages.includes(pathname)
   // Pagina's met een donkere achtergrond door de hele pagina — header blijft altijd donker
   const hasAlwaysDarkBg = pathname === '/werk-in-opdracht'
 
@@ -30,16 +36,18 @@ export function Header() {
   }, [])
 
   const isTransparent = hasDarkHero && !scrolled && !isOpen
-  const isDark = isOpen || isTransparent || hasAlwaysDarkBg
+  const isDark = isOpen || isTransparent || hasAlwaysDarkBg || scrolled
 
   return (
     <header
       className={`fixed z-50 transition-all duration-500 ${
         isOpen
           ? 'top-0 left-0 right-0 bg-forest-dark noise-overlay overflow-hidden'
-          : isTransparent || hasAlwaysDarkBg
-            ? 'top-0 left-0 right-0 bg-transparent'
-            : 'top-0 left-0 right-0 bg-[#e8f2e8]/95 backdrop-blur-xl border-b border-forest/15'
+          : scrolled
+            ? 'top-0 left-0 right-0 bg-forest-dark border-b border-white/10'
+            : isTransparent || hasAlwaysDarkBg
+              ? 'top-0 left-0 right-0 bg-transparent'
+              : 'top-0 left-0 right-0 bg-[#e8f2e8]/95 backdrop-blur-xl border-b border-forest/15'
       }`}
     >
       <div className="max-w-[1400px] mx-auto pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-6 lg:pr-8 flex items-center justify-between h-16 md:h-20 py-2">

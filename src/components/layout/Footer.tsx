@@ -3,13 +3,13 @@ import Image from 'next/image'
 
 const footerLinks = {
   ontdek: [
-    { label: 'Reistips', href: '/blog' },
+    { label: 'Korte verhalen', href: '/blog' },
     { label: 'Bestemmingen', href: '/bestemmingen' },
     { label: 'Reisfotografie', href: '/fotografie' },
     { label: 'Interactieve Kaart', href: '/kaart' },
   ],
   info: [
-    { label: 'Samenwerken', href: '/contact' },
+    { label: 'Samenwerken', href: '/werk-in-opdracht#samenwerken' },
     { label: 'Portfolio', href: '/werk-in-opdracht' },
     { label: 'Over MTL', href: '/over' },
     { label: 'Reisnieuws', href: '/reisnieuws' },

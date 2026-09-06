@@ -58,13 +58,13 @@ export default async function VerhalenPage() {
 
         <div className="relative z-10 text-center px-6 w-full pt-16">
           <span className="block text-[11px] uppercase tracking-[0.3em] text-white/55 mb-5">
-            Diepgaande reisverhalen
+            Lange journalistieke stukken
           </span>
           <h1
             className="!text-white leading-none mb-6 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]"
             style={{ fontSize: 'clamp(3.5rem, 11vw, 11rem)' }}
           >
-            Verhalen
+            Reportages
           </h1>
           <p className="text-white/75 text-lg md:text-xl max-w-xl mx-auto leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.3)]">
             Persoonlijke verhalen en fotografie van de meest bijzondere plekken ter wereld.
