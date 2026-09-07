@@ -32,7 +32,7 @@ const destinations = [
   { name: 'New York', image: '/media/newyork-1-scaled.webp', slug: 'new-york', count: '3 artikelen' },              // aug 2026
   { name: 'Apulië, Italië', image: '/media/over-puglia-steeg.webp', slug: 'apulie', count: '' },                    // mei 2026
   { name: 'Sevilla, Spanje', image: '/media/over-kleur-trappen.webp', slug: 'sevilla', count: '' },                 // mrt 2026
-  { name: 'Ruhrgebied, Duitsland', image: '/media/over-new-york.webp', slug: 'ruhrgebied', count: '' },             // nov 2025
+  { name: 'Ruhrgebied, Duitsland', image: '/media/ruhrgebied-zollverein-essen.webp', slug: 'ruhrgebied', count: '' }, // dec 2025, Zeche Zollverein
   { name: 'Noorwegen', image: '/media/over-zwembad-lezen.webp', slug: 'noorwegen', count: '' },                     // jul 2025
   { name: 'Indonesië', image: '/media/DJI_20240517152816_0082_D-scaled.webp', slug: 'indonesie', count: '10 artikelen' }, // mei 2024
   { name: 'Japan', image: '/media/Shirakawago-3.webp', slug: 'japan', count: '5 artikelen' },                       // mrt 2024
@@ -40,7 +40,6 @@ const destinations = [
   { name: 'Thailand', image: '/media/Ayuthayya-1-4-scaled.webp', slug: 'thailand', count: '6 artikelen' },          // aug 2023
   { name: 'Marokko', image: '/media/woestijn-9-scaled.webp', slug: 'marokko', count: '4 artikelen' },               // dec 2022
   { name: 'Peru', image: '/media/cusco-12-scaled.webp', slug: 'peru', count: '12 artikelen' },                      // jul 2022
-  { name: 'Colombia', image: '/media/Dansenmaloca-scaled.webp', slug: 'colombia', count: '7 artikelen' },           // geen reis gevonden
 ]
 
 const continents = [
@@ -606,7 +605,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
         <Marquee className="flex whitespace-nowrap">
           {Array.from({ length: 2 }).map((_, i) => (
             <span key={i} className="flex items-center gap-8 mr-8">
-              {['Maleisië', 'Peru', 'Thailand', 'Indonesië', 'Japan', 'Colombia', 'Marokko', 'Sri Lanka'].map((place) => (
+              {['Maleisië', 'Peru', 'Thailand', 'Indonesië', 'Japan', 'Marokko', 'Singapore', 'New York'].map((place) => (
                 <span key={`${place}-${i}`} className="flex items-center gap-8">
                   <span className="text-white/90 text-sm uppercase tracking-[0.2em] font-medium">{place}</span>
                   <span className="text-white/60">✦</span>
