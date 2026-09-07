@@ -13,26 +13,34 @@ const GEO_URL = '/countries-110m.json'
 
 export type HomeRecentPost = {
   title: string
-  slug: string
+  /** Volledig pad, want deze lijst mengt reportages (/verhalen) en blogposts (/blog). */
+  href: string
   image: string
   excerpt: string
   category: string
   date: string
 }
 
+/**
+ * Recent bezochte bestemmingen, op volgorde van laatste bezoek.
+ *
+ * De volgorde komt uit de datums en GPS van Daley's eigen fotobibliotheek,
+ * niet uit een gevoel. Het jaartal staat erbij zodat de volgorde na te lopen
+ * is als er een reis bij komt.
+ */
 const destinations = [
-  { name: 'Apulië, Italië', image: '/media/over-puglia-steeg.webp', slug: 'apulie', count: '' },
-  { name: 'Sevilla, Spanje', image: '/media/over-kleur-trappen.webp', slug: 'sevilla', count: '' },
-  { name: 'Ruhrgebied, Duitsland', image: '/media/over-new-york.webp', slug: 'ruhrgebied', count: '' },
-  { name: 'Noorwegen', image: '/media/over-zwembad-lezen.webp', slug: 'noorwegen', count: '' },
-  { name: 'Maleisië', image: '/media/Malaysia-1-7-1-scaled.webp', slug: 'maleisie', count: '8 artikelen' },
-  { name: 'Peru', image: '/media/cusco-12-scaled.webp', slug: 'peru', count: '12 artikelen' },
-  { name: 'Thailand', image: '/media/Ayuthayya-1-4-scaled.webp', slug: 'thailand', count: '6 artikelen' },
-  { name: 'Indonesië', image: '/media/DJI_20240517152816_0082_D-scaled.webp', slug: 'indonesie', count: '10 artikelen' },
-  { name: 'Japan', image: '/media/Shirakawago-3.webp', slug: 'japan', count: '5 artikelen' },
-  { name: 'Marokko', image: '/media/woestijn-9-scaled.webp', slug: 'marokko', count: '4 artikelen' },
-  { name: 'Colombia', image: '/media/Dansenmaloca-scaled.webp', slug: 'colombia', count: '7 artikelen' },
-  { name: 'New York', image: '/media/newyork-1-scaled.webp', slug: 'new-york', count: '3 artikelen' },
+  { name: 'New York', image: '/media/newyork-1-scaled.webp', slug: 'new-york', count: '3 artikelen' },              // aug 2026
+  { name: 'Apulië, Italië', image: '/media/over-puglia-steeg.webp', slug: 'apulie', count: '' },                    // mei 2026
+  { name: 'Sevilla, Spanje', image: '/media/over-kleur-trappen.webp', slug: 'sevilla', count: '' },                 // mrt 2026
+  { name: 'Ruhrgebied, Duitsland', image: '/media/over-new-york.webp', slug: 'ruhrgebied', count: '' },             // nov 2025
+  { name: 'Noorwegen', image: '/media/over-zwembad-lezen.webp', slug: 'noorwegen', count: '' },                     // jul 2025
+  { name: 'Indonesië', image: '/media/DJI_20240517152816_0082_D-scaled.webp', slug: 'indonesie', count: '10 artikelen' }, // mei 2024
+  { name: 'Japan', image: '/media/Shirakawago-3.webp', slug: 'japan', count: '5 artikelen' },                       // mrt 2024
+  { name: 'Maleisië', image: '/media/Malaysia-1-7-1-scaled.webp', slug: 'maleisie', count: '8 artikelen' },         // aug 2023
+  { name: 'Thailand', image: '/media/Ayuthayya-1-4-scaled.webp', slug: 'thailand', count: '6 artikelen' },          // aug 2023
+  { name: 'Marokko', image: '/media/woestijn-9-scaled.webp', slug: 'marokko', count: '4 artikelen' },               // dec 2022
+  { name: 'Peru', image: '/media/cusco-12-scaled.webp', slug: 'peru', count: '12 artikelen' },                      // jul 2022
+  { name: 'Colombia', image: '/media/Dansenmaloca-scaled.webp', slug: 'colombia', count: '7 artikelen' },           // geen reis gevonden
 ]
 
 const continents = [
@@ -462,8 +470,8 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {recentPosts.map((post) => (
-              <article key={post.slug}>
-                <Link href={`/blog/${post.slug}`} className="group block card-lift">
+              <article key={post.href}>
+                <Link href={post.href} className="group block card-lift">
                   <div className="relative aspect-[4/3] organic-img overflow-hidden img-zoom mb-5">
                     <Image src={post.image} alt={post.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
                   </div>

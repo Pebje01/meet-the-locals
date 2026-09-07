@@ -3,6 +3,7 @@
  *
  *   node scripts/verhalen-offline.cjs --dry
  *   node scripts/verhalen-offline.cjs
+ *   node scripts/verhalen-offline.cjs <slug> [<slug>...] [--dry]
  *
  * Cartagena en de Andes zijn verzonnen reisverhalen: Daley staat er niet
  * achter en ze spreken de belofte op de over-pagina tegen dat alles echt is.
@@ -15,7 +16,11 @@
 const { Client } = require('pg')
 const dry = process.argv.includes('--dry')
 
-const SLUGS = ['de-keuken-van-cartagena', 'boven-de-wolken-in-de-andes']
+// Slugs mogen ook op de opdrachtregel mee, zodat dit script herbruikbaar is:
+//   node scripts/verhalen-offline.cjs verloren-in-de-sahara --dry
+const STANDAARD = ['de-keuken-van-cartagena', 'boven-de-wolken-in-de-andes']
+const meegegeven = process.argv.slice(2).filter((a) => !a.startsWith('--'))
+const SLUGS = meegegeven.length ? meegegeven : STANDAARD
 
 async function main() {
   const db = new Client({ connectionString: process.env.DATABASE_URI })
