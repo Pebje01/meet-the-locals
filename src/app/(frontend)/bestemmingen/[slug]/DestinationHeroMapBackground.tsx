@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { geoCentroid, geoDistance, geoNaturalEarth1 } from 'd3-geo'
 import { feature } from 'topojson-client'
 import type { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson'
@@ -13,16 +13,35 @@ import { COUNTRY_NAMES_NL } from '@/lib/countryNamesNl'
 // laadt alleen op desktop en pas als de browser tijd heeft (DecorMapGate).
 const GEO_URL = '/countries-50m.json'
 
-// Tekenvlak in de verhouding van een brede hero. Met `slice` vult de kaart
-// altijd het hele vlak, ook op schermen die breder of hoger zijn.
-const WIDTH = 1440
-const HEIGHT = 900
+// Het tekenvlak neemt de echte maat van de hero over (zie useBoxSize). Zo
+// valt een land op tablet niet half buiten beeld, wat wel gebeurde toen het
+// vlak een vaste brede verhouding had en aan de zijkanten werd afgesneden.
+const FALLBACK_SIZE = { width: 1440, height: 900 }
 
-// Waar een land in beeld komt: rechts van de tekst, met wat lucht eromheen.
-const FIT_BOX: [[number, number], [number, number]] = [
-  [WIDTH * 0.5, HEIGHT * 0.16],
-  [WIDTH * 0.94, HEIGHT * 0.84],
-]
+/** Waar een land in beeld komt: rechts van de tekst, met wat lucht eromheen. */
+function fitBox(width: number, height: number): [[number, number], [number, number]] {
+  return [
+    [width * 0.5, height * 0.16],
+    [width * 0.94, height * 0.84],
+  ]
+}
+
+/** Meet de container, zodat de kaart precies dat vlak vult. */
+function useBoxSize() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [size, setSize] = useState(FALLBACK_SIZE)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect
+      if (width > 0 && height > 0) setSize({ width: Math.round(width), height: Math.round(height) })
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+  return { ref, ...size }
+}
 
 // Verder inzoomen dan dit heeft geen zin: de kustlijnen in de 50m-kaart
 // worden dan weer hoekig. Een klein land (Singapore) krijgt zo zijn omgeving mee.
@@ -51,13 +70,18 @@ function normalizedId(id: string | number | undefined): string {
   return String(id ?? '').padStart(3, '0')
 }
 
+/** Alle polygonen van een land als losse features. */
+function polygonParts(geometry: Polygon | MultiPolygon): CountryFeature[] {
+  const polygons =
+    geometry.type === 'MultiPolygon'
+      ? geometry.coordinates.map((coordinates) => ({ type: 'Polygon' as const, coordinates }))
+      : [geometry]
+  return polygons.map((polygon) => ({ type: 'Feature' as const, properties: {}, geometry: polygon }))
+}
+
 /** De delen van een land die bij de pin horen, als losse polygonen. */
 function nearbyParts(country: CountryFeature, marker: [number, number]): CountryFeature[] {
-  const polygons =
-    country.geometry.type === 'MultiPolygon'
-      ? country.geometry.coordinates.map((coordinates) => ({ type: 'Polygon' as const, coordinates }))
-      : [country.geometry]
-  const parts = polygons.map((geometry) => ({ type: 'Feature' as const, properties: {}, geometry }))
+  const parts = polygonParts(country.geometry)
   const near = parts.filter((part) => geoDistance(geoCentroid(part), marker) <= MAX_PART_DISTANCE)
   return near.length > 0 ? near : parts
 }
@@ -91,6 +115,7 @@ export function DestinationHeroMapBackground({
   fitToCountry?: boolean
 }) {
   const [topology, setTopology] = useState<CountryTopology | null>(null)
+  const { ref, width: WIDTH, height: HEIGHT } = useBoxSize()
 
   useEffect(() => {
     let active = true
@@ -121,7 +146,8 @@ export function DestinationHeroMapBackground({
     if (parts.length === 0) return cmsProjection()
 
     const target: FeatureCollection = { type: 'FeatureCollection', features: parts }
-    const fitted = geoNaturalEarth1().fitExtent(FIT_BOX, target)
+    const box = fitBox(WIDTH, HEIGHT)
+    const fitted = geoNaturalEarth1().fitExtent(box, target)
 
     if (fitted.scale() > MAX_FIT_SCALE) {
       // Te klein land: begrenzen, en het land weer midden in het vak zetten
@@ -129,24 +155,25 @@ export function DestinationHeroMapBackground({
       const projected = fitted(geoCentroid(target))
       if (projected) {
         const [tx, ty] = fitted.translate()
-        const boxX = (FIT_BOX[0][0] + FIT_BOX[1][0]) / 2
-        const boxY = (FIT_BOX[0][1] + FIT_BOX[1][1]) / 2
+        const boxX = (box[0][0] + box[1][0]) / 2
+        const boxY = (box[0][1] + box[1][1]) / 2
         fitted.translate([tx + boxX - projected[0], ty + boxY - projected[1]])
       }
     }
     return fitted
-  }, [topology, fitToCountry, countryIds, marker, scale, center])
-
-  // Pas tekenen als de kaartdata er is, anders verspringt de uitsnede
-  if (!topology) return null
+  }, [topology, fitToCountry, countryIds, marker, scale, center, WIDTH, HEIGHT])
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 -bottom-20 top-16 z-[1] select-none overflow-hidden md:-bottom-24 md:top-0 lg:-bottom-32">
+    <div
+      ref={ref}
+      className="pointer-events-none absolute inset-x-0 -bottom-20 top-16 z-[1] select-none overflow-hidden md:-bottom-24 md:top-0 lg:-bottom-32"
+    >
+      {/* Pas tekenen als de kaartdata er is, anders verspringt de uitsnede */}
+      {topology && (
       <ComposableMap
         projection={projection}
         width={WIDTH}
         height={HEIGHT}
-        preserveAspectRatio="xMidYMid slice"
         style={{ width: '100%', height: '100%' }}
       >
         <Graticule
@@ -184,7 +211,13 @@ export function DestinationHeroMapBackground({
               {geographies.map((geo: GeoFeature) => {
                 const name = COUNTRY_NAMES_NL[normalizedId(geo.id)]
                 if (!name || path.area(geo) < MIN_LABEL_AREA) return null
-                const [x, y] = path.centroid(geo)
+                // Op het grootste stuk land, niet op het gemiddelde: anders belandt
+                // "Frankrijk" door Frans-Guyana midden in de Atlantische Oceaan.
+                const geometry = (geo as unknown as CountryFeature).geometry
+                const mainPart = polygonParts(geometry).reduce((a, b) =>
+                  path.area(b as unknown as GeoFeature) > path.area(a as unknown as GeoFeature) ? b : a,
+                )
+                const [x, y] = path.centroid(mainPart as unknown as GeoFeature)
                 if (!Number.isFinite(x) || x < 40 || x > WIDTH - 40 || y < 40 || y > HEIGHT - 40) return null
                 const isHighlighted = countryIds.includes(normalizedId(geo.id))
                 return (
@@ -219,6 +252,7 @@ export function DestinationHeroMapBackground({
           </g>
         </Marker>
       </ComposableMap>
+      )}
     </div>
   )
 }

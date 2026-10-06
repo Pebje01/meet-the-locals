@@ -61,7 +61,7 @@ export function DestinationSlider({ destinations }: { destinations: SliderDestin
   return (
     <>
       <div className="mx-auto mb-12 max-w-[1400px] px-6 lg:px-10">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <h2 className="t-h2 text-cream">Recent bezochte bestemmingen</h2>
           <div className="flex items-center gap-5">
             <div className="flex gap-2">

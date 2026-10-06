@@ -25,7 +25,7 @@ export function TintedCard({
 }) {
   const t = TONES[tone]
   return (
-    <div className={`group organic-card card-lift border p-8 transition-colors md:p-10 ${t.card} ${className}`}>
+    <div className={`group organic-card card-lift border p-7 transition-colors md:p-6 lg:p-10 ${t.card} ${className}`}>
       {icon && (
         <div className={`mb-6 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300 group-hover:bg-white/80 ${t.icon}`}>
           {icon}

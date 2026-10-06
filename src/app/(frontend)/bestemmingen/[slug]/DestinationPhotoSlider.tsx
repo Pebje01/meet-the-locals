@@ -111,7 +111,8 @@ export function DestinationPhotoSlider({
       */}
       {images.length > 1 && (
         <div aria-hidden="true" className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0">
-          {[buur(1), buur(-1)].map((i) => (
+          {/* Bij twee foto's zijn volgende en vorige dezelfde: dan maar één keer laden */}
+          {[...new Set([buur(1), buur(-1)])].map((i) => (
             <Image
               key={images[i].url}
               src={images[i].url}

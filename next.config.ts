@@ -51,6 +51,8 @@ const nextConfig: NextConfig = {
     ]
   },
   images: {
+    // 72 voor de herodia's op de homepage, 75 is de standaard van next/image
+    qualities: [72, 75],
     remotePatterns: [
       {
         protocol: 'http',

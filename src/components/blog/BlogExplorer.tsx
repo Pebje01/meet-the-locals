@@ -183,7 +183,7 @@ export function BlogExplorer({
       {rest.length > 0 && (
         <section className="pb-24 md:pb-32">
           <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6 lg:gap-8">
               {rest.map((post) => (
                 <PostCard
                   key={post.id}

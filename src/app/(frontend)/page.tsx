@@ -319,7 +319,7 @@ export default async function HomePage() {
       <section className="relative bg-cream py-24 md:py-32">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <SectionHeader title="Laatste verhalen" link={{ href: '/blog', label: 'Alle verhalen' }} />
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6 lg:gap-8">
             {recentPosts.map((post) => (
               <PostCard key={post.href} post={post} />
             ))}
@@ -390,7 +390,7 @@ export default async function HomePage() {
       {/* WERELDDELEN */}
       <section className="bg-cream py-16 md:py-20">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,520px)_1fr] md:items-center md:gap-16">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,520px)_1fr] lg:items-center lg:gap-16">
             <h2 className="t-h2 text-forest">Ontdek de werelddelen</h2>
             <div className="relative min-h-[145px] max-w-[620px] overflow-hidden md:min-h-[165px]">
               <div className="pointer-events-none absolute -inset-6 opacity-85" aria-hidden="true">
@@ -401,7 +401,7 @@ export default async function HomePage() {
                   <Link
                     key={item.value}
                     href={`/blog?werelddeel=${item.value}`}
-                    className="pill bg-cream-dark/75 text-forest/80 backdrop-blur-[1px] hover:bg-accent hover:text-white"
+                    className="pill whitespace-nowrap bg-cream-dark/75 text-forest/80 backdrop-blur-[1px] hover:bg-accent hover:text-white"
                   >
                     {item.label}
                   </Link>
@@ -429,10 +429,10 @@ export default async function HomePage() {
       </div>
 
       {/* WAT JE HIER VINDT */}
-      <section className="relative bg-cream py-24 md:py-32">
+      <section className="relative bg-cream pb-8 pt-24 md:pb-12 md:pt-32">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <SectionHeader title="Wat je hier vindt" align="center" className="mb-14 md:mb-16" />
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:gap-6">
             {HIGHLIGHTS.map((item) => (
               <TintedCard key={item.title} icon={item.icon} title={item.title} text={item.text} tone={item.tone} />
             ))}

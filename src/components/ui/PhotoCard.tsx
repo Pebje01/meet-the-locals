@@ -58,7 +58,7 @@ export function PhotoCard({
         {children}
       </div>
 
-      <span className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/40 text-white transition-all duration-300 group-hover:border-accent group-hover:bg-accent">
+      <span className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/40 bg-black/15 text-white backdrop-blur-sm transition-all duration-300 group-hover:border-accent group-hover:bg-accent">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>

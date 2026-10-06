@@ -46,9 +46,9 @@ export function Footer() {
       </div>
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pt-20 md:pt-24 pb-16 md:pb-20 relative z-10">
-        <div className="grid grid-cols-3 md:grid-cols-12 gap-x-4 gap-y-12 md:gap-8">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 md:gap-x-8 lg:grid-cols-12 lg:gap-8">
           {/* Brand */}
-          <div className="col-span-3 md:col-span-4">
+          <div className="col-span-2 md:col-span-3 lg:col-span-4">
             <Image
               src="/media/logo.webp"
               alt="Meet the Locals"
@@ -76,8 +76,8 @@ export function Footer() {
           </div>
 
           {/* Ontdek */}
-          <div className="col-span-1 md:col-span-2 md:col-start-6">
-            <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Ontdek</h4>
+          <div className="col-span-1 lg:col-span-2 lg:col-start-6">
+            <h4 className="mb-5 font-display text-lg uppercase tracking-[0.1em] text-white">Ontdek</h4>
             <ul className="space-y-3">
               {footerLinks.ontdek.map((link) => (
                 <li key={link.href + link.label}>
@@ -90,8 +90,8 @@ export function Footer() {
           </div>
 
           {/* Info */}
-          <div className="col-span-1 md:col-span-2">
-            <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Informatie</h4>
+          <div className="col-span-1 lg:col-span-2">
+            <h4 className="mb-5 font-display text-lg uppercase tracking-[0.1em] text-white">Informatie</h4>
             <ul className="space-y-3">
               {footerLinks.info.map((link) => (
                 <li key={link.href + link.label}>
@@ -104,8 +104,8 @@ export function Footer() {
           </div>
 
           {/* Extern */}
-          <div className="col-span-1 md:col-span-2">
-            <h4 className="font-display! text-lg uppercase tracking-[0.1em] text-white! mb-5">Bekijk ook eens</h4>
+          <div className="col-span-2 md:col-span-1 lg:col-span-2">
+            <h4 className="mb-5 font-display text-lg uppercase tracking-[0.1em] text-white">Bekijk ook eens</h4>
             <ul className="space-y-3">
               {footerLinks.extern.map((link) => (
                 <li key={link.label}>

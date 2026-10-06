@@ -519,19 +519,22 @@ export default function OverPage() {
             </div>
           </div>
 
-          <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-4">
+          {/* Wat The Daley Edit maakt, als rustige rij pillen (eerder lege witte
+              tegels met één woord, die op mobiel uit hun vak liepen) */}
+          <ul className="mt-10 flex flex-wrap gap-2.5">
             {['Merkidentiteit', 'Websites', 'Campagnebeelden', 'Portretfotografie', 'Branding shoots', 'Dronebeelden', 'Folders & DTP', 'Social content'].map((item) => (
-              <a
-                key={item}
-                href="https://thedaleyedit.nl"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="t-eyebrow flex min-h-[130px] items-center justify-center rounded-3xl bg-white px-4 text-center text-forest/55 natural-shadow-box transition-colors hover:text-accent md:min-h-[160px]"
-              >
-                {item}
-              </a>
+              <li key={item}>
+                <a
+                  href="https://thedaleyedit.nl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pill border border-forest/15 bg-white/60 text-forest/75 hover:bg-forest hover:text-cream"
+                >
+                  {item}
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
     </main>

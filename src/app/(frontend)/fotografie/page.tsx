@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { OrganicEdge } from '@/components/OrganicEdge'
 import { PageHero } from '@/components/PageHero'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { ExifCaption } from '@/components/ui/ExifCaption'
@@ -51,6 +52,15 @@ async function getGalleryStrip(limit = 10): Promise<StripPhoto[]> {
 
 type GearItem = { camera: string; photos: number; lenses: string[] }
 
+/** "24.0 mm f/1.7" en "24mm f/1.7" zijn dezelfde lens: schrijfwijze gelijktrekken. */
+function normalizeLens(lens: string): string {
+  return lens
+    .replace(/(\d+)\.0\b/g, '$1')
+    .replace(/(\d)\s+mm\b/g, '$1mm')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 /**
  * Waar ik mee fotografeer, afgeleid uit de EXIF van de mediabibliotheek. Zo
  * klopt het blok altijd met de foto's die echt op de site staan.
@@ -72,7 +82,7 @@ async function getGear(): Promise<GearItem[]> {
     const key = camera.toLowerCase()
     const entry = byCamera.get(key) ?? { label: camera, photos: 0, lenses: new Map() }
     entry.photos++
-    const lens = doc.exif?.lens?.trim()
+    const lens = doc.exif?.lens ? normalizeLens(doc.exif.lens) : ''
     if (lens) entry.lenses.set(lens, (entry.lenses.get(lens) ?? 0) + 1)
     // Voorkeur voor de schrijfwijze met kleine letters ("Nikon" boven "NIKON")
     if (camera !== camera.toUpperCase()) entry.label = camera
@@ -206,14 +216,16 @@ export default async function FotografiePage() {
 
       {/* Gear */}
       {gear.length > 0 && (
-        <section className="bg-cream-dark/50 py-16 md:py-24">
+        <section className="relative bg-cream-dark py-24 md:py-32">
+          <OrganicEdge position="top" fill="var(--color-cream)" className="h-[36px] md:h-[56px]" />
+          <OrganicEdge fill="var(--color-cream)" className="h-[36px] md:h-[56px]" />
           <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
             <SectionHeader eyebrow="Gear" title="Waar ik mee fotografeer" className="mb-10 md:mb-12">
               Afgeleid uit de foto&apos;s op deze site: welke camera ze maakte en met welke lens.
             </SectionHeader>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {gear.map((item) => (
-                <div key={item.camera} className="rounded-3xl border border-forest/10 bg-white/70 p-7">
+                <div key={item.camera} className="rounded-3xl border border-forest/10 bg-cream p-7">
                   <p className="t-meta mb-3 font-semibold text-accent">
                     {item.photos === 1 ? '1 foto' : `${item.photos} foto's`} op de site
                   </p>

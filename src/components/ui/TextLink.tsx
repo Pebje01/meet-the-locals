@@ -49,7 +49,7 @@ export function TextLink({
   return (
     <Link
       href={href}
-      className={`group font-btn inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.1em] transition-colors ${color} ${className}`}
+      className={`group font-btn inline-flex items-center gap-2 whitespace-nowrap text-[13px] font-semibold uppercase tracking-[0.1em] transition-colors ${color} ${className}`}
     >
       {direction === 'left' && arrow}
       <span>{children}</span>

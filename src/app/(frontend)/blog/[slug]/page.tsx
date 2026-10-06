@@ -220,8 +220,7 @@ export default async function BlogPostPage({ params }: Props) {
               </div>
 
               {/* Nieuwsbrief mini */}
-              <div className="relative overflow-hidden rounded-3xl border border-forest/10 bg-cream-dark/50 p-7">
-                <div aria-hidden className="grain-layer" />
+              <div className="relative overflow-hidden rounded-3xl border border-forest/10 bg-cream-dark/60 p-7">
                 <div className="relative">
                   <Eyebrow tone="muted" as="p" className="mb-2">Nieuwsbrief</Eyebrow>
                   <p className="mb-5 text-[15px] leading-relaxed text-forest/75">Nieuwe verhalen direct in je inbox?</p>
