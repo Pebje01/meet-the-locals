@@ -39,15 +39,17 @@ function MetaBar({ image }: { image: SliderImage }) {
   const hasRight = !!image.caption
 
   return (
-    <div className="absolute bottom-0 inset-x-0 z-20 flex items-end justify-between gap-4 px-5 pb-8 md:px-8 md:pb-10 pointer-events-none opacity-0 group-hover/slider:opacity-100 transition-opacity duration-300">
+    // Op touch is er geen hover: daar staat de balk altijd in beeld, klein onderin.
+    // Op apparaten met een muis verschijnt hij pas bij hover, zoals de huisregel wil.
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-wrap items-end justify-between gap-2 px-4 pb-14 transition-opacity duration-300 md:gap-4 md:px-8 md:pb-10 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/slider:opacity-100">
       {/* Links: naamsvermelding, gevolgd door camera-instellingen indien bekend */}
-      <p className="font-mono text-[11px] md:text-[12px] tracking-wide text-white leading-none rounded-lg bg-white/20 backdrop-blur-md px-3 py-2">
+      <p className="rounded-lg bg-black/35 px-2.5 py-1.5 font-mono text-[10px] leading-snug tracking-wide text-white backdrop-blur-md md:bg-white/20 md:px-3 md:py-2 md:text-[12px] md:leading-none">
         {leftParts.join(' · ')}
       </p>
 
       {/* Rechts: locatie */}
       {hasRight && (
-        <p className="text-right italic text-[11px] md:text-[12px] tracking-wide text-white leading-none rounded-lg bg-white/20 backdrop-blur-md px-3 py-2 ml-auto">
+        <p className="ml-auto rounded-lg bg-black/35 px-2.5 py-1.5 text-right text-[10px] italic leading-snug tracking-wide text-white backdrop-blur-md md:bg-white/20 md:px-3 md:py-2 md:text-[12px] md:leading-none">
           {image.caption}
         </p>
       )}
@@ -149,7 +151,7 @@ export function DestinationPhotoSlider({
 
       {/* Dots */}
       {images.length > 1 && (
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        <div className="absolute top-20 left-1/2 md:top-auto md:bottom-16 -translate-x-1/2 z-20 flex gap-2">
           {images.map((_, i) => (
             <button
               key={i}

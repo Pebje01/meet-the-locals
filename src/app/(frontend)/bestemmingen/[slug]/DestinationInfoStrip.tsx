@@ -24,7 +24,6 @@ type StripItem = {
   icon: ReactNode
   value: string
   dotClass?: string
-  placeholder?: boolean
 }
 
 function IconLanguage() {
@@ -108,17 +107,6 @@ function IconCar() {
   )
 }
 
-// Shown while no travel info has been added in the CMS yet
-const PLACEHOLDER_ITEMS: StripItem[] = [
-  { label: 'Taal', icon: <IconLanguage />, value: '-', placeholder: true },
-  { label: 'Valuta', icon: <IconCurrency />, value: '-', placeholder: true },
-  { label: 'Klimaat', icon: <IconClimate />, value: '-', placeholder: true },
-  { label: 'Tijdzone', icon: <IconTimezone />, value: '-', placeholder: true },
-  { label: 'Stroom', icon: <IconPlug />, value: '-', placeholder: true },
-  { label: 'Reisadvies', icon: <IconShield />, value: '-', placeholder: true },
-  { label: 'Visum', icon: <IconPassport />, value: '-', placeholder: true },
-]
-
 export function DestinationInfoStrip({
   info,
   flightHours,
@@ -152,7 +140,9 @@ export function DestinationInfoStrip({
     items.push({ label: isRoad ? 'Reistijd' : 'Vliegtijd', icon: isRoad ? <IconCar /> : <IconPlane />, value: flightHours })
   }
 
-  const displayItems = items.length > 0 ? items : PLACEHOLDER_ITEMS
+  // Zonder ingevulde reisinfo geen strook: een rij streepjes zegt niets.
+  if (items.length === 0) return null
+  const displayItems = items
 
   return (
     <div className="-mt-[40px] relative z-20">
@@ -187,7 +177,7 @@ export function DestinationInfoStrip({
                   key={`${item.label}-${i}-${copy}`}
                   className="mr-14 flex items-center gap-14"
                 >
-                  <span className={`flex items-center gap-3 transition-opacity ${item.placeholder ? 'opacity-30' : ''}`}>
+                  <span className="flex items-center gap-3">
                     {/* Icon */}
                     <span className="text-white/80 flex-shrink-0" aria-label={item.label}>
                       {item.icon}

@@ -36,10 +36,14 @@ export function DestinationsWorldMap({ destinations }: { destinations: DestEntry
         </div>
       )}
 
+      {/* Breder dan hoog getekend, zodat de lege poolgebieden wegvallen en de
+          kaart een compacte band blijft in plaats van een vol scherm. */}
       <ComposableMap
         projection="geoNaturalEarth1"
-        projectionConfig={{ scale: 160, center: [10, 5] }}
-        style={{ width: '100%', height: 'auto' }}
+        width={800}
+        height={400}
+        projectionConfig={{ scale: 158, center: [10, 14] }}
+        style={{ width: '100%', height: 'auto', maxHeight: '50vh' }}
       >
         <Geographies geography={GEO_URL}>
           {({ geographies }: { geographies: GeoFeature[] }) =>

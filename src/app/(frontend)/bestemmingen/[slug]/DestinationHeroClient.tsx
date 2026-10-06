@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { HeroDecorMap } from './HeroDecorMap'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 type FactItem = { label: string; value: string }
 
@@ -79,7 +80,7 @@ export function DestinationHeroClient({
       <div className="relative z-10 mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-10">
           {breadcrumbs.length > 0 ? (
-            <nav className="mb-6 flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-cream/55">
+            <nav aria-label="Kruimelpad" className="t-meta mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 font-semibold text-cream/55">
               <Link href="/bestemmingen" className="transition-colors hover:text-cream">Alle bestemmingen</Link>
               {breadcrumbs.map((crumb) => (
                 <span key={crumb.slug} className="flex items-center gap-2">
@@ -92,24 +93,24 @@ export function DestinationHeroClient({
           ) : (
             <Link
               href="/bestemmingen"
-              className="mb-10 inline-flex text-[12px] font-semibold uppercase tracking-[0.14em] text-cream/55 transition-colors hover:text-cream"
+              className="t-meta mb-10 inline-flex font-semibold text-cream/55 transition-colors hover:text-cream"
             >
               ← Alle bestemmingen
             </Link>
           )}
 
           {eyebrow && (
-            <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-cream/70">
+            <Eyebrow tone="light" className="mb-4">
               {eyebrow}
-            </span>
+            </Eyebrow>
           )}
 
-          <h1 className="mb-7 text-5xl leading-[0.98] text-cream! md:text-7xl lg:text-8xl">
+          <h1 className="t-h1 mb-7 text-cream">
             {name}
           </h1>
 
           {intro && (
-            <p className="max-w-4xl text-[22px] leading-relaxed text-cream/70 md:text-[26px]">
+            <p className="t-lead max-w-3xl text-cream/75 md:text-[22px]">
               {intro}
             </p>
           )}
@@ -118,7 +119,7 @@ export function DestinationHeroClient({
             <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">
               {factItems.map((item) => (
                 <div key={item.label} className="border-l border-cream/15 pl-5">
-                  <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.15em] text-cream/35">{item.label}</p>
+                  <p className="t-meta mb-2 font-semibold text-cream/45">{item.label}</p>
                   <p className="text-lg leading-snug text-cream md:text-xl">{item.value}</p>
                 </div>
               ))}

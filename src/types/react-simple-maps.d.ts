@@ -4,6 +4,8 @@ declare module 'react-simple-maps' {
   export interface ComposableMapProps {
     projection?: string
     projectionConfig?: Record<string, unknown>
+    width?: number
+    height?: number
     style?: React.CSSProperties
     children?: ReactNode
   }
