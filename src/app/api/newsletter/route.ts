@@ -13,9 +13,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Serverconfiguratie ontbreekt.' }, { status: 500 })
   }
 
+  // Single opt-in: wie zich inschrijft wordt direct actief (geen bevestigingsklik).
+  // De welkomstmail 'bedankt voor je inschrijving' loopt via een MailerLite automation
+  // die getriggerd wordt zodra iemand aan de groep wordt toegevoegd.
   const body: Record<string, unknown> = {
     email: email.trim().toLowerCase(),
     status: 'active',
+  }
+
+  const groupId = process.env.MAILERLITE_GROUP_ID
+  if (groupId) {
+    body.groups = [groupId]
   }
 
   if (name && typeof name === 'string' && name.trim()) {

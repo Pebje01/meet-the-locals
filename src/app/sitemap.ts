@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { publishedPostsWhere } from '@/lib/queries'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://meetthelocals.nl'
@@ -76,7 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Published blog posts
     const { docs: posts } = await payload.find({
       collection: 'posts',
-      where: { status: { equals: 'published' } },
+      where: publishedPostsWhere(),
       limit: 1000,
       depth: 0,
     })
