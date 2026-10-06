@@ -193,6 +193,23 @@ a.text-link:hover,
   opacity: 0.7;
 }
 
+/* ─── Ruimte voor de golf van de voet ───
+   De golf van de footer ligt 50px (mobiel) of 70px over de laatste sectie heen,
+   zodat die sectie doorloopt tot in de voet. Deze afstandhouder zorgt dat er
+   nooit inhoud onder die golf valt, welke sectie er ook als laatste staat (bij
+   bestemmingen verschilt dat per pagina). Een sectie die zelf al genoeg ruimte
+   onderaan heeft, krijgt de klasse `footer-ready`. */
+main > :last-child:not(.footer-ready)::after {
+  content: '';
+  display: block;
+  height: 50px;
+}
+@media (min-width: 768px) {
+  main > :last-child:not(.footer-ready)::after {
+    height: 70px;
+  }
+}
+
 /* ─── Formuliervelden ───
    Eén veld voor alle formulieren (contact, nieuwsbrief, opdracht). Ze staan
    allemaal op een donker vlak. De focuskleur volgt --field-focus, standaard

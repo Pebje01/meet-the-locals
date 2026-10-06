@@ -639,7 +639,7 @@ export function WerkInOpdrachtClient() {
           (de golf is transparant en toont anders de crème body-achtergrond) */}
       <div aria-hidden className="fixed inset-0 -z-10 bg-forest" />
 
-      <main className="destinations-texture noise-overlay relative min-h-screen bg-forest">
+      <main className="destinations-texture noise-overlay relative min-h-screen overflow-x-clip bg-forest">
 
       {/* Modal. Via een portal naar body: main isoleert zijn stapelvolgorde
           (voor de korrel), en daarbinnen zou de modal onder de header vallen. */}
@@ -694,7 +694,7 @@ export function WerkInOpdrachtClient() {
       <SkillsBlock />
 
       {/* CTA — samenwerken + WhatsApp */}
-      <section className="relative z-10 px-6 pt-16 pb-24 md:pt-20 md:pb-32 lg:px-10">
+      <section className="footer-ready relative z-10 px-6 pt-16 pb-24 md:pt-20 md:pb-32 lg:px-10">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}

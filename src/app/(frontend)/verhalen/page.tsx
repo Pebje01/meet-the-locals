@@ -39,7 +39,7 @@ export default async function VerhalenPage() {
         geheel organisch blijft en niet als twee losse blokken oogt. De
         onderste marge is ruim, want de golf van de voet ligt over deze sectie.
       */}
-      <section className="pb-32 pt-16 md:pb-44 md:pt-24">
+      <section className="footer-ready pb-32 pt-16 md:pb-44 md:pt-24">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           {stories.length === 0 ? (
             <EmptyState

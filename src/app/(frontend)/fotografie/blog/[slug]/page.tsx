@@ -74,7 +74,7 @@ export default async function FotografieBlogPostPage({ params }: Props) {
   const hero = imageUrl(post.heroImage)
 
   return (
-    <main className="min-h-screen bg-warm-white">
+    <main className="min-h-screen bg-cream">
       <ArticleJsonLd
         title={post.title}
         description={post.seo?.metaDescription || post.excerpt}

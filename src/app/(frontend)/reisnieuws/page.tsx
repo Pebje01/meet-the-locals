@@ -198,7 +198,7 @@ export default async function ReisnieuwsPage() {
       </section>
 
       {/* NIEUWSBRIEF */}
-      <section id="nieuwsbrief" className="relative scroll-mt-20 overflow-hidden bg-forest-dark py-28 noise-overlay md:py-36">
+      <section id="nieuwsbrief" className="footer-ready relative scroll-mt-20 overflow-hidden bg-forest-dark py-28 noise-overlay md:py-36">
         <div className="absolute inset-0 bg-gradient-to-br from-forest-dark via-forest-dark/98 to-forest-deep" />
         <div aria-hidden className="pointer-events-none absolute inset-0 z-10">
           <OrganicEdge position="top" fill="var(--color-cream)" className="h-[40px] md:h-[70px]" />

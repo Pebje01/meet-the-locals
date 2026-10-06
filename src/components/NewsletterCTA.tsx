@@ -39,7 +39,7 @@ export function NewsletterCTA() {
     // De golf van de voet ligt over de onderkant van deze sectie heen en eet
     // zo'n 60px op. Daarom staat de ruimte onder de kaart los van die
     // erboven: anders komt de kaart tegen de voet aan te staan.
-    <section id="nieuwsbrief" className="scroll-mt-20 bg-cream pt-12 pb-28 md:pt-16 md:pb-40">
+    <section id="nieuwsbrief" className="footer-ready scroll-mt-20 bg-cream pt-12 pb-28 md:pt-16 md:pb-40">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
         <div className="max-w-4xl mx-auto rounded-3xl px-10 py-12 md:px-16 md:py-14 overflow-hidden relative text-center">
           {/* Oranje achtergrond met korrel */}

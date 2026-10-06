@@ -22,7 +22,7 @@ export default function ContactPage() {
         image={HERO_IMAGES.contact}
       />
 
-      <section className="mx-auto max-w-[1400px] py-12 md:px-6 md:py-24 lg:px-10">
+      <section className="footer-ready mx-auto max-w-[1400px] py-12 md:px-6 md:py-24 lg:px-10">
         <div className="relative overflow-hidden bg-gradient-to-br from-forest-dark via-forest-dark to-forest-deep md:rounded-3xl">
         <div aria-hidden className="grain-layer" />
 
