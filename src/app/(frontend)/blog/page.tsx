@@ -36,7 +36,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   })
 
   return (
-    <main className="min-h-screen bg-warm-white">
+    <main className="min-h-screen bg-cream">
       <PageHero
         title="Reistips voor echte trips"
         subtitle="Voor normale mensen die ook maar proberen iets van de wereld te zien, tussen werk, afspraken en alle andere verplichtingen door."
