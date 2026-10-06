@@ -50,7 +50,7 @@ function SpotCard({ spot }: { spot: MapSpot }) {
           </span>
         )}
       </div>
-      <h3 className="font-serif text-xl font-bold text-forest transition-colors group-hover:text-accent">
+      <h3 className="text-xl text-forest transition-colors group-hover:text-accent">
         {spot.title}
       </h3>
       {spot.story && (

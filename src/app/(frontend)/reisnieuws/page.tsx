@@ -184,7 +184,7 @@ export default async function ReisnieuwsPage() {
       <section className="py-20 md:py-28 bg-warm-white">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <div className="mb-14 text-center">
-            <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Op de radar</h2>
+            <h2 className="text-4xl md:text-5xl text-forest">Op de radar</h2>
           </div>
 
           {newsItems.length === 0 ? (
@@ -224,7 +224,7 @@ export default async function ReisnieuwsPage() {
                         )}
                         <span className="text-[12px] text-text-muted/60">{date}</span>
                       </div>
-                      <h3 className="font-display text-xl font-light text-forest mb-2 group-hover:text-accent transition-colors leading-snug">
+                      <h3 className="text-xl text-forest mb-2 group-hover:text-accent transition-colors leading-snug">
                         {item.title}
                       </h3>
                       <p className="text-text-muted text-[15px] leading-relaxed line-clamp-3">{item.excerpt}</p>
@@ -238,7 +238,7 @@ export default async function ReisnieuwsPage() {
       </section>
 
       {/* NIEUWSBRIEF */}
-      <section className="relative overflow-hidden bg-forest-dark py-24 md:py-32 noise-overlay">
+      <section id="nieuwsbrief" className="relative scroll-mt-20 overflow-hidden bg-forest-dark py-24 md:py-32 noise-overlay">
         <div className="absolute inset-0 bg-gradient-to-br from-forest-dark via-forest-dark/98 to-[#0f2a14]" />
 
         <div className="relative z-10 mx-auto max-w-[1400px] px-6 lg:px-10">
@@ -249,7 +249,7 @@ export default async function ReisnieuwsPage() {
               <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-[#5aab6a]">
                 Nieuwsbrief
               </span>
-              <h2 className="mb-6 font-display text-cream! leading-[0.95]" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)' }}>
+              <h2 className="mb-6 text-cream! leading-[0.95]" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)' }}>
                 Blijf op de hoogte van de reiswereld
               </h2>
               <p className="text-[19px] leading-relaxed text-cream/60 mb-10">

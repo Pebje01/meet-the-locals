@@ -2,6 +2,9 @@
 
 import { useState } from 'react'
 import { PageHero } from '@/components/PageHero'
+import { HERO_IMAGES } from '@/lib/heroImages'
+import { INSTAGRAM, SOCIAL_LINKS } from '@/lib/social'
+import { SocialIcon } from '@/components/SocialIcon'
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
@@ -13,8 +16,7 @@ export default function ContactPage() {
       <PageHero
         title="Contact"
         subtitle="Samenwerken, connecten, of gewoon een vraag?"
-        image="/media/langkawi-scaled.webp"
-        imageAlt="Langkawi strand"
+        image={HERO_IMAGES.contact}
       />
 
       <section className="max-w-[90%] mx-auto my-16 md:my-24 overflow-hidden rounded-[2rem] md:rounded-[3rem] relative noise-overlay">
@@ -29,7 +31,7 @@ export default function ContactPage() {
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent mb-4 block">
                   Get in touch
                 </span>
-                <h2 className="font-display text-cream! text-3xl md:text-4xl lg:text-5xl leading-[1.1] mb-6">
+                <h2 className="text-cream! text-3xl md:text-4xl lg:text-5xl leading-[1.1] mb-6">
                   Samenwerken,
                   <br />connecten, of gewoon
                   <br />een vraag?
@@ -57,45 +59,33 @@ export default function ContactPage() {
                 </div>
 
                 {/* Socials */}
-                <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-xl bg-cream/8 border border-cream/12 flex items-center justify-center text-accent flex-shrink-0">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="2" width="20" height="20" rx="5" />
-                      <circle cx="12" cy="12" r="5" />
-                      <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
-                    </svg>
+                {INSTAGRAM && (
+                  <div className="flex items-center gap-4">
+                    <div className="w-11 h-11 rounded-xl bg-cream/8 border border-cream/12 flex items-center justify-center text-accent flex-shrink-0">
+                      <SocialIcon network="instagram" />
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-cream/35 mb-0.5">Instagram</p>
+                      <a href={INSTAGRAM.url} target="_blank" rel="noopener noreferrer" className="text-cream/75 hover:text-accent transition-colors text-[15px]">
+                        @{INSTAGRAM.handle}
+                      </a>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-cream/35 mb-0.5">Instagram</p>
-                    <a href="https://instagram.com/meetthelocals.nl" target="_blank" rel="noopener noreferrer" className="text-cream/75 hover:text-accent transition-colors text-[15px]">
-                      @meetthelocals.nl
-                    </a>
-                  </div>
-                </div>
+                )}
 
                 <div className="flex gap-3 pt-2">
-                  <a href="https://instagram.com/meetthelocals.nl" target="_blank" rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-cream/8 border border-cream/12 flex items-center justify-center text-cream/50 hover:bg-accent hover:text-white hover:border-accent transition-all duration-300">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="2" width="20" height="20" rx="5" />
-                      <circle cx="12" cy="12" r="5" />
-                      <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
-                    </svg>
-                  </a>
-                  <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-cream/8 border border-cream/12 flex items-center justify-center text-cream/50 hover:bg-accent hover:text-white hover:border-accent transition-all duration-300">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.15V11.7a4.84 4.84 0 01-3.58-1.43V6.69h3.58z" />
-                    </svg>
-                  </a>
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-cream/8 border border-cream/12 flex items-center justify-center text-cream/50 hover:bg-accent hover:text-white hover:border-accent transition-all duration-300">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z" />
-                      <rect x="2" y="9" width="4" height="12" />
-                      <circle cx="4" cy="4" r="2" />
-                    </svg>
-                  </a>
+                  {SOCIAL_LINKS.map((social) => (
+                    <a
+                      key={social.network}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label}
+                      className="w-10 h-10 rounded-full bg-cream/8 border border-cream/12 flex items-center justify-center text-cream/50 hover:bg-accent hover:text-white hover:border-accent transition-all duration-300"
+                    >
+                      <SocialIcon network={social.network} size={16} />
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
@@ -109,7 +99,7 @@ export default function ContactPage() {
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </div>
-                  <h3 className="font-display text-cream! text-2xl">Bericht verstuurd!</h3>
+                  <h3 className="text-cream! text-2xl">Bericht verstuurd!</h3>
                   <p className="text-cream/55 text-[15px]">Ik neem zo snel mogelijk contact met je op.</p>
                 </div>
               ) : (

@@ -4,7 +4,6 @@ import type { Metadata, Viewport } from 'next'
 import '../globals.css'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { TravelPath } from '@/components/TravelPath'
 import { SmoothScroll } from '@/components/SmoothScroll'
 import { GlobalJsonLd } from '@/components/JsonLd'
 
@@ -103,7 +102,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
       </head>
       <body className="antialiased relative">
         <SmoothScroll />
-        {/* <TravelPath /> */}
+        {/* TravelPath (src/components/TravelPath.tsx) staat bewust uit: niet aanzetten zonder performance-test. */}
         <Header />
         {children}
         <Footer />

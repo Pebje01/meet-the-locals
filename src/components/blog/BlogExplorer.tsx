@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Post } from '@/payload-types'
@@ -34,7 +34,21 @@ export function BlogExplorer({
   posts: Post[]
   initialFilter?: ActiveFilter
 }) {
-  const [activeFilter, setActiveFilter] = useState<ActiveFilter>(initialFilter)
+  const [activeFilter, setActiveFilterState] = useState<ActiveFilter>(initialFilter)
+
+  // Het filter staat ook in de URL (?werelddeel=... of ?thema=...), zodat een
+  // gefilterd overzicht te delen is en de homepage er direct naartoe kan
+  // linken. replaceState houdt de pagina op de client, zonder nieuwe
+  // serverronde en zonder dat de scrollpositie verspringt.
+  const setActiveFilter = useCallback((filter: ActiveFilter) => {
+    setActiveFilterState(filter)
+    if (typeof window === 'undefined') return
+    const url = new URL(window.location.href)
+    url.searchParams.delete('werelddeel')
+    url.searchParams.delete('thema')
+    if (filter.type) url.searchParams.set(filter.type, filter.value)
+    window.history.replaceState(window.history.state, '', url)
+  }, [])
 
   const { allOptions } = useMemo(() => {
     const usedWerelddeel = new Set<string>()
@@ -159,7 +173,7 @@ export function BlogExplorer({
                       {postBadge(featured)}
                     </span>
                   )}
-                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-forest leading-[1.1] mb-4 group-hover:text-accent transition-colors">
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl text-forest leading-[1.1] mb-4 group-hover:text-accent transition-colors">
                     {featured.title}
                   </h2>
                   <p className="text-text-muted text-lg leading-relaxed mb-6 max-w-5xl">
@@ -221,7 +235,7 @@ export function BlogExplorer({
                           {formatDate(post.publishedDate)}
                         </span>
                       </div>
-                      <h3 className="text-xl font-serif font-bold text-forest mb-2 group-hover:text-accent transition-colors">
+                      <h3 className="text-xl text-forest mb-2 group-hover:text-accent transition-colors">
                         {post.title}
                       </h3>
                       <p className="text-text-muted text-[15px] leading-relaxed line-clamp-2">

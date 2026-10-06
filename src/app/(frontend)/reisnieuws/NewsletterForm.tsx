@@ -45,7 +45,7 @@ export function NewsletterForm() {
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <h3 className="text-2xl font-display text-cream! mb-3">Je staat op de lijst</h3>
+        <h3 className="text-2xl text-cream! mb-3">Je staat op de lijst</h3>
         <p className="text-[15px] text-cream/50 max-w-sm">
           Je ontvangt de eerstvolgende editie zodra die verschijnt. Tot dan.
         </p>
@@ -58,7 +58,7 @@ export function NewsletterForm() {
       <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-cream/40 mb-2">
         Één keer per maand
       </p>
-      <h3 className="text-2xl md:text-3xl font-display text-cream! mb-2">
+      <h3 className="text-2xl md:text-3xl text-cream! mb-2">
         Schrijf je in
       </h3>
       <p className="text-[15px] text-cream/50 mb-8">

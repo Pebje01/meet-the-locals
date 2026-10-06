@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import { SOCIAL_LINKS } from '@/lib/social'
+import { SocialIcon } from '@/components/SocialIcon'
 
 const navItems = [
   // Twee soorten verhalen, onderscheiden op diepte. 'Reportages' in plaats van
@@ -23,12 +25,9 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-  // Pagina's met een lichte hero: header staat daar meteen in de lichte variant
-  // De homepage heeft nu een beeldvullende, donkere hero, dus daar hoort de
-  // donkere header bij. Alleen /over houdt nog een lichte hero.
-  const lightHeroPages = ['/over']
-  const hasDarkHero = !lightHeroPages.includes(pathname)
-  // Pagina's met een donkere achtergrond door de hele pagina — header blijft altijd donker
+  // Elke pagina opent met een donkere hero, dus de header begint overal
+  // transparant met witte tekst en wordt bosgroen zodra je scrolt.
+  const hasDarkHero = true
   const hasAlwaysDarkBg = pathname === '/werk-in-opdracht'
 
   useEffect(() => {
@@ -52,7 +51,7 @@ export function Header() {
               : 'top-0 left-0 right-0 bg-[#e8f2e8]/95 backdrop-blur-xl border-b border-forest/15'
       }`}
     >
-      <div className="max-w-[1400px] mx-auto pl-3 pr-4 md:pl-4 md:pr-6 lg:pl-6 lg:pr-8 flex items-center justify-between h-16 md:h-20 py-2">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between h-16 md:h-20 py-2">
         {/* Logo */}
         <Link href="/" className="flex-shrink-0 group">
           <Image
@@ -60,7 +59,7 @@ export function Header() {
             alt="Meet the Locals"
             width={320}
             height={96}
-            className={`h-16 md:h-20 w-auto transition-all duration-500 group-hover:scale-[1.02] ${
+            className={`h-14 md:h-16 w-auto transition-all duration-500 group-hover:scale-[1.02] ${
               isOpen ? 'logo-light-green' : isDark ? 'brightness-0 invert' : 'logo-forest'
             }`}
             priority
@@ -68,7 +67,7 @@ export function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden xl:flex items-center gap-2">
+        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-2">
           {navItems.map((item, i) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
             const wobble = i % 2 === 0 ? 'organic-btn' : 'organic-btn-alt'
@@ -78,7 +77,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative px-3 py-1 ${wobble} nav-font text-[17px] font-extralight tracking-[0.04em] uppercase transition-all duration-300 ${
+                className={`relative whitespace-nowrap px-2 xl:px-3 py-1 ${wobble} nav-font text-[14px] xl:text-[17px] font-extralight tracking-[0.03em] xl:tracking-[0.04em] uppercase transition-all duration-300 ${
                   isActive
                     ? `${activeColor} text-white`
                     : isDark
@@ -92,7 +91,7 @@ export function Header() {
           })}
           <Link
             href="/kaart"
-            className={`ml-3 flex items-center gap-2 px-5 py-2.5 organic-btn text-[12px] font-semibold tracking-[0.08em] uppercase transition-all duration-300 ${
+            className={`ml-2 xl:ml-3 flex items-center gap-2 px-4 xl:px-5 py-2.5 organic-btn text-[12px] font-semibold tracking-[0.08em] uppercase transition-all duration-300 ${
               isDark
                 ? 'bg-white/15 text-white backdrop-blur-sm hover:bg-white/25'
                 : 'bg-forest/10 text-forest hover:bg-forest hover:text-white'
@@ -109,7 +108,7 @@ export function Header() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`xl:hidden relative w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-300 ${
+          className={`lg:hidden relative w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-300 ${
             isDark ? 'bg-white/15 backdrop-blur-sm' : 'bg-forest/10'
           }`}
           aria-label="Menu"
@@ -142,7 +141,7 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="xl:hidden fixed inset-0 top-16 md:top-20 bg-forest-dark noise-overlay overflow-hidden z-40"
+            className="lg:hidden fixed inset-0 top-16 md:top-20 bg-forest-dark noise-overlay overflow-hidden z-40"
           >
             <div className="relative z-10 px-8 py-12 flex flex-col gap-1">
               {[{ label: 'Home', href: '/' }, ...navItems, { label: 'Kaart', href: '/kaart' }].map(
@@ -169,25 +168,18 @@ export function Header() {
                 transition={{ delay: 0.4 }}
                 className="mt-12 flex gap-5"
               >
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-cream/10 flex items-center justify-center text-cream/60 hover:bg-accent hover:text-white transition-all duration-300">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" />
-                    <circle cx="12" cy="12" r="5" />
-                    <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
-                  </svg>
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-cream/10 flex items-center justify-center text-cream/60 hover:bg-accent hover:text-white transition-all duration-300">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z" />
-                    <rect x="2" y="9" width="4" height="12" />
-                    <circle cx="4" cy="4" r="2" />
-                  </svg>
-                </a>
-                <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-cream/10 flex items-center justify-center text-cream/60 hover:bg-accent hover:text-white transition-all duration-300">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.17V11.7a4.83 4.83 0 01-3.58-1.43V6.69h3.58z" />
-                  </svg>
-                </a>
+                {SOCIAL_LINKS.map((social) => (
+                  <a
+                    key={social.network}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="w-11 h-11 rounded-full bg-cream/10 flex items-center justify-center text-cream/60 hover:bg-accent hover:text-white transition-all duration-300"
+                  >
+                    <SocialIcon network={social.network} size={20} />
+                  </a>
+                ))}
               </motion.div>
             </div>
           </motion.nav>

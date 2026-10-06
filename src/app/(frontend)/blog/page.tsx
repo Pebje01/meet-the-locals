@@ -1,7 +1,9 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
+import { HERO_IMAGES } from '@/lib/heroImages'
 import { BlogExplorer } from '@/components/blog/BlogExplorer'
+import { publishedPostsWhere } from '@/lib/queries'
 
 type BlogPageProps = {
   searchParams?: Promise<{
@@ -27,7 +29,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const payload = await getPayload({ config })
   const { docs: posts } = await payload.find({
     collection: 'posts',
-    where: { status: { equals: 'published' } },
+    where: publishedPostsWhere(),
     sort: '-publishedDate',
     depth: 1,
     limit: 100,
@@ -38,8 +40,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <PageHero
         title="Reistips voor echte trips"
         subtitle="Voor normale mensen die ook maar proberen iets van de wereld te zien, tussen werk, afspraken en alle andere verplichtingen door."
-        image="/media/maleisie-5-scaled.webp"
-        imageAlt="Reizen door Maleisië"
+        image={HERO_IMAGES.blog}
+        eyebrow="Korte verhalen"
       />
       <BlogExplorer posts={posts} initialFilter={initialFilter} />
     </main>

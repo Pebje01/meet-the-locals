@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { BarterDeal } from '@/components/BarterDeal'
 import { FAQJsonLd } from '@/components/JsonLd'
 import { PhotoWithInfo } from '@/components/PhotoWithInfo'
 import { photoMeta } from '@/data/photoMeta'
 
 const quickLinks = [
-  { label: 'Samenwerken?', href: '#samenwerken' },
+  { label: 'Samenwerken?', href: '/werk-in-opdracht#samenwerken' },
   { label: 'Bekijk fotografie', href: '/fotografie' },
   { label: 'Portfolio', href: '/werk-in-opdracht' },
   { label: 'Mijn fotospots', href: '/kaart' },
@@ -350,6 +351,8 @@ export default function OverPage() {
         </div>
       </section>
 
+      <BarterDeal />
+
       <section className="bg-[#F5EFE8] py-20 md:py-24">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <h2 className="mb-8 text-3xl leading-tight text-forest md:text-4xl">
@@ -442,7 +445,7 @@ export default function OverPage() {
                   echt werken.
                 </p>
                 <p className="text-cream/50 text-[16px]">
-                  "Ik vind het zo zonde als bedrijven hun potentie laten liggen."
+                  &quot;Ik vind het zo zonde als bedrijven hun potentie laten liggen.&quot;
                 </p>
               </div>
             </div>
@@ -505,7 +508,7 @@ export default function OverPage() {
                 key={item.title}
                 className="rounded-[1.5rem] bg-white px-8 py-8 natural-shadow-box"
               >
-                <h3 className="mb-3 text-xl font-semibold uppercase tracking-[0.06em] text-forest">
+                <h3 className="mb-3 text-xl uppercase tracking-[0.06em] text-forest">
                   {item.title}
                 </h3>
                 <p className="text-[16px] leading-relaxed text-text-muted">{item.desc}</p>

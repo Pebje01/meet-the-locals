@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { OrganicEdge } from '@/components/OrganicEdge'
+import { SOCIAL_LINKS } from '@/lib/social'
+import { SocialIcon } from '@/components/SocialIcon'
 
 const footerLinks = {
   ontdek: [
@@ -58,40 +60,18 @@ export function Footer() {
               Persoonlijke reisverhalen, fotografie en tips van bestemmingen wereldwijd.
             </p>
             <div className="flex items-center gap-4">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-cream/10 flex items-center justify-center text-cream/80 hover:bg-accent hover:text-white transition-all duration-300"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="5" />
-                  <circle cx="12" cy="12" r="5" />
-                  <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
-                </svg>
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-cream/10 flex items-center justify-center text-cream/80 hover:bg-accent hover:text-white transition-all duration-300"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z" />
-                  <rect x="2" y="9" width="4" height="12" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
-              </a>
-              <a
-                href="https://tiktok.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-cream/10 flex items-center justify-center text-cream/80 hover:bg-accent hover:text-white transition-all duration-300"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.15V11.7a4.84 4.84 0 01-3.58-1.43V6.69h3.58z" />
-                </svg>
-              </a>
+              {SOCIAL_LINKS.map((social) => (
+                <a
+                  key={social.network}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="w-10 h-10 rounded-full bg-cream/10 flex items-center justify-center text-cream/80 hover:bg-accent hover:text-white transition-all duration-300"
+                >
+                  <SocialIcon network={social.network} />
+                </a>
+              ))}
             </div>
           </div>
 
@@ -131,7 +111,7 @@ export function Footer() {
                 <li key={link.label}>
                   <a href={link.href} target="_blank" rel="noopener noreferrer" className="group text-cream/80 hover:text-cream transition-colors text-[15px] inline-flex items-center gap-1">
                     {link.label}
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                       <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </a>

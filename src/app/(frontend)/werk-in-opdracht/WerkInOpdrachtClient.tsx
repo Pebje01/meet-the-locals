@@ -177,7 +177,7 @@ function SkillsBlock() {
           <span className="block text-[12px] font-semibold uppercase tracking-[0.16em] text-cream/50 mb-4">
             Samenwerken
           </span>
-          <h2 className="font-display text-cream! text-3xl md:text-5xl leading-[1.05] mb-4">
+          <h2 className="text-cream! text-3xl md:text-5xl leading-[1.05] mb-4">
             Wat ik voor reisbedrijven doe
           </h2>
           <p className="text-cream/60 text-[16px] md:text-[17px] leading-relaxed">
@@ -199,7 +199,7 @@ function SkillsBlock() {
               <div className="w-11 h-11 rounded-full border border-cream/25 flex items-center justify-center text-cream/80">
                 {skill.icon}
               </div>
-              <h3 className="font-display text-cream! text-xl md:text-2xl leading-tight">
+              <h3 className="text-cream! text-xl md:text-2xl leading-tight">
                 {skill.title}
               </h3>
               <p className="text-cream/60 text-[14px] leading-relaxed">
@@ -505,7 +505,7 @@ function ProjectModal({
         {/* ── Sticky header ── */}
         <div className="sticky top-0 z-10 bg-white flex items-center justify-between px-6 py-5 border-b border-gray-100">
           <h2
-            className="font-display font-bold leading-tight pr-4"
+            className="leading-tight pr-4"
             style={{ fontSize: 'clamp(18px, 2.5vw, 24px)', color: '#2b4a2a' }}
           >
             {title}
@@ -651,7 +651,7 @@ function HireForm() {
         ) : (
           <>
             <div className="text-center mb-8">
-              <h2 className="font-display text-cream! text-3xl md:text-4xl leading-tight mb-3">
+              <h2 className="text-cream! text-3xl md:text-4xl leading-tight mb-3">
                 Samenwerken?
               </h2>
               <p className="text-cream/65 text-[15px] leading-relaxed max-w-xl mx-auto">

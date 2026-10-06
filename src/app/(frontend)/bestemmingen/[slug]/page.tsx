@@ -508,7 +508,7 @@ export default async function DestinationPage({ params }: Props) {
                       </div>
                     )}
                     <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
-                      <h3 className="text-3xl font-display font-light text-cream!">
+                      <h3 className="text-3xl text-cream!">
                         {child.name}
                       </h3>
                       {child.intro && (

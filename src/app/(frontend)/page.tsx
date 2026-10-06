@@ -2,18 +2,10 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Category, Destination, Post, Story } from '@/payload-types'
 import { HomePageClient, type HomeRecentPost } from './HomePageClient'
+import { publishedPostsWhere } from '@/lib/queries'
+import { WERELDDEEL_OPTIONS, labelFor } from '@/lib/taxonomy'
 
 export const revalidate = 300
-
-const WERELDDEEL_LABELS: Record<NonNullable<Post['werelddeel']>, string> = {
-  europe: 'Europa',
-  asia: 'Azië',
-  'north-america': 'Noord-Amerika',
-  'south-america': 'Zuid-Amerika',
-  africa: 'Afrika',
-  oceania: 'Oceanië',
-  'middle-east': 'Midden-Oosten',
-}
 
 function mediaUrl(media: Post['heroImage']): string {
   if (!media || typeof media !== 'object') return ''
@@ -30,7 +22,7 @@ function postCategory(post: Post): string {
   return (
     firstRelationName(post.categories) ||
     firstRelationName(post.destinations) ||
-    (post.werelddeel ? WERELDDEEL_LABELS[post.werelddeel] : '') ||
+    labelFor(WERELDDEEL_OPTIONS, post.werelddeel) ||
     'Reisverhaal'
   )
 }
@@ -79,11 +71,9 @@ function toHomeRecentStory(story: Story): MetDatum {
  */
 async function getRecentPosts(): Promise<HomeRecentPost[]> {
   const payload = await getPayload({ config })
-  const gepubliceerd = { status: { equals: 'published' } }
-
   const [posts, stories] = await Promise.all([
-    payload.find({ collection: 'posts', where: gepubliceerd, sort: '-publishedDate', depth: 1, limit: 3 }),
-    payload.find({ collection: 'stories', where: gepubliceerd, sort: '-publishedDate', depth: 1, limit: 3 }),
+    payload.find({ collection: 'posts', where: publishedPostsWhere(), sort: '-publishedDate', depth: 1, limit: 3 }),
+    payload.find({ collection: 'stories', where: { status: { equals: 'published' } }, sort: '-publishedDate', depth: 1, limit: 3 }),
   ])
 
   return [...posts.docs.map(toHomeRecentPost), ...stories.docs.map(toHomeRecentStory)]

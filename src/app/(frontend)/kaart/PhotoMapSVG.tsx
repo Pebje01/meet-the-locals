@@ -148,7 +148,7 @@ function PopupCard({
         )}
       </div>
       <div className="p-4">
-        <h3 className="font-display text-forest text-base leading-snug mb-1">{spot.title}</h3>
+        <h3 className="text-forest text-base leading-snug mb-1">{spot.title}</h3>
         {spot.story && (
           <p className="text-text-muted text-[13px] leading-relaxed line-clamp-2 mb-3">
             {spot.story}

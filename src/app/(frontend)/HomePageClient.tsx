@@ -217,7 +217,7 @@ function DestinationSlider() {
       {/* Header uitgelijnd met de rest van de content */}
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 mb-12">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-          <h2 className="text-4xl md:text-5xl font-display font-light text-cream!">Recent bezochte bestemmingen</h2>
+          <h2 className="text-4xl md:text-5xl text-cream!">Recent bezochte bestemmingen</h2>
           <div className="flex items-center gap-5">
             <div className="flex gap-2">
               <button
@@ -268,7 +268,7 @@ function DestinationSlider() {
             <Image src={dest.image} alt={dest.name} fill className="object-cover" sizes="360px" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-accent-dark/85 transition-all duration-500" />
             <div className="absolute bottom-0 left-0 right-0 p-6">
-              <h3 className="font-display text-2xl text-white! drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">{dest.name}</h3>
+              <h3 className="text-2xl text-white! drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">{dest.name}</h3>
             </div>
             <div className="absolute top-4 right-4 w-9 h-9 rounded-full border border-white/40 group-hover:border-accent group-hover:bg-accent flex items-center justify-center transition-all duration-300">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
@@ -423,7 +423,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
                   </li>
                 ))}
               </ul>
-              <h2 className="mb-6 font-display text-4xl font-light leading-[1.1] text-forest md:text-5xl lg:text-6xl">
+              <h2 className="mb-6 text-4xl leading-[1.1] text-forest md:text-5xl lg:text-6xl">
                 Meer dan een <span className="text-accent">reisblog</span>
               </h2>
               <p className="mb-6 max-w-xl text-[19px] leading-relaxed text-text-muted md:text-[20px]">
@@ -459,7 +459,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
       <section className="relative py-24 md:py-32 bg-cream">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
-            <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Laatste verhalen</h2>
+            <h2 className="text-4xl md:text-5xl text-forest">Laatste verhalen</h2>
             <Link href="/blog" className="group inline-flex items-center gap-2 text-forest font-semibold text-sm uppercase tracking-[0.1em]">
               <span>Alle artikelen</span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="hidden sm:block transition-transform duration-300 group-hover:translate-x-1">
@@ -480,7 +480,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
                       <span className="text-text-muted/30">|</span>
                       <span className="text-[15px] uppercase tracking-[0.15em] text-text-muted/70">{post.date}</span>
                     </div>
-                    <h3 className="text-xl font-display font-light text-forest mb-2 group-hover:text-accent transition-colors">{post.title}</h3>
+                    <h3 className="text-xl text-forest mb-2 group-hover:text-accent transition-colors">{post.title}</h3>
                     <p className="text-text-muted text-[17px] leading-relaxed line-clamp-2">{post.excerpt}</p>
                   </div>
                 </Link>
@@ -529,7 +529,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-display font-light text-forest leading-[1.1] mb-6">
+              <h2 className="text-4xl md:text-5xl text-forest leading-[1.1] mb-6">
                 Werk in opdracht
               </h2>
               <p className="text-text-muted text-[20px] leading-relaxed mb-6 max-w-5xl">
@@ -581,7 +581,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
       <section className="py-16 md:py-20 bg-cream">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="grid grid-cols-1 md:grid-cols-[minmax(340px,520px)_1fr] md:items-center gap-10 md:gap-16">
-            <h2 className="text-3xl md:text-4xl font-display uppercase text-forest leading-[1.2] flex-shrink-0">
+            <h2 className="text-3xl md:text-4xl uppercase text-forest leading-[1.2] flex-shrink-0">
               Ontdek de werelddelen
             </h2>
             <div className="relative min-h-[145px] max-w-[560px] md:min-h-[165px] md:max-w-[620px] overflow-hidden">
@@ -620,7 +620,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
       <section className="relative py-24 md:py-32 bg-cream">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Wat je hier vindt</h2>
+            <h2 className="text-4xl md:text-5xl text-forest">Wat je hier vindt</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
@@ -666,7 +666,7 @@ export function HomePageClient({ recentPosts }: HomePageClientProps) {
                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-white/80 ${item.iconClass}`}>
                   {item.icon}
                 </div>
-                <h3 className="font-serif text-xl font-bold text-forest mb-3">{item.title}</h3>
+                <h3 className="text-xl text-forest mb-3">{item.title}</h3>
                 <p className="text-text-muted leading-relaxed text-[17px]">{item.text}</p>
               </div>
             ))}

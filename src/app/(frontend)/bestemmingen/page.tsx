@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
+import { HERO_IMAGES } from '@/lib/heroImages'
 import type { Destination } from '@/payload-types'
 import { DestinationsWorldMap } from './DestinationsWorldMap'
 
@@ -52,8 +53,8 @@ export default async function DestinatiesPage() {
       <PageHero
         title="Bestemmingen"
         subtitle="Alle plekken waar ik ben geweest, van Zuidoost-Azië tot Zuid-Amerika."
-        image="/media/maleisie-7-scaled.webp"
-        imageAlt="Weg door de jungle in Maleisië"
+        image={HERO_IMAGES.bestemmingen}
+        next="var(--color-forest-dark)"
         variant="dark"
       />
 
@@ -92,7 +93,7 @@ export default async function DestinatiesPage() {
                   {label}
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
-                  <h2 className="text-3xl font-display font-light text-cream!">
+                  <h2 className="text-3xl text-cream!">
                     {destination.name}
                   </h2>
                   {destination.intro && (

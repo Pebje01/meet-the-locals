@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
+import { HERO_IMAGES } from '@/lib/heroImages'
 import type { Story } from '@/payload-types'
 
 function storyImageUrl(img: Story['heroImage']): string {
@@ -46,8 +47,7 @@ export default async function FotografiePage() {
       <PageHero
         title="Fotografie"
         subtitle="Reisfotografie verhalen, compositietips en eerlijke gear reviews."
-        image="/media/DSC_3088-scaled.webp"
-        imageAlt="Reisfotografie landschap"
+        image={HERO_IMAGES.fotografie}
       />
 
       {/* Reisfotografie verhalen */}
@@ -58,7 +58,7 @@ export default async function FotografiePage() {
               <span className="block text-[11px] uppercase tracking-[0.15em] text-accent font-semibold mb-2">
                 Diepte
               </span>
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-forest leading-tight">
+              <h2 className="text-3xl md:text-4xl text-forest leading-tight">
                 Reisfotografie verhalen
               </h2>
             </div>
@@ -148,7 +148,7 @@ export default async function FotografiePage() {
             <span className="block text-[11px] uppercase tracking-[0.15em] text-accent font-semibold mb-2">
               Kennis
             </span>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-forest leading-tight">
+            <h2 className="text-3xl md:text-4xl text-forest leading-tight">
               Tips & Inspiratie
             </h2>
           </div>
@@ -186,7 +186,7 @@ export default async function FotografiePage() {
                             {formatDate(tip.publishedDate)}
                           </span>
                         </div>
-                        <h3 className="text-xl font-serif font-bold text-forest mb-2 group-hover:text-accent transition-colors">
+                        <h3 className="text-xl text-forest mb-2 group-hover:text-accent transition-colors">
                           {tip.title}
                         </h3>
                         <p className="text-text-muted text-[15px] leading-relaxed line-clamp-2">

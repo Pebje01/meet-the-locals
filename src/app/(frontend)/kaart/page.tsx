@@ -1,6 +1,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
+import { HERO_IMAGES } from '@/lib/heroImages'
 import { PhotoMap, type MapSpot } from './PhotoMap'
 import type { Media, Post } from '@/payload-types'
 
@@ -68,8 +69,7 @@ export default async function KaartPage() {
       <PageHero
         title="Kaart"
         subtitle="Bekijk de interactieve kaart met bestemmingen en bijzondere plekken."
-        image="/media/Shirakawago-3.webp"
-        imageAlt="Uitzicht over een rivierdal in Azië"
+        image={HERO_IMAGES.kaart}
       />
 
       <section className="mx-auto max-w-[1600px] px-4 py-14 sm:px-6 md:py-20 lg:px-10">
