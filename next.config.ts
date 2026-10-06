@@ -41,6 +41,13 @@ const nextConfig: NextConfig = {
       { source: '/tag/:slug*', destination: '/blog', permanent: true },
       { source: '/feed', destination: '/', permanent: true },
       { source: '/comments/feed', destination: '/', permanent: true },
+      // Fotografie-subpagina's zonder inhoud: tijdelijk naar de hub, tot er
+      // echte content staat. Tijdelijk (307), zodat zoekmachines niets vastleggen.
+      // /fotografie/blog/:slug blijft gewoon werken.
+      { source: '/fotografie/gear', destination: '/fotografie', permanent: false },
+      { source: '/fotografie/galerij', destination: '/fotografie', permanent: false },
+      { source: '/fotografie/galerij/:slug', destination: '/fotografie', permanent: false },
+      { source: '/fotografie/blog', destination: '/fotografie', permanent: false },
     ]
   },
   images: {

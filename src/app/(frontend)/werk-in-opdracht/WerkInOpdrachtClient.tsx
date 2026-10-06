@@ -3,7 +3,10 @@
 import Image from 'next/image'
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
+import { createPortal } from 'react-dom'
+import { OrganicEdge } from '@/components/OrganicEdge'
+import { Button } from '@/components/ui/Button'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 export type Commission = {
   cardTitle: string
@@ -26,7 +29,7 @@ export const commissions: Commission[] = [
       'Content reis naar Noorwegen voor Kip Caravans. Fotografie, dronefotografie en video van de Kip Kompakt polar blue in het Noorse fjordenlandschap.',
     client: 'Kip Caravans',
     tags: ['Fotografie', 'Content', 'Drone', 'Video', 'Dronefotografie'],
-    image: 'https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/a07e40239930507.693376d2b9c8a.png',
+    image: '/media/kip-caravans.webp',
     imageAlt: 'Kip Kompakt caravan in een Noors landschap',
     images: [
       // Landschap/Noorwegen
@@ -99,7 +102,8 @@ export const commissions: Commission[] = [
   // Voeg hier nieuwe opdrachten toe
 ]
 
-const TEXT_HEIGHT = 76 // px — hoogte van de tekstbalk bij hover
+/** Zolang er minder projecten zijn dan dit, vullen lege plekken het raster aan. */
+const MIN_GRID_ITEMS = 3
 
 // ─────────────────────────────────────────────────────────────────
 // Skills — wat ik voor reisbedrijven doe
@@ -164,8 +168,7 @@ function SkillsBlock() {
   return (
     <section
       id="samenwerken"
-      className="relative z-10 px-6 pt-24 md:pt-28 lg:px-10"
-      style={{ scrollMarginTop: '90px' }}
+      className="relative z-10 scroll-mt-24 px-6 pt-24 md:pt-28 lg:px-10"
     >
       <div className="max-w-[1400px] mx-auto">
         <motion.div
@@ -174,13 +177,9 @@ function SkillsBlock() {
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.35 }}
         >
-          <span className="block text-[12px] font-semibold uppercase tracking-[0.16em] text-cream/50 mb-4">
-            Samenwerken
-          </span>
-          <h2 className="text-cream! text-3xl md:text-5xl leading-[1.05] mb-4">
-            Wat ik voor reisbedrijven doe
-          </h2>
-          <p className="text-cream/60 text-[16px] md:text-[17px] leading-relaxed">
+          <Eyebrow tone="light" className="mb-4">Samenwerken</Eyebrow>
+          <h2 className="t-h2 mb-4 text-cream">Wat ik voor reisbedrijven doe</h2>
+          <p className="t-lead max-w-3xl text-cream/70">
             Als fotograaf en brand designer help ik hotels, B&amp;B&apos;s, touroperators,
             kampeermerken en verkeersbureaus aan beeld en een merk dat klopt.
           </p>
@@ -199,13 +198,13 @@ function SkillsBlock() {
               <div className="w-11 h-11 rounded-full border border-cream/25 flex items-center justify-center text-cream/80">
                 {skill.icon}
               </div>
-              <h3 className="text-cream! text-xl md:text-2xl leading-tight">
+              <h3 className="t-card text-cream">
                 {skill.title}
               </h3>
-              <p className="text-cream/60 text-[14px] leading-relaxed">
+              <p className="text-[15px] leading-relaxed text-cream/70">
                 {skill.description}
               </p>
-              <p className="text-cream/40 text-[12px] font-semibold uppercase tracking-[0.08em] mt-auto pt-1">
+              <p className="t-meta mt-auto pt-1 font-semibold text-cream/50">
                 {skill.items.join(' · ')}
               </p>
             </motion.div>
@@ -217,7 +216,7 @@ function SkillsBlock() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.35 }}
-          className="mt-10 md:mt-12 text-cream/60 text-[16px] md:text-[17px] leading-relaxed"
+          className="t-body mt-10 text-cream/70 md:mt-12"
         >
           Bekijk ook mijn eigen website{' '}
           <a
@@ -247,100 +246,34 @@ function ProjectCard({
   index: number
   onOpen: (project: Commission) => void
 }) {
-  const [hovered, setHovered] = useState(false)
-
+  // De titel staat altijd onder de foto. Eerder schoof hij pas bij hover in
+  // beeld, en op een telefoon zag je dan nooit waar een project over ging.
   return (
     <motion.div
-      className="w-full max-w-[500px] mx-auto"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.4, delay: 0.06 * index }}
     >
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => onOpen(project)}
-        onKeyDown={(e) => e.key === 'Enter' && onOpen(project)}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          borderRadius: '1.5rem',
-          overflow: 'hidden',
-          aspectRatio: '3/4',
-          cursor: 'pointer',
-        }}
-      >
-        {/* Afbeelding */}
-        <div style={{ flex: '1 1 auto', position: 'relative', overflow: 'hidden', minHeight: 0 }}>
+      <button type="button" onClick={() => onOpen(project)} className="group block w-full text-left">
+        <div className="relative mb-5 aspect-[4/5] overflow-hidden organic-img img-zoom bg-forest-dark">
           <Image
             src={project.image}
             alt={project.imageAlt}
             fill
-            style={{
-              objectFit: 'cover',
-              transition: 'transform 700ms ease-out',
-              transform: hovered ? 'scale(1.04)' : 'scale(1)',
-            }}
-            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             priority={index === 0}
           />
-        </div>
-
-        {/* Witte tekst + pijl — schuift omhoog op hover */}
-        <div
-          style={{
-            height: hovered ? `${TEXT_HEIGHT}px` : '0px',
-            overflow: 'hidden',
-            transition: 'height 500ms ease',
-            backgroundColor: '#2b4a2a',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '0 16px',
-            flexShrink: 0,
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: "'oslla', Georgia, serif",
-              fontWeight: 400,
-              color: 'white',
-              fontSize: 'clamp(15px, 1.7vw, 20px)',
-              lineHeight: 1.25,
-              margin: 0,
-              flex: 1,
-              minWidth: 0,
-              overflow: 'hidden',
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-            }}
-          >
-            {project.cardTitle}
-          </h3>
-          <div
-            style={{
-              flexShrink: 0,
-              marginLeft: '14px',
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              border: '1.5px solid rgba(255,255,255,0.35)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M7 17L17 7" />
-              <path d="M7 7h10v10" />
+          <span className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-black/10 text-white backdrop-blur-sm transition-all duration-300 group-hover:border-accent group-hover:bg-accent">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M7 17L17 7M7 7h10v10" />
             </svg>
-          </div>
+          </span>
         </div>
-      </div>
+        {project.client && <p className="t-meta mb-2 font-semibold text-accent-light">{project.client}</p>}
+        <h3 className="t-card text-cream transition-colors group-hover:text-sand-light">{project.cardTitle}</h3>
+      </button>
     </motion.div>
   )
 }
@@ -351,23 +284,19 @@ function ProjectCard({
 function PlaceholderCard({ index }: { index: number }) {
   return (
     <motion.div
-      className="w-full max-w-[500px] mx-auto"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.4, delay: 0.06 * index }}
     >
-      <div
-        className="flex flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-cream/20 text-center px-6"
-        style={{ aspectRatio: '3/4' }}
-      >
+      <div className="flex aspect-[4/5] flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-cream/20 px-6 text-center">
         <div className="w-12 h-12 rounded-full border border-cream/20 flex items-center justify-center text-cream/40">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 5v14M5 12h14" />
           </svg>
         </div>
         <p className="font-display text-cream/40 text-lg">Binnenkort meer</p>
-        <p className="text-cream/30 text-[13px] leading-relaxed">Nieuwe opdrachten volgen snel.</p>
+        <p className="text-[14px] leading-relaxed text-cream/40">Nieuwe opdrachten volgen snel.</p>
       </div>
     </motion.div>
   )
@@ -488,8 +417,7 @@ function ProjectModal({
 
   return (
     <div
-      className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-8"
-      style={{ backgroundColor: 'rgba(0,0,0,0.72)' }}
+      className="fixed inset-0 z-[300] flex items-center justify-center bg-forest-dark/80 p-4 backdrop-blur-sm md:p-8"
       onClick={onClose}
     >
       {/* Modal panel */}
@@ -499,24 +427,17 @@ function ProjectModal({
         exit={{ opacity: 0, scale: 0.96, y: 12 }}
         transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-white rounded-2xl w-full overflow-hidden flex flex-col"
-        style={{ maxWidth: '680px', maxHeight: '90vh' }}
+        className="relative flex max-h-[90vh] w-full max-w-[680px] flex-col overflow-hidden rounded-3xl bg-cream"
       >
         {/* ── Sticky header ── */}
-        <div className="sticky top-0 z-10 bg-white flex items-center justify-between px-6 py-5 border-b border-gray-100">
-          <h2
-            className="leading-tight pr-4"
-            style={{ fontSize: 'clamp(18px, 2.5vw, 24px)', color: '#2b4a2a' }}
-          >
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-forest/10 bg-cream px-6 py-5">
+          <h2 className="t-card pr-4 text-forest">
             {title}
           </h2>
           <button
             onClick={onClose}
             aria-label="Sluiten"
-            className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-200"
-            style={{ backgroundColor: '#2b4a2a' }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#3d6b3c' }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#2b4a2a' }}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-forest transition-colors duration-200 hover:bg-link-hover"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
               <path d="M2 2l10 10M12 2L2 12" />
@@ -540,11 +461,7 @@ function ProjectModal({
             {project.tags && project.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[11px] font-semibold uppercase tracking-[0.1em] px-3 py-1 organic-btn-alt"
-                    style={{ border: '1.5px solid #2b4a2a', color: '#2b4a2a' }}
-                  >
+                  <span key={tag} className="pill border border-forest/30 px-3 py-1 text-forest">
                     {tag}
                   </span>
                 ))}
@@ -553,15 +470,15 @@ function ProjectModal({
 
             {/* Description */}
             {project.description && (
-              <p className="text-gray-700 text-[15px] leading-relaxed mb-4">
+              <p className="t-body mb-4 text-text-dark/80">
                 {project.description}
               </p>
             )}
 
             {/* Client */}
             {project.client && (
-              <p className="text-[13px] text-gray-400">
-                <span className="font-semibold text-gray-500">Klant:</span>{' '}
+              <p className="text-[14px] text-text-muted">
+                <span className="font-semibold text-forest">Klant:</span>{' '}
                 {project.client}
               </p>
             )}
@@ -570,26 +487,11 @@ function ProjectModal({
 
         {/* ── Sticky footer ── */}
         {project.link && (
-          <div className="sticky bottom-0 z-10 bg-white border-t border-gray-100 px-6 py-4 flex items-center justify-between">
-            <span className="text-[13px] text-gray-400">
-              Bekijk het volledige project
-            </span>
-            <a
-              href={project.link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 organic-btn text-white text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors duration-200"
-              style={{ backgroundColor: '#2b4a2a' }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#3d6b3c' }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#2b4a2a' }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
+          <div className="sticky bottom-0 z-10 flex flex-wrap items-center justify-between gap-3 border-t border-forest/10 bg-cream px-6 py-4">
+            <span className="text-[14px] text-text-muted">Bekijk het volledige project</span>
+            <Button href={project.link.url} variant="forest" size="sm" arrow="diagonal">
               {project.linkLabel || 'Bekijk op Behance'}
-            </a>
+            </Button>
           </div>
         )}
       </motion.div>
@@ -631,12 +533,10 @@ function HireForm() {
     }
   }
 
-  const fieldClass =
-    'w-full bg-cream/12 rounded-2xl border border-cream/25 px-5 py-3 text-[15px] text-cream placeholder-cream/40 outline-none transition-colors focus:border-cream/50'
-
   return (
-    <div className="max-w-4xl mx-auto rounded-3xl px-8 py-12 md:px-16 md:py-14 overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#bd6a3a] via-[#bd6a3a] to-[#8a3f1e] rounded-3xl" />
+    <div className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl px-6 py-12 md:px-16 md:py-14 [--field-focus:var(--color-cream)]">
+      <div aria-hidden className="absolute inset-0 rounded-3xl bg-gradient-to-br from-accent via-accent to-accent-deep" />
+      <div aria-hidden className="grain-layer rounded-3xl" />
       <div className="relative z-10">
         {submitted ? (
           <div className="flex flex-col items-center justify-center gap-3 py-6 text-center">
@@ -651,10 +551,10 @@ function HireForm() {
         ) : (
           <>
             <div className="text-center mb-8">
-              <h2 className="text-cream! text-3xl md:text-4xl leading-tight mb-3">
+              <h2 className="t-h2 mb-3 text-cream">
                 Samenwerken?
               </h2>
-              <p className="text-cream/65 text-[15px] leading-relaxed max-w-xl mx-auto">
+              <p className="mx-auto max-w-xl text-[15px] leading-relaxed text-cream/75">
                 Voor bedrijven in de reisbranche doe ik (drone) fotografie en video, vormgeving en maak ik websites. Stuur een bericht of app me direct.
               </p>
             </div>
@@ -666,7 +566,7 @@ function HireForm() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Je naam"
-                  className={fieldClass}
+                  className="field"
                 />
                 <input
                   type="email"
@@ -674,7 +574,7 @@ function HireForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="jij@voorbeeld.nl"
-                  className={fieldClass}
+                  className="field"
                 />
               </div>
               <textarea
@@ -683,31 +583,21 @@ function HireForm() {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Vertel kort waar je aan denkt"
                 rows={4}
-                className={`${fieldClass} resize-none`}
+                className="field resize-none"
               />
               {/* Naast elkaar, ook op mobiel. Op smalle schermen wat minder
                   binnenmarge zodat beide knoppen op één regel passen. */}
               <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 mt-2">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="group/btn organic-btn bg-cream px-5 sm:px-7 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#8a3f1e] whitespace-nowrap transition-colors hover:bg-cream/90 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="transition-transform duration-300 ease-out group-hover/btn:translate-x-0.5">
-                      {loading ? 'Versturen...' : 'Verstuur'}
-                    </span>
-                    <span className="transition-transform duration-300 ease-out group-hover/btn:translate-x-1">→</span>
-                  </span>
-                </button>
+                <Button type="submit" variant="cream" size="sm" arrow={loading ? false : 'right'} disabled={loading}>
+                  {loading ? 'Versturen...' : 'Verstuur'}
+                </Button>
                 <a
                   href="https://wa.me/31636162639"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="organic-btn-alt inline-flex items-center gap-2 px-5 sm:px-7 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] text-cream whitespace-nowrap transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: '#1d3b1c' }}
+                  className="organic-btn-alt inline-flex items-center gap-2 whitespace-nowrap bg-forest px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-cream transition-colors duration-300 hover:bg-forest-dark"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                   </svg>
                   WhatsApp
@@ -727,6 +617,9 @@ function HireForm() {
 // ─────────────────────────────────────────────────────────────────
 export function WerkInOpdrachtClient() {
   const [activeProject, setActiveProject] = useState<Commission | null>(null)
+  // Pas na hydratie bestaat document.body; zo blijven server- en client-HTML gelijk.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   const openProject = useCallback((project: Commission) => {
     setActiveProject(project)
@@ -736,70 +629,57 @@ export function WerkInOpdrachtClient() {
     setActiveProject(null)
   }, [])
 
-  // Echte opdrachten + 2 placeholders voor toekomstige opdrachten
-  const items: ({ kind: 'project'; project: Commission } | { kind: 'placeholder' })[] = [
-    ...commissions.map((project) => ({ kind: 'project' as const, project })),
-    { kind: 'placeholder' as const },
-    { kind: 'placeholder' as const },
-  ]
-  const leftCol = items.filter((_, i) => i % 2 === 0)
-  const rightCol = items.filter((_, i) => i % 2 === 1)
+  // Echte opdrachten, aangevuld met lege plekken zolang het er minder dan drie zijn
+  const placeholderCount = Math.max(0, MIN_GRID_ITEMS - commissions.length)
 
   return (
     <>
-      {/* Groene achterlaag zodat het lichtere groen doorloopt tot in de footer-golf
-          (de golf is transparant en toont anders de cream body-achtergrond) */}
-      <div aria-hidden className="fixed inset-0 -z-10" style={{ backgroundColor: '#2b4a2a' }} />
+      {/* Groene achterlaag zodat het groen doorloopt tot in de footer-golf
+          (de golf is transparant en toont anders de crème body-achtergrond) */}
+      <div aria-hidden className="fixed inset-0 -z-10 bg-forest" />
 
-      <main className="min-h-screen relative destinations-texture noise-overlay" style={{ backgroundColor: '#2b4a2a' }}>
+      <main className="destinations-texture noise-overlay relative min-h-screen bg-forest">
 
-      {/* Modal */}
-      <AnimatePresence>
-        {activeProject && (
-          <ProjectModal project={activeProject} onClose={closeProject} />
+      {/* Modal. Via een portal naar body: main isoleert zijn stapelvolgorde
+          (voor de korrel), en daarbinnen zou de modal onder de header vallen. */}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {activeProject && <ProjectModal project={activeProject} onClose={closeProject} />}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
 
-      {/* Hero */}
-      <section className="relative z-10 overflow-hidden px-6 pt-36 pb-20 md:pt-48 md:pb-24 lg:px-10">
-        <div className="relative z-10 max-w-[1400px] mx-auto">
-          <motion.h1
+      {/* Hero: donkerder dan de portfoliosectie, met een golf ertussen */}
+      <section className="relative z-10 overflow-hidden bg-forest-dark px-6 pb-28 pt-36 md:pb-36 md:pt-44 lg:px-10">
+        <div aria-hidden className="grain-layer opacity-60" />
+        <div className="relative z-10 mx-auto max-w-[1400px]">
+          <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: 0.06 }}
-            className="font-display font-bold text-white! leading-[0.92] tracking-[-0.02em]"
-            style={{ fontSize: 'clamp(52px, 9vw, 112px)' }}
+            className="max-w-3xl"
           >
-            Mooie
-            <br />
-            <span className="text-white">opdrachten</span>
-          </motion.h1>
+            <Eyebrow tone="light" className="mb-5">Portfolio</Eyebrow>
+            <h1 className="t-h1 mb-6 text-cream">Mooie opdrachten</h1>
+            <p className="t-lead text-cream/75 md:text-[21px]">
+              Fotografie, dronebeelden en vormgeving voor bedrijven in de reisbranche en horeca.
+              Klik op een project voor alle beelden.
+            </p>
+          </motion.div>
         </div>
+        <OrganicEdge fill="var(--color-forest)" className="h-[40px] md:h-[70px]" />
       </section>
 
       {/* Projecten */}
-      <section className="relative z-10 px-6 pb-24 md:pb-32 lg:px-10">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-x-24 lg:gap-x-32 items-start">
-            <div className="flex flex-col gap-16 md:gap-28">
-              {leftCol.map((item, i) =>
-                item.kind === 'project' ? (
-                  <ProjectCard key={item.project.cardTitle} project={item.project} index={i * 2} onOpen={openProject} />
-                ) : (
-                  <PlaceholderCard key={`ph-l-${i}`} index={i * 2} />
-                ),
-              )}
-            </div>
-            <div className="flex flex-col gap-16 md:gap-28 md:pt-[180px]">
-              {rightCol.map((item, i) =>
-                item.kind === 'project' ? (
-                  <ProjectCard key={item.project.cardTitle} project={item.project} index={i * 2 + 1} onOpen={openProject} />
-                ) : (
-                  <PlaceholderCard key={`ph-r-${i}`} index={i * 2 + 1} />
-                ),
-              )}
-            </div>
-          </div>
+      <section className="relative z-10 px-6 pb-24 pt-12 md:pb-32 md:pt-16 lg:px-10">
+        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 md:grid-cols-2 md:gap-10 lg:grid-cols-3">
+          {commissions.map((project, i) => (
+            <ProjectCard key={project.cardTitle} project={project} index={i} onOpen={openProject} />
+          ))}
+          {Array.from({ length: placeholderCount }).map((_, i) => (
+            <PlaceholderCard key={`ph-${i}`} index={commissions.length + i} />
+          ))}
         </div>
       </section>
 
