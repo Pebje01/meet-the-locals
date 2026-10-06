@@ -194,6 +194,38 @@ a.text-link:hover,
   opacity: 0.7;
 }
 
+/* ─── Formuliervelden ───
+   Eén veld voor alle formulieren (contact, nieuwsbrief, opdracht). Ze staan
+   allemaal op een donker vlak. De focuskleur volgt --field-focus, standaard
+   oranje; het radarformulier zet hem op radargroen. */
+@utility field {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgb(245 239 232 / 0.15);
+  background-color: rgb(245 239 232 / 0.08);
+  padding: 0.875rem 1.25rem;
+  font-size: 15px;
+  color: var(--color-cream);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  &::placeholder {
+    color: rgb(245 239 232 / 0.3);
+  }
+  &:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--field-focus, var(--color-accent)) 60%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--field-focus, var(--color-accent)) 30%, transparent);
+  }
+}
+@utility field-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(245 239 232 / 0.45);
+}
+
 /* ─── Pil (filter, tag, label) ─── */
 @utility pill {
   display: inline-flex;

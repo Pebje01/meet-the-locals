@@ -1,9 +1,11 @@
 import Image from 'next/image'
-import Link from 'next/link'
 
 import { BarterDeal } from '@/components/BarterDeal'
 import { FAQJsonLd } from '@/components/JsonLd'
+import { OrganicEdge } from '@/components/OrganicEdge'
 import { PhotoWithInfo } from '@/components/PhotoWithInfo'
+import { Button } from '@/components/ui/Button'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { photoMeta } from '@/data/photoMeta'
 
 const quickLinks = [
@@ -24,7 +26,7 @@ const services = [
   'Ontwerpen voor brochures, folders, banners en beursstands',
 ]
 
-const logoCards = ['Hotels', 'Horeca', 'Toerisme', 'Reismerken', 'Campagnes', 'Editorial']
+const sectors = ['Hotels', 'Horeca', 'Toerisme', 'Reismerken', 'Campagnes', 'Editorial']
 
 const faqItems = [
   {
@@ -75,37 +77,33 @@ const faqColumns = [faqItems.slice(0, 4), faqItems.slice(4)]
 
 export default function OverPage() {
   return (
-    <main className="bg-[#F5EFE8]">
+    <main className="bg-cream">
       <FAQJsonLd questions={faqItems} />
 
       {/* HERO */}
       <section className="relative overflow-hidden">
         {/* Dark green top */}
         <div className="relative bg-forest-dark">
-          <div className="absolute inset-0 pointer-events-none z-0" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,29,15,0.55) 100%)' }} />
-          <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pb-16 pt-32 md:pt-40 lg:px-10">
+          <div aria-hidden className="grain-layer opacity-60" />
+          <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pb-24 pt-32 md:pb-28 md:pt-40 lg:px-10">
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
               <div className="lg:col-span-7">
-                <span className="mb-5 block text-[12px] font-semibold uppercase tracking-[0.16em] text-white/60">
+                <Eyebrow tone="light" className="mb-5">
                   Over mij
-                </span>
-                <h1 className="mb-7 text-5xl leading-[0.98] text-white! md:text-7xl lg:text-8xl">
+                </Eyebrow>
+                <h1 className="t-h1 mb-7 text-white">
                   Hi, ik ben Daley.
                 </h1>
                 <div className="mt-9 flex flex-wrap gap-3">
                   {quickLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="organic-btn border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:border-white/60 hover:bg-white/20"
-                    >
+                    <Button key={link.href} href={link.href} variant="glass" size="sm">
                       {link.label}
-                    </Link>
+                    </Button>
                   ))}
                 </div>
               </div>
               <div className="flex justify-center lg:col-span-5 lg:justify-end">
-                <div className="relative w-full max-w-[340px] aspect-[3/4] overflow-hidden rounded-[2.5rem] shadow-2xl lg:max-w-[420px]">
+                <div className="relative aspect-[3/4] w-full max-w-[340px] overflow-hidden organic-img natural-shadow-box lg:max-w-[420px]">
                   <Image
                     src="/media/over-hero-daley.webp"
                     alt="Daley Jansen, Manhattan Bridge New York"
@@ -118,40 +116,33 @@ export default function OverPage() {
               </div>
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 z-10">
-            <svg viewBox="0 0 1440 50" preserveAspectRatio="none" className="block h-[35px] w-full md:h-[50px]">
-              <path d="M0,50 L0,35 C240,45 480,22 720,35 C960,48 1200,28 1440,40 L1440,50 Z" fill="#bd6a3a" />
-            </svg>
-          </div>
+          <OrganicEdge fill="var(--color-accent)" className="h-[36px] md:h-[56px]" />
         </div>
 
         {/* Orange stats strip */}
         <div className="relative -mt-px overflow-hidden bg-accent">
-          <div className="mx-auto max-w-[1400px] px-6 py-12 lg:px-10">
+          <div aria-hidden className="grain-layer" />
+          <div className="relative mx-auto max-w-[1400px] px-6 pb-16 pt-10 md:pb-20 lg:px-10">
             <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
               <div>
                 <p className="font-display text-[52px] leading-none text-white md:text-[64px]">1988</p>
-                <p className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.08em] text-white/70">Het jaar dat ik de wereld kwam verkennen</p>
+                <p className="mx-auto mt-3 max-w-[16rem] text-[13px] font-medium leading-snug text-white/80">Het jaar dat ik de wereld kwam verkennen</p>
               </div>
               <div>
                 <p className="font-display text-[52px] leading-none text-white md:text-[64px]">30+</p>
-                <p className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.08em] text-white/70">Jaar computernerd. Photoshop, websites maken, ontwerpen.</p>
+                <p className="mx-auto mt-3 max-w-[16rem] text-[13px] font-medium leading-snug text-white/80">Jaar computernerd. Photoshop, websites maken, ontwerpen.</p>
               </div>
               <div>
                 <p className="font-display text-[52px] leading-none text-white md:text-[64px]">6+</p>
-                <p className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.08em] text-white/70">Jaar fotograaf</p>
+                <p className="mx-auto mt-3 max-w-[16rem] text-[13px] font-medium leading-snug text-white/80">Jaar fotograaf</p>
               </div>
               <div>
                 <p className="font-display text-[52px] leading-none text-white md:text-[64px]">5</p>
-                <p className="mt-2 text-[11px] font-semibold uppercase leading-snug tracking-[0.08em] text-white/70">Jaar was ik toen ik mijn eerste ervaring al deelde in een schoolkrant.</p>
+                <p className="mx-auto mt-3 max-w-[16rem] text-[13px] font-medium leading-snug text-white/80">Jaar was ik toen ik mijn eerste ervaring al deelde in een schoolkrant.</p>
               </div>
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0">
-            <svg viewBox="0 0 1440 50" preserveAspectRatio="none" className="block h-[35px] w-full md:h-[50px]">
-              <path d="M0,50 L0,35 C240,25 480,42 720,32 C960,22 1200,38 1440,30 L1440,50 Z" fill="#F5EFE8" />
-            </svg>
-          </div>
+          <OrganicEdge fill="var(--color-cream)" className="h-[36px] md:h-[56px]" />
         </div>
       </section>
 
@@ -159,10 +150,10 @@ export default function OverPage() {
       <section className="relative overflow-hidden px-6 py-20 md:py-28 lg:px-10">
         <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-6">
-            <h2 className="mb-5 text-4xl leading-[1.0] text-forest md:text-5xl lg:text-6xl">
+            <h2 className="t-h2 mb-5 text-forest">
               Over mij
             </h2>
-            <div className="space-y-5 text-[19px] leading-relaxed text-text-muted md:text-[21px]">
+            <div className="t-lead space-y-5 text-text-muted">
               <p className="font-medium text-forest/80">Hi, ik ben Daley.</p>
               <p>
                 Moeder van mijn dochter Abby en partner van Frank. Ik beschrijf mezelf het best als
@@ -187,7 +178,7 @@ export default function OverPage() {
           <div className="lg:col-span-6">
             <div className="grid grid-cols-12 items-end gap-4">
               <div className="col-span-7">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[3rem] bg-cream">
+                <div className="relative aspect-[4/5] overflow-hidden organic-img bg-cream-dark">
                   <Image
                     src="/media/over-peru-klooster.webp"
                     alt="Santa Catalina klooster, Peru"
@@ -198,7 +189,7 @@ export default function OverPage() {
                 </div>
               </div>
               <div className="col-span-5 space-y-4 pb-5">
-                <div className="relative aspect-square overflow-hidden rounded-[2.25rem] bg-cream">
+                <div className="relative aspect-square overflow-hidden organic-img-alt bg-cream-dark">
                   <Image
                     src="/media/over-tempel-lantaarns.webp"
                     alt="Chinese tempel, Maleisie"
@@ -207,7 +198,7 @@ export default function OverPage() {
                     sizes="(max-width: 1024px) 40vw, 18vw"
                   />
                 </div>
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[2.25rem] bg-cream">
+                <div className="relative aspect-[4/5] overflow-hidden organic-img bg-cream-dark">
                   <Image
                     src="/media/over-puglia-steeg.webp"
                     alt="Wit steegje, Locorotondo"
@@ -227,25 +218,24 @@ export default function OverPage() {
             <p className="font-display text-[26px] font-light italic leading-[1.4] text-forest md:text-[32px] lg:text-[38px]">
               &ldquo;Niet alleen wat mooi is, maar wat echt is. Want echt is zoveel mooier.&rdquo;
             </p>
-            <cite className="mt-6 block not-italic text-[13px] font-semibold uppercase tracking-[0.16em] text-accent">
+            <cite className="t-eyebrow mt-6 block not-italic text-accent">
               Daley Jansen
             </cite>
           </blockquote>
         </div>
       </section>
 
-
-<section className="bg-[#F5EFE8] py-20 md:py-28">
+      <section className="bg-cream py-20 md:py-28">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <div className="mb-12">
-            <h2 className="text-4xl leading-[1.05] text-forest md:text-6xl">
+            <h2 className="t-h2 max-w-4xl text-forest">
               Reisobsessie? Zo kun je het wel noemen, ja.
             </h2>
           </div>
 
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[3rem] bg-cream">
+              <div className="relative aspect-[4/5] overflow-hidden organic-img-alt bg-cream-dark">
                 <Image
                   src="/media/over-fotograaf-kust.webp"
                   alt="Aan het fotograferen op de kust"
@@ -256,7 +246,7 @@ export default function OverPage() {
               </div>
             </div>
 
-            <div className="space-y-5 text-[19px] leading-relaxed text-text-muted md:text-[20px] lg:col-span-7">
+            <div className="t-lead space-y-5 text-text-muted lg:col-span-7">
               <p>
                 Reizen heeft me altijd in de greep gehad. Dit begon voor het eerst toen ik Floortje
                 bij 3 op reis keek en zij naar Palau ging. En daarna een aflevering over Nieuw-Zeeland.
@@ -295,7 +285,7 @@ export default function OverPage() {
         </div>
       </section>
 
-      <section className="bg-[#F5EFE8] py-4">
+      <section className="bg-cream py-4">
         <div className="mx-auto max-w-[1400px] px-4 lg:px-6">
           <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
             {[
@@ -304,7 +294,7 @@ export default function OverPage() {
               { src: '/media/over-kleur-trappen.webp', alt: 'Kleurrijke trappen', key: 'over-kleur-trappen' },
               { src: '/media/over-tempel-lantaarns.webp', alt: 'Chinese tempel, Maleisie', key: 'over-tempel-lantaarns' },
             ].map((photo) => (
-              <div key={photo.src} className="relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl">
+              <div key={photo.src} className="relative aspect-[3/4] overflow-hidden rounded-2xl">
                 <PhotoWithInfo
                   src={photo.src}
                   alt={photo.alt}
@@ -317,72 +307,64 @@ export default function OverPage() {
         </div>
       </section>
 
-      <section id="samenwerken" className="mt-16 bg-[#ece7de] py-20 md:mt-24 md:py-28">
+      <section id="samenwerken" className="mt-16 scroll-mt-20 bg-cream-dark py-20 md:mt-24 md:py-28">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-          <h2 className="mb-6 text-4xl leading-[1.04] text-forest md:text-6xl">
+          <h2 className="t-h2 mb-6 text-forest">
             Laten we samenwerken.
           </h2>
-          <p className="mb-8 text-[19px] leading-relaxed text-text-muted md:text-[21px]">
+          <p className="t-lead mb-8 max-w-4xl text-text-muted">
             Dit kunnen hotels, B&amp;B&apos;s, reisbureaus, touroperators, caravan- en tentmerken,
             verkeersbureaus en andere reismerken zijn. Als professioneel fotograaf en brand designer
             kan ik je helpen met authentieke content, een converterende website of andere
             merkversterkende uitingen.
           </p>
 
-          <ul className="mb-8 grid grid-cols-1 gap-3 text-[19px] text-text-muted md:grid-cols-2 md:text-[19px]">
+          <ul className="t-lead mb-8 grid grid-cols-1 gap-3 text-text-muted md:grid-cols-2">
             {services.map((service) => (
               <li key={service} className="flex gap-3">
-                <span className="mt-2 h-2 w-2 flex-none rounded-full bg-accent" />
+                <span aria-hidden className="mt-[0.6em] h-2 w-2 flex-none rounded-full bg-accent" />
                 <span>{service}</span>
               </li>
             ))}
           </ul>
 
-          <p className="mb-12 text-[19px] leading-relaxed text-text-muted">
+          <p className="t-lead mb-12 text-text-muted">
             Ik ben ervaren in het maken van en het werken met bestaande huisstijlen en tone-of-voice.
           </p>
 
-          <Link
-            href="/contact"
-            className="inline-flex organic-btn bg-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-accent-dark"
-          >
+          <Button href="/contact" arrow="right">
             Neem contact op
-          </Link>
+          </Button>
         </div>
       </section>
 
-      <BarterDeal />
+      <BarterDeal above="var(--color-cream-dark)" />
 
-      <section className="bg-[#F5EFE8] py-20 md:py-24">
-        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-          <h2 className="mb-8 text-3xl leading-tight text-forest md:text-4xl">
-            Waar ik voor fotografeer
-          </h2>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-            {logoCards.map((item) => (
-              <div
-                key={item}
-                className="flex min-h-[150px] items-center justify-center rounded-[1.5rem] bg-white px-6 text-center text-xl font-semibold uppercase tracking-[0.08em] text-forest/45 natural-shadow-box md:min-h-[180px]"
-              >
+      {/* Sectoren als rustige tekstregel. Zodra er echte klantlogo's zijn,
+          kunnen die hier in dezelfde rij komen te staan. */}
+      <section className="bg-cream pb-4 pt-20 md:pt-28">
+        <div className="mx-auto flex max-w-[1400px] flex-col gap-6 px-6 md:flex-row md:items-center md:gap-10 lg:px-10">
+          <h2 className="t-h3 shrink-0 text-forest">Waar ik voor fotografeer</h2>
+          <ul className="flex flex-wrap gap-2.5">
+            {sectors.map((item) => (
+              <li key={item} className="pill border border-forest/15 bg-white/60 text-forest/75">
                 {item}
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
-      <section className="bg-[#F5EFE8] py-20 md:py-28">
+      <section className="bg-cream py-20 md:py-28">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <div className="mb-14 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
             <div className="lg:col-span-6">
-              <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-                Veelgestelde vragen
-              </span>
-              <h2 className="text-5xl leading-[1.02] text-forest md:text-7xl">
+              <Eyebrow className="mb-4">Veelgestelde vragen</Eyebrow>
+              <h2 className="t-h2 text-forest">
                 Vragen over samenwerken en fotografie.
               </h2>
             </div>
-            <p className="max-w-3xl text-[20px] leading-relaxed text-forest/65 lg:col-span-6 lg:pt-10">
+            <p className="t-lead max-w-3xl text-forest/65 lg:col-span-6 lg:pt-10">
               Antwoorden op de vragen die meestal terugkomen rond fotografie, reiscontent en
               samenwerkingen met Meet the Locals. Kort, praktisch en zonder omwegen.
             </p>
@@ -390,18 +372,18 @@ export default function OverPage() {
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {faqColumns.map((column, columnIndex) => (
-              <div key={columnIndex} className="self-start border border-forest/25 bg-white">
+              <div key={columnIndex} className="self-start overflow-hidden rounded-3xl border border-forest/15 bg-white">
                 {column.map((item) => (
                   <details
                     key={item.question}
-                    className="group border-b border-forest/25 last:border-b-0"
+                    className="group border-b border-forest/15 last:border-b-0"
                   >
                     <summary className="flex cursor-pointer list-none items-start justify-between gap-6 px-6 py-6 text-left md:px-8 [&::-webkit-details-marker]:hidden">
                       <div>
-                        <span className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.16em] text-accent/80">
+                        <span className="t-meta mb-2 block font-semibold text-accent">
                           {item.category}
                         </span>
-                        <h3 className="text-xl leading-tight text-forest md:text-2xl">
+                        <h3 className="t-card text-forest">
                           {item.question}
                         </h3>
                       </div>
@@ -411,7 +393,7 @@ export default function OverPage() {
                       </span>
                     </summary>
                     <div className="border-t border-forest/15 px-6 pb-7 pt-5 md:px-8">
-                      <p className="max-w-3xl text-[17px] leading-relaxed text-forest/65 md:text-[18px]">
+                      <p className="t-body max-w-3xl text-forest/70">
                         {item.answer}
                       </p>
                     </div>
@@ -424,17 +406,19 @@ export default function OverPage() {
       </section>
 
       {/* THE DALEY EDIT — professional intro */}
-      <section className="relative bg-forest-dark noise-overlay py-20 md:py-28">
+      <section className="relative overflow-hidden bg-forest-dark noise-overlay py-28 md:py-36">
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-10">
+          <OrganicEdge position="top" fill="var(--color-cream)" className="h-[36px] md:h-[56px]" />
+          <OrganicEdge fill="var(--color-cream-dark)" className="h-[36px] md:h-[56px]" />
+        </div>
         <div className="relative z-10 mx-auto max-w-[1400px] px-6 lg:px-10">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-7">
-              <span className="mb-5 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-                Naast dit blog
-              </span>
-              <h2 className="mb-6 text-4xl leading-[1.04] text-white md:text-6xl">
+              <Eyebrow className="mb-5">Naast dit blog</Eyebrow>
+              <h2 className="t-h2 mb-6 text-cream">
                 Brand designer, fotograaf en webdesigner.
               </h2>
-              <div className="space-y-4 text-[18px] leading-relaxed text-cream/75 md:text-[20px]">
+              <div className="t-lead space-y-4 text-cream/75">
                 <p>
                   Naast Meet the Locals run ik The Daley Edit: mijn creatieve bureau waar ik
                   merken help met hun uitstraling, marketing en online aanwezigheid.
@@ -444,13 +428,13 @@ export default function OverPage() {
                   merkinzicht. Het resultaat: merken die er niet alleen goed uitzien, maar ook
                   echt werken.
                 </p>
-                <p className="text-cream/50 text-[16px]">
+                <p className="text-[16px] text-cream/55">
                   &quot;Ik vind het zo zonde als bedrijven hun potentie laten liggen.&quot;
                 </p>
               </div>
             </div>
             <div className="lg:col-span-5">
-              <div className="relative aspect-[3/4] max-w-[340px] overflow-hidden rounded-[2.5rem] shadow-2xl lg:max-w-full">
+              <div className="relative aspect-[3/4] max-w-[340px] overflow-hidden organic-img-alt lg:max-w-full">
                 <Image
                   src="/media/over-hero-daley.webp"
                   alt="Daley Jansen"
@@ -465,15 +449,13 @@ export default function OverPage() {
       </section>
 
       {/* Diensten — waar ik bij kan helpen */}
-      <section className="bg-[#ece7de] py-20 md:py-28">
+      <section className="bg-cream-dark py-20 md:py-28">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-          <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-            The Daley Edit
-          </span>
-          <h2 className="mb-4 text-4xl leading-[1.04] text-forest md:text-6xl">
+          <Eyebrow className="mb-4">The Daley Edit</Eyebrow>
+          <h2 className="t-h2 mb-4 text-forest">
             Waar ik bij kan helpen.
           </h2>
-          <p className="mb-12 max-w-2xl text-[18px] leading-relaxed text-text-muted md:text-[20px]">
+          <p className="t-lead mb-12 max-w-2xl text-text-muted">
             Van merkidentiteit tot webdesign en van fotografie tot marketing. Alles onder één dak,
             zonder meerdere ZZP&apos;ers.
           </p>
@@ -506,12 +488,12 @@ export default function OverPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="rounded-[1.5rem] bg-white px-8 py-8 natural-shadow-box"
+                className="rounded-3xl bg-white p-8 natural-shadow-box"
               >
-                <h3 className="mb-3 text-xl uppercase tracking-[0.06em] text-forest">
+                <h3 className="t-card mb-3 text-forest">
                   {item.title}
                 </h3>
-                <p className="text-[16px] leading-relaxed text-text-muted">{item.desc}</p>
+                <p className="t-body text-text-muted">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -519,35 +501,22 @@ export default function OverPage() {
       </section>
 
       {/* Mijn werk */}
-      <section className="bg-[#F5EFE8] py-20 md:py-28">
+      <section className="bg-cream py-20 md:py-28">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
           <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-12">
             <div className="lg:col-span-7">
-              <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-                Portfolio
-              </span>
-              <h2 className="text-4xl leading-[1.04] text-forest md:text-6xl">
+              <Eyebrow className="mb-4">Portfolio</Eyebrow>
+              <h2 className="t-h2 text-forest">
                 Bekijk mijn werk.
               </h2>
             </div>
             <div className="flex flex-wrap gap-3 lg:col-span-5 lg:justify-end">
-              <Link
-                href="/werk-in-opdracht"
-                className="inline-flex items-center gap-2 organic-btn bg-forest px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-forest-dark"
-              >
+              <Button href="/werk-in-opdracht" variant="forest">
                 Bekijk portfolio
-              </Link>
-              <a
-                href="https://thedaleyedit.nl"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 organic-btn-alt bg-accent px-8 py-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-accent-dark"
-              >
+              </Button>
+              <Button href="https://thedaleyedit.nl" shape="organic-btn-alt" arrow="diagonal">
                 Naar The Daley Edit
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
-              </a>
+              </Button>
             </div>
           </div>
 
@@ -558,7 +527,7 @@ export default function OverPage() {
                 href="https://thedaleyedit.nl"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex min-h-[130px] items-center justify-center rounded-[1.5rem] bg-white px-4 text-center text-base font-semibold uppercase tracking-[0.07em] text-forest/45 natural-shadow-box transition-all hover:text-forest/80 md:min-h-[160px]"
+                className="t-eyebrow flex min-h-[130px] items-center justify-center rounded-3xl bg-white px-4 text-center text-forest/55 natural-shadow-box transition-colors hover:text-accent md:min-h-[160px]"
               >
                 {item}
               </a>
