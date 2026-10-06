@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Button } from '@/components/ui/Button'
 
 export function NewsletterCTA() {
   const [email, setEmail] = useState('')
@@ -41,20 +42,9 @@ export function NewsletterCTA() {
     <section id="nieuwsbrief" className="scroll-mt-20 bg-cream pt-12 pb-28 md:pt-16 md:pb-40">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
         <div className="max-w-4xl mx-auto rounded-3xl px-10 py-12 md:px-16 md:py-14 overflow-hidden relative text-center">
-          {/* Oranje achtergrond */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#bd6a3a] via-[#bd6a3a] to-[#8a3f1e] rounded-3xl" />
-
-          {/* Noise overlay */}
-          <div
-            className="absolute inset-0 rounded-3xl pointer-events-none"
-            style={{
-              backgroundImage: "url('/textures/grain.webp')",
-              backgroundSize: '800px 533px',
-              backgroundRepeat: 'repeat',
-              opacity: 0.65,
-              mixBlendMode: 'overlay',
-            }}
-          />
+          {/* Oranje achtergrond met korrel */}
+          <div aria-hidden className="absolute inset-0 rounded-3xl bg-gradient-to-br from-accent via-accent to-accent-deep" />
+          <div aria-hidden className="grain-layer rounded-3xl" />
 
           <div className="relative z-10">
             {submitted ? (
@@ -70,7 +60,7 @@ export function NewsletterCTA() {
             ) : (
               <div className="flex flex-col items-center gap-6">
                 <div>
-                  <h2 className="text-cream! text-3xl md:text-4xl leading-tight mb-3">
+                  <h2 className="t-h2 mb-3 text-cream">
                     Schrijf je in voor de nieuwsbrief
                   </h2>
                   <p className="text-cream/65 text-[15px] leading-relaxed max-w-xl mx-auto">
@@ -90,20 +80,9 @@ export function NewsletterCTA() {
                     placeholder="jij@voorbeeld.nl"
                     className="flex-1 bg-transparent pl-5 pr-2 py-2 text-[15px] text-cream placeholder-cream/40 outline-none min-w-0"
                   />
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="group/btn flex-shrink-0 organic-btn bg-cream px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-[#8a3f1e] whitespace-nowrap transition-colors duration-300 hover:bg-cream/90 disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    <span className="inline-flex items-center gap-1.5">
-                      <span className="transition-transform duration-300 ease-out group-hover/btn:translate-x-0.5">
-                        Schrijf me in
-                      </span>
-                      <span className="transition-transform duration-300 ease-out group-hover/btn:translate-x-1">
-                        →
-                      </span>
-                    </span>
-                  </button>
+                  <Button type="submit" variant="cream" size="sm" arrow="right" disabled={loading} className="shrink-0">
+                    Schrijf me in
+                  </Button>
                 </form>
 
                 {error && (
