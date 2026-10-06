@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CREDIT } from '@/lib/credit'
+import { OrganicEdge } from '@/components/OrganicEdge'
 
 type SliderImage = {
   url: string
@@ -41,7 +42,7 @@ function MetaBar({ image }: { image: SliderImage }) {
   return (
     // Op touch is er geen hover: daar staat de balk altijd in beeld, klein onderin.
     // Op apparaten met een muis verschijnt hij pas bij hover, zoals de huisregel wil.
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-wrap items-end justify-between gap-2 px-4 pb-14 transition-opacity duration-300 md:gap-4 md:px-8 md:pb-10 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/slider:opacity-100">
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-wrap items-end justify-between gap-2 px-4 pb-14 transition-opacity duration-300 md:gap-4 md:px-8 md:pb-24 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/slider:opacity-100">
       {/* Links: naamsvermelding, gevolgd door camera-instellingen indien bekend */}
       <p className="rounded-lg bg-black/35 px-2.5 py-1.5 font-mono text-[10px] leading-snug tracking-wide text-white backdrop-blur-md md:bg-white/20 md:px-3 md:py-2 md:text-[12px] md:leading-none">
         {leftParts.join(' · ')}
@@ -151,7 +152,7 @@ export function DestinationPhotoSlider({
 
       {/* Dots */}
       {images.length > 1 && (
-        <div className="absolute top-20 left-1/2 md:top-auto md:bottom-16 -translate-x-1/2 z-20 flex gap-2">
+        <div className="absolute top-20 left-1/2 md:top-auto md:bottom-28 -translate-x-1/2 z-20 flex gap-2">
           {images.map((_, i) => (
             <button
               key={i}
@@ -164,6 +165,9 @@ export function DestinationPhotoSlider({
           ))}
         </div>
       )}
+
+      {/* Golf naar de crème sectie eronder */}
+      <OrganicEdge fill="var(--color-cream)" className="h-[36px] md:h-[64px]" />
 
       {/* Metadata balk */}
       <MetaBar image={images[current]} />

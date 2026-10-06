@@ -225,12 +225,13 @@ export default async function DestinationPage({ params }: Props) {
         ].filter(Boolean) as { label: string; value: string }[]}
       />
 
-      {/* ── Fotogalerij ──────────────────────────────────────────────────── */}
-      {galleryImages.length > 0 && (
-        <div className="relative z-[1] -mt-20 md:-mt-28 lg:-mt-36">
-          <DestinationPhotoSlider images={galleryImages} name={dest.name} />
-        </div>
-      )}
+      {/* ── Reisinfo-balk en fotogalerij ─────────────────────────────────
+          Samen onder de golf van de hero geschoven: is er reisinfo, dan vult
+          de oranje balk die golf, anders loopt de foto er direct onder door. */}
+      <div className="relative z-[1] -mt-20 md:-mt-28 lg:-mt-36">
+        <DestinationInfoStrip info={dest.travelInfo ?? null} flightHours={dest.flightHours ?? null} />
+        {galleryImages.length > 0 && <DestinationPhotoSlider images={galleryImages} name={dest.name} />}
+      </div>
 
       {/* ── Gerelateerde verhalen (direct onder de fotoslider) ─────────── */}
       {relatedPosts.length > 0 && (
@@ -260,8 +261,6 @@ export default async function DestinationPage({ params }: Props) {
         </section>
       )}
 
-      {/* ── Reisinfo-strip ───────────────────────────────────────────────── */}
-      <DestinationInfoStrip info={dest.travelInfo ?? null} flightHours={dest.flightHours ?? null} />
 
       {/* ── Highlights ───────────────────────────────────────────────────── */}
       {dest.highlightList && dest.highlightList.length > 0 && (

@@ -107,6 +107,14 @@ function IconCar() {
   )
 }
 
+/**
+ * Dezelfde golf als de onderrand van de bestemmingshero (heroWaveClip in
+ * DestinationHeroClient), omgerekend naar een strook van 1440 x 100. Het
+ * gevulde deel ligt boven de lijn, zodat de balk de foto in golft.
+ */
+const HERO_WAVE =
+  'M0,0 L1440,0 L1440,29 C1267,29 1181,71 1037,57 C893,50 778,14 634,29 C490,43 389,71 245,57 C101,50 43,21 0,29 Z'
+
 export function DestinationInfoStrip({
   info,
   flightHours,
@@ -145,26 +153,21 @@ export function DestinationInfoStrip({
   const displayItems = items
 
   return (
-    <div className="-mt-[40px] relative z-20">
-      {/*
-        Wave SVG: transparent above the curve, orange below.
-        This gives the orange bar an organic top edge that overlaps the photo.
-      */}
+    // Ligt direct onder de hero. De wrapper eromheen schuift onder de golf
+    // van de hero, dus de bovenkant van deze balk volgt die golf vanzelf; de
+    // ruimte bovenin compenseert die overlap. Onderaan dezelfde golf, over de foto heen.
+    <div className="relative z-[2] bg-accent pt-20 md:pt-28 lg:pt-36">
       <svg
-        viewBox="0 0 1440 60"
+        viewBox="0 0 1440 100"
         preserveAspectRatio="none"
-        className="block w-full"
-        style={{ height: '40px' }}
+        className="pointer-events-none absolute inset-x-0 top-full -mt-px block h-[56px] w-full md:h-[52px]"
         aria-hidden="true"
       >
-        <path
-          d="M0,38 C360,28 720,48 1080,34 C1260,27 1380,38 1440,36 L1440,60 L0,60 Z"
-          fill="var(--color-accent)"
-        />
+        <path d={HERO_WAVE} fill="var(--color-accent)" />
       </svg>
 
       {/* Scrolling strip */}
-      <div className="bg-accent relative -mt-px overflow-hidden py-5">
+      <div className="relative overflow-hidden py-5">
         {/* Soft fade on left and right so items scroll smoothly out of view */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-accent to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-accent to-transparent" />
