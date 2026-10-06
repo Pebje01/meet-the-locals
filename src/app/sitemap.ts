@@ -118,7 +118,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     }))
 
-    return [...staticPages, ...postUrls, ...storyUrls, ...destinationUrls]
+    // Gepubliceerde fotografie-artikelen
+    const { docs: photoPosts } = await payload.find({
+      collection: 'photography-posts',
+      where: { status: { equals: 'published' } },
+      limit: 1000,
+      depth: 0,
+    })
+
+    const photoPostUrls: MetadataRoute.Sitemap = photoPosts.map((post) => ({
+      url: `${baseUrl}/fotografie/blog/${post.slug}`,
+      lastModified: post.updatedAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }))
+
+    return [...staticPages, ...postUrls, ...storyUrls, ...destinationUrls, ...photoPostUrls]
   } catch {
     // Fallback to static-only if Payload is unavailable (e.g. during static export)
     return staticPages

@@ -68,6 +68,7 @@ export default async function KaartPage() {
     <main>
       <PageHero
         title="Kaart"
+        breadcrumbs={[{ name: 'Kaart', href: '/kaart' }]}
         subtitle="Bekijk de interactieve kaart met bestemmingen en bijzondere plekken."
         image={HERO_IMAGES.kaart}
       />

@@ -26,6 +26,7 @@ export default async function VerhalenPage() {
     <main className="min-h-screen bg-cream">
       <PageHero
         title="Reportages"
+        breadcrumbs={[{ name: 'Reportages', href: '/verhalen' }]}
         subtitle="Persoonlijke verhalen en fotografie van de meest bijzondere plekken ter wereld."
         image={HERO_IMAGES.verhalen}
         height="md"

@@ -17,6 +17,7 @@ export default function ContactPage() {
     <main>
       <PageHero
         title="Contact"
+        breadcrumbs={[{ name: 'Contact', href: '/contact' }]}
         subtitle="Samenwerken, connecten, of gewoon een vraag?"
         image={HERO_IMAGES.contact}
       />

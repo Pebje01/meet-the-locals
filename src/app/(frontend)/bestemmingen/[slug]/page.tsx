@@ -7,7 +7,6 @@ import type { Destination, Post } from '@/payload-types'
 import { DestinationHeroClient } from './DestinationHeroClient'
 import { DestinationPhotoSlider } from './DestinationPhotoSlider'
 import { DestinationInfoStrip } from './DestinationInfoStrip'
-import { BreadcrumbJsonLd } from '@/components/JsonLd'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { PhotoCard } from '@/components/ui/PhotoCard'
 import { PostCard } from '@/components/ui/PostCard'
@@ -207,20 +206,15 @@ export default async function DestinationPage({ params }: Props) {
   })
   const relatedPosts = allPosts.filter((post) => isRelatedPost(post, dest)).slice(0, 3)
 
-  const breadcrumbItems = [
-    { name: 'Bestemmingen', url: `${SITE_URL}/bestemmingen` },
-    ...breadcrumbs.map((c) => ({ name: c.name, url: `${SITE_URL}/bestemmingen/${c.slug}` })),
-    { name: dest.name, url: `${SITE_URL}/bestemmingen/${dest.slug}` },
-  ]
 
   return (
     <main className="bg-cream">
-      <BreadcrumbJsonLd items={breadcrumbItems} />
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <DestinationHeroClient
         heroImageUrl={image}
         mapProps={mapProps}
         breadcrumbs={breadcrumbs}
+        slug={dest.slug}
         name={dest.name}
         eyebrow={dest.eyebrow}
         intro={dest.intro}

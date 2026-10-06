@@ -5,9 +5,10 @@ import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Post } from '@/payload-types'
-import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd'
+import { ArticleJsonLd } from '@/components/JsonLd'
 import { OrganicEdge } from '@/components/OrganicEdge'
 import { RichText, extractHeadings } from '@/components/blog/RichText'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Button } from '@/components/ui/Button'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { PostCard } from '@/components/ui/PostCard'
@@ -111,13 +112,6 @@ export default async function BlogPostPage({ params }: Props) {
         dateModified={post.updatedAt}
         {...(themas.length ? { keywords: themas.map((t) => t.label) } : {})}
       />
-      <BreadcrumbJsonLd
-        items={[
-          { name: 'Home', url: '/' },
-          { name: 'Korte verhalen', url: '/blog' },
-          { name: post.title, url: `/blog/${post.slug}` },
-        ]}
-      />
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <section className="relative h-[75vh] min-h-[520px] flex items-end overflow-hidden bg-forest-dark">
@@ -130,9 +124,13 @@ export default async function BlogPostPage({ params }: Props) {
 
         <div className="relative z-10 w-full pb-16 md:pb-24">
           <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-            <TextLink href="/blog" tone="light" direction="left" className="mb-6">
-              Alle korte verhalen
-            </TextLink>
+            <Breadcrumbs
+              items={[
+                { name: 'Korte verhalen', href: '/blog' },
+                { name: post.title, href: `/blog/${post.slug}` },
+              ]}
+              className="mb-6"
+            />
             <div className="mb-4 flex flex-wrap items-center gap-3">
               <Eyebrow>{werelddeelLabel || 'Reisverhaal'}</Eyebrow>
               <span aria-hidden className="text-xs text-white/30">·</span>

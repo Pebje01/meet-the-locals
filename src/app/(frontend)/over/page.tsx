@@ -5,6 +5,7 @@ import { FAQJsonLd } from '@/components/JsonLd'
 import { OrganicEdge } from '@/components/OrganicEdge'
 import { PhotoWithInfo } from '@/components/PhotoWithInfo'
 import { Button } from '@/components/ui/Button'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { photoMeta } from '@/data/photoMeta'
 
@@ -88,9 +89,7 @@ export default function OverPage() {
           <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 pb-24 pt-32 md:pb-28 md:pt-40 lg:px-10">
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
               <div className="lg:col-span-7">
-                <Eyebrow tone="light" className="mb-5">
-                  Over mij
-                </Eyebrow>
+                <Breadcrumbs items={[{ name: 'Over mij', href: '/over' }]} className="mb-5" />
                 <h1 className="t-h1 mb-7 text-white">
                   Hi, ik ben Daley.
                 </h1>

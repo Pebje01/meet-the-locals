@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { OrganicEdge } from '@/components/OrganicEdge'
+import { Breadcrumbs, type Crumb } from '@/components/ui/Breadcrumbs'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import type { HeroImage } from '@/lib/heroImages'
 
@@ -21,6 +22,7 @@ export function PageHero({
   height = 'lg',
   align = 'center',
   next = 'var(--color-cream)',
+  breadcrumbs,
 }: {
   title: string
   subtitle?: string
@@ -30,6 +32,8 @@ export function PageHero({
   height?: 'md' | 'lg'
   align?: 'center' | 'left'
   next?: string
+  /** Kruimelpad zonder Home, de laatste stap is deze pagina. */
+  breadcrumbs?: Crumb[]
 }) {
   const isDark = variant === 'dark'
   const centered = align === 'center'
@@ -67,6 +71,9 @@ export function PageHero({
       <div className="relative z-10 w-full pt-16 md:pt-20">
         <div className={`mx-auto max-w-[1400px] px-6 lg:px-10 ${centered ? 'text-center' : ''}`}>
           <div className={centered ? 'mx-auto max-w-4xl' : 'max-w-3xl'}>
+            {breadcrumbs && (
+              <Breadcrumbs items={breadcrumbs} align={align} className="mb-5 drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]" />
+            )}
             {eyebrow && (
               <Eyebrow tone="light" className="mb-5 drop-shadow-[0_2px_10px_rgba(0,0,0,0.4)]">
                 {eyebrow}

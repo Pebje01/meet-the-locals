@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
 import { OrganicEdge } from '@/components/OrganicEdge'
 import { Button } from '@/components/ui/Button'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 
 export type Commission = {
@@ -660,6 +661,7 @@ export function WerkInOpdrachtClient() {
             transition={{ duration: 0.35, delay: 0.06 }}
             className="max-w-3xl"
           >
+            <Breadcrumbs items={[{ name: 'Werk in opdracht', href: '/werk-in-opdracht' }]} className="mb-5" />
             <Eyebrow tone="light" className="mb-5">Portfolio</Eyebrow>
             <h1 className="t-h1 mb-6 text-cream">Mooie opdrachten</h1>
             <p className="t-lead text-cream/75 md:text-[21px]">

@@ -6,6 +6,7 @@ import config from '@payload-config'
 import { NewsletterForm } from './NewsletterForm'
 import { OrganicEdge } from '@/components/OrganicEdge'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { formatDate } from '@/lib/format'
 import { imageUrl } from '@/lib/media'
@@ -124,6 +125,7 @@ export default async function ReisnieuwsPage() {
         <div className="relative z-10 mx-auto w-full max-w-[1400px]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             <div className="lg:col-span-6">
+              <Breadcrumbs items={[{ name: 'Reisnieuws', href: '/reisnieuws' }]} className="mb-5" />
               <p className="t-eyebrow mb-4 text-radar">Reisnieuws</p>
               <h1 className="t-h1-xl mb-6 text-cream">Travel Radar</h1>
               <p className="t-lead text-cream/70 md:text-[21px]">

@@ -39,6 +39,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     <main className="min-h-screen bg-cream">
       <PageHero
         title="Reistips voor echte trips"
+        breadcrumbs={[{ name: 'Korte verhalen', href: '/blog' }]}
         subtitle="Voor normale mensen die ook maar proberen iets van de wereld te zien, tussen werk, afspraken en alle andere verplichtingen door."
         image={HERO_IMAGES.blog}
         eyebrow="Korte verhalen"

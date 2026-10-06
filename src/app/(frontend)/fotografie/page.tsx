@@ -120,6 +120,7 @@ export default async function FotografiePage() {
     <main className="min-h-screen bg-cream">
       <PageHero
         title="Fotografie"
+        breadcrumbs={[{ name: 'Fotografie', href: '/fotografie' }]}
         subtitle="Reisfotografie verhalen, beelden van onderweg en de camera's waarmee ze gemaakt zijn."
         image={HERO_IMAGES.fotografie}
       />

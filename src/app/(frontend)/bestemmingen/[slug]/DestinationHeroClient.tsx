@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { HeroDecorMap } from './HeroDecorMap'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 
 type FactItem = { label: string; value: string }
@@ -19,6 +19,7 @@ export function DestinationHeroClient({
   heroImageUrl,
   mapProps,
   breadcrumbs,
+  slug,
   name,
   eyebrow,
   intro,
@@ -27,6 +28,7 @@ export function DestinationHeroClient({
   heroImageUrl: string
   mapProps: MapProps | null
   breadcrumbs: Crumb[]
+  slug: string
   name: string
   eyebrow?: string | null
   intro?: string | null
@@ -79,25 +81,14 @@ export function DestinationHeroClient({
       {/* Inhoud */}
       <div className="relative z-10 mx-auto grid max-w-[1400px] grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-10">
-          {breadcrumbs.length > 0 ? (
-            <nav aria-label="Kruimelpad" className="t-meta mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 font-semibold text-cream/55">
-              <Link href="/bestemmingen" className="transition-colors hover:text-cream">Alle bestemmingen</Link>
-              {breadcrumbs.map((crumb) => (
-                <span key={crumb.slug} className="flex items-center gap-2">
-                  <span>/</span>
-                  <Link href={`/bestemmingen/${crumb.slug}`} className="transition-colors hover:text-cream">{crumb.name}</Link>
-                </span>
-              ))}
-              <span>/</span>
-            </nav>
-          ) : (
-            <Link
-              href="/bestemmingen"
-              className="t-meta mb-10 inline-flex font-semibold text-cream/55 transition-colors hover:text-cream"
-            >
-              ← Alle bestemmingen
-            </Link>
-          )}
+          <Breadcrumbs
+            items={[
+              { name: 'Bestemmingen', href: '/bestemmingen' },
+              ...breadcrumbs.map((crumb) => ({ name: crumb.name, href: `/bestemmingen/${crumb.slug}` })),
+              { name, href: `/bestemmingen/${slug}` },
+            ]}
+            className="mb-8"
+          />
 
           {eyebrow && (
             <Eyebrow tone="light" className="mb-4">

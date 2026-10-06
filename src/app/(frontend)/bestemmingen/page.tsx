@@ -93,6 +93,7 @@ export default async function DestinatiesPage() {
     <main>
       <PageHero
         title="Bestemmingen"
+        breadcrumbs={[{ name: 'Bestemmingen', href: '/bestemmingen' }]}
         subtitle="Alle plekken waar ik ben geweest, van Zuidoost-Azië tot Zuid-Amerika."
         image={HERO_IMAGES.bestemmingen}
         next="var(--color-forest-dark)"

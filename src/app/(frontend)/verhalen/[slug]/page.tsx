@@ -4,12 +4,12 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Metadata } from 'next'
 import type { Media, Story } from '@/payload-types'
-import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd'
+import { ArticleJsonLd } from '@/components/JsonLd'
 import { AuthorByline } from '@/components/AuthorByline'
 import { OrganicEdge } from '@/components/OrganicEdge'
 import { RichText } from '@/components/blog/RichText'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
 import { Eyebrow } from '@/components/ui/Eyebrow'
-import { TextLink } from '@/components/ui/TextLink'
 import { CREDIT } from '@/lib/credit'
 import { formatDate } from '@/lib/format'
 import { imageUrl, imageAlt } from '@/lib/media'
@@ -94,13 +94,6 @@ export default async function VerhaalDetailPage({ params }: Props) {
         basePath="/verhalen"
         {...(story.thema?.length && { category: story.thema[0] })}
       />
-      <BreadcrumbJsonLd
-        items={[
-          { name: 'Home', url: '/' },
-          { name: 'Reportages', url: '/verhalen' },
-          { name: story.title, url: `/verhalen/${slug}` },
-        ]}
-      />
 
       {/* Hero: beeldvullend, tekst linksonder op het vaste zijverloop */}
       <section className="relative flex min-h-[85vh] items-end overflow-hidden bg-forest-dark">
@@ -119,6 +112,13 @@ export default async function VerhaalDetailPage({ params }: Props) {
         <div className="relative z-10 w-full pb-24 pt-40 md:pb-32">
           <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
             <div className="max-w-[60ch]">
+              <Breadcrumbs
+                items={[
+                  { name: 'Reportages', href: '/verhalen' },
+                  { name: story.title, href: `/verhalen/${slug}` },
+                ]}
+                className="mb-6"
+              />
               <Eyebrow tone="light" className="mb-4">
                 {eyebrow}
               </Eyebrow>
@@ -136,10 +136,6 @@ export default async function VerhaalDetailPage({ params }: Props) {
 
       <article>
         <div className="mx-auto max-w-3xl px-6 py-14 md:py-20">
-          <TextLink href="/verhalen" direction="left" className="mb-10">
-            Alle reportages
-          </TextLink>
-
           <RichText data={story.content} />
 
           {story.gallery && story.gallery.length > 0 && (
