@@ -41,6 +41,8 @@ const MIN_LABEL_AREA = 2500
 
 const CREAM = '245, 239, 232'
 const ACCENT = '189, 106, 58'
+// Zacht zand voor het land van de bestemming: oranje was te fel achter de tekst.
+const SAND = '212, 190, 154'
 
 type CountryTopology = Topology<{ countries: GeometryCollection }>
 type CountryFeature = Feature<Polygon | MultiPolygon>
@@ -70,7 +72,7 @@ function graticuleStep(projectionScale: number): [number, number] {
 /**
  * De bestemmingskaart als achtergrond van de hero: landen met hun grenzen,
  * een gradennet, Nederlandse landnamen en een pin op de bestemming. Het land
- * van de bestemming licht op in de accentkleur.
+ * van de bestemming licht zacht op in zandkleur, de pin is oranje.
  *
  * Bij een land zoomt de kaart zelf zo ver in dat het hele land rechts naast
  * de tekst past. Regio's en steden gebruiken de uitsnede uit het CMS.
@@ -165,9 +167,9 @@ export function DestinationHeroMapBackground({
                     geography={geo}
                     style={{
                       default: {
-                        fill: isHighlighted ? `rgba(${ACCENT}, 0.14)` : `rgba(${CREAM}, 0.06)`,
-                        stroke: isHighlighted ? `rgba(${ACCENT}, 0.7)` : `rgba(${CREAM}, 0.2)`,
-                        strokeWidth: isHighlighted ? 1.2 : 0.6,
+                        fill: isHighlighted ? `rgba(${SAND}, 0.1)` : `rgba(${CREAM}, 0.06)`,
+                        stroke: isHighlighted ? `rgba(${SAND}, 0.38)` : `rgba(${CREAM}, 0.2)`,
+                        strokeWidth: isHighlighted ? 0.9 : 0.6,
                         strokeLinejoin: 'round',
                         outline: 'none',
                       },
@@ -198,7 +200,7 @@ export function DestinationHeroMapBackground({
                       fontWeight: 600,
                       letterSpacing: '0.22em',
                       textTransform: 'uppercase',
-                      fill: isHighlighted ? `rgba(${ACCENT}, 0.75)` : `rgba(${CREAM}, 0.28)`,
+                      fill: isHighlighted ? `rgba(${SAND}, 0.5)` : `rgba(${CREAM}, 0.28)`,
                     }}
                   >
                     {name}
@@ -211,7 +213,7 @@ export function DestinationHeroMapBackground({
 
         <Marker coordinates={marker}>
           <g>
-            <circle r={34} fill={`rgba(${ACCENT}, 0.12)`} />
+            <circle r={34} fill={`rgba(${ACCENT}, 0.08)`} />
             <circle r={22} fill="none" stroke={`rgba(${CREAM}, 0.45)`} strokeDasharray="4 3" strokeWidth={1.2} />
             <circle r={6} fill={`rgb(${ACCENT})`} stroke={`rgba(${CREAM}, 0.9)`} strokeWidth={1.5} />
           </g>
