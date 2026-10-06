@@ -49,11 +49,10 @@
   --color-sand-pale: #fdf7e3;    /* lichte zandkaartjes */
   --color-accent-deep: #8a3f1e;  /* tekst op crème knoppen in oranje kaarten */
 
-  --font-display: 'poleno', 'El Messiri', Georgia, serif;
-  --font-serif: 'El Messiri', Georgia, serif;
+  --font-display: 'poleno', Georgia, serif;
+  --font-serif: Georgia, serif;
   --font-editorial: 'oslla', Georgia, serif;
-  --font-oswald: 'Oswald', sans-serif;
-  --font-sans: 'athletics', 'DM Sans', system-ui, sans-serif;
+  --font-sans: 'athletics', system-ui, sans-serif;
 }
 
 /* ─── Base ───
@@ -114,7 +113,7 @@
 }
 
 .nav-font {
-  font-family: 'poleno', 'El Messiri', Georgia, serif;
+  font-family: 'poleno', Georgia, serif;
 }
 
 /* Tekstlinks hover: niet op buttons */

@@ -91,18 +91,14 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
   return (
     <html lang="nl">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Oswald:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
+        {/* Poleno en Athletics komen van Typekit; de lettertypebestanden zelf staan op p.typekit.net */}
+        <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://p.typekit.net" crossOrigin="anonymous" />
         <link rel="stylesheet" href="https://use.typekit.net/pio7rwo.css" />
         <GlobalJsonLd />
       </head>
       <body className="antialiased relative">
         <SmoothScroll />
-        {/* TravelPath (src/components/TravelPath.tsx) staat bewust uit: niet aanzetten zonder performance-test. */}
         <Header />
         {children}
         <Footer />

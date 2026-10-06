@@ -159,7 +159,7 @@ export default async function VerhaalDetailPage({ params }: Props) {
                         sizes="(max-width: 768px) 100vw, 50vw"
                       />
                       {exif.length > 0 && (
-                        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-wrap gap-x-3 gap-y-1 bg-black/50 px-4 py-2.5 text-[11px] text-white/90 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
+                        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-wrap gap-x-3 gap-y-1 bg-black/50 px-4 py-2.5 text-[11px] text-white/90 [@media(hover:hover)]:opacity-0 backdrop-blur-sm transition-opacity [@media(hover:hover)]:group-hover:opacity-100">
                           {exif.map((v) => (
                             <span key={v}>{v}</span>
                           ))}

@@ -46,7 +46,7 @@ export function PhotoWithInfo({
           sizes={sizes}
           priority={priority}
         />
-        <p className="pointer-events-none absolute bottom-2 right-2 rounded bg-black/40 px-2 py-1 text-[10px] tracking-wide text-white/80 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+        <p className="pointer-events-none absolute bottom-2 right-2 rounded bg-black/40 px-2 py-1 text-[10px] tracking-wide text-white/80 [@media(hover:hover)]:opacity-0 backdrop-blur-sm transition-opacity duration-300 [@media(hover:hover)]:group-hover:opacity-100">
           © {CREDIT.creator}
         </p>
       </div>
@@ -66,7 +66,7 @@ export function PhotoWithInfo({
       />
 
       {/* Hover overlay */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col justify-end opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      <div className="pointer-events-none absolute inset-0 flex flex-col justify-end transition-opacity duration-300 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
         {/* Gradient backdrop */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
