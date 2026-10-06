@@ -11,6 +11,7 @@ type MapProps = {
   label: string
   scale: number
   center: [number, number]
+  fitToCountry?: boolean
 }
 
 type Crumb = { name: string; slug: string }

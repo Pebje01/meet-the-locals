@@ -189,6 +189,8 @@ export default async function DestinationPage({ params }: Props) {
         marker: [dest.coordinates.longitude, dest.coordinates.latitude] as [number, number],
         label: dest.mapLabel!,
         scale: dest.mapScale ?? 1500,
+        // Een land past de kaart zelf in; regio's en steden houden de zoom uit het CMS
+        fitToCountry: dest.level === 'land',
         center: [
           dest.mapCenter?.longitude ?? dest.coordinates.longitude,
           dest.mapCenter?.latitude ?? dest.coordinates.latitude,
