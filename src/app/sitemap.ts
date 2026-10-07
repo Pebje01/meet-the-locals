@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getPayload } from 'payload'
+import { getPayload, type Where } from 'payload'
 import config from '@payload-config'
 import { publishedPostsWhere } from '@/lib/queries'
 
@@ -71,71 +71,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  try {
-    const payload = await getPayload({ config })
+  const payload = await getPayload({ config }).catch(() => null)
+  // Fallback naar alleen de vaste pagina's als Payload niet bereikbaar is (bijv. bij een statische build)
+  if (!payload) return staticPages
 
-    // Published blog posts
-    const { docs: posts } = await payload.find({
-      collection: 'posts',
-      where: publishedPostsWhere(),
-      limit: 1000,
-      depth: 0,
-    })
-
-    const postUrls: MetadataRoute.Sitemap = posts.map((post) => ({
-      url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: post.updatedAt,
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    }))
-
-    // Published stories (verhalen)
-    const { docs: stories } = await payload.find({
-      collection: 'stories',
-      where: { status: { equals: 'published' } },
-      limit: 1000,
-      depth: 0,
-    })
-
-    const storyUrls: MetadataRoute.Sitemap = stories.map((story) => ({
-      url: `${baseUrl}/verhalen/${story.slug}`,
-      lastModified: story.updatedAt,
-      changeFrequency: 'monthly' as const,
-      priority: 0.85,
-    }))
-
-    // All destinations
-    const { docs: destinations } = await payload.find({
-      collection: 'destinations',
-      limit: 1000,
-      depth: 0,
-    })
-
-    const destinationUrls: MetadataRoute.Sitemap = destinations.map((dest) => ({
-      url: `${baseUrl}/bestemmingen/${dest.slug}`,
-      lastModified: dest.updatedAt,
-      changeFrequency: 'weekly' as const,
-      priority: 0.85,
-    }))
-
-    // Gepubliceerde fotografie-artikelen
-    const { docs: photoPosts } = await payload.find({
-      collection: 'photography-posts',
-      where: { status: { equals: 'published' } },
-      limit: 1000,
-      depth: 0,
-    })
-
-    const photoPostUrls: MetadataRoute.Sitemap = photoPosts.map((post) => ({
-      url: `${baseUrl}/fotografie/blog/${post.slug}`,
-      lastModified: post.updatedAt,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }))
-
-    return [...staticPages, ...postUrls, ...storyUrls, ...destinationUrls, ...photoPostUrls]
-  } catch {
-    // Fallback to static-only if Payload is unavailable (e.g. during static export)
-    return staticPages
+  /**
+   * Elke collectie apart ophalen. Eerder zat alles in één try: ontbrak één
+   * tabel in de productiedatabase, dan viel de hele sitemap terug op de
+   * vaste pagina's en verdwenen alle verhalen en bestemmingen eruit.
+   */
+  async function urlsFor(
+    collection: 'posts' | 'stories' | 'destinations' | 'photography-posts',
+    where: Where | undefined,
+    toUrl: (slug: string) => string,
+    changeFrequency: 'weekly' | 'monthly',
+    priority: number,
+  ): Promise<MetadataRoute.Sitemap> {
+    try {
+      const { docs } = await payload!.find({ collection, where, limit: 1000, depth: 0 })
+      return docs.map((doc) => ({
+        url: toUrl(doc.slug as string),
+        lastModified: doc.updatedAt,
+        changeFrequency,
+        priority,
+      }))
+    } catch (error) {
+      console.error(`[sitemap] ${collection} overgeslagen:`, error instanceof Error ? error.message : error)
+      return []
+    }
   }
+
+  const published: Where = { status: { equals: 'published' } }
+  const groups = await Promise.all([
+    urlsFor('posts', publishedPostsWhere(), (slug) => `${baseUrl}/blog/${slug}`, 'monthly', 0.8),
+    urlsFor('stories', published, (slug) => `${baseUrl}/verhalen/${slug}`, 'monthly', 0.85),
+    urlsFor('destinations', undefined, (slug) => `${baseUrl}/bestemmingen/${slug}`, 'weekly', 0.85),
+    urlsFor('photography-posts', published, (slug) => `${baseUrl}/fotografie/blog/${slug}`, 'monthly', 0.7),
+  ])
+
+  return [...staticPages, ...groups.flat()]
 }
