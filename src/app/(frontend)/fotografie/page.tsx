@@ -2,26 +2,107 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { OrganicEdge } from '@/components/OrganicEdge'
 import { PageHero } from '@/components/PageHero'
-import type { Story } from '@/payload-types'
+import { EmptyState } from '@/components/ui/EmptyState'
+import { ExifCaption } from '@/components/ui/ExifCaption'
+import { PhotoCard } from '@/components/ui/PhotoCard'
+import { PostCard } from '@/components/ui/PostCard'
+import { SectionHeader } from '@/components/ui/SectionHeader'
+import { TextLink } from '@/components/ui/TextLink'
+import { formatDate } from '@/lib/format'
+import { HERO_IMAGES } from '@/lib/heroImages'
+import { imageUrl } from '@/lib/media'
+import type { Media } from '@/payload-types'
 
-function storyImageUrl(img: Story['heroImage']): string {
-  return img && typeof img === 'object' ? (img.url ?? '') : ''
+type StripPhoto = { media: Media; destination: { name: string; slug: string } }
+
+/**
+ * Een fotostrook uit de bestemmingsgalerijen: per bestemming de eerste foto's,
+ * om en om, zodat de strook laat zien hoe breed het werk is in plaats van tien
+ * beelden van dezelfde stad.
+ */
+async function getGalleryStrip(limit = 10): Promise<StripPhoto[]> {
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'destinations',
+    where: { 'gallery.image': { exists: true } },
+    sort: 'name',
+    depth: 1,
+    limit: 50,
+  })
+
+  const perDestination = docs.map((d) =>
+    (d.gallery ?? [])
+      .map((item) => item.image)
+      .filter((img): img is Media => typeof img === 'object' && !!img?.url)
+      .slice(0, 2)
+      .map((media) => ({ media, destination: { name: d.name, slug: d.slug } })),
+  )
+
+  const strip: StripPhoto[] = []
+  for (let round = 0; round < 2 && strip.length < limit; round++) {
+    for (const photos of perDestination) {
+      if (photos[round]) strip.push(photos[round])
+      if (strip.length >= limit) break
+    }
+  }
+  return strip
 }
 
-function formatDate(date?: string | null): string {
-  if (!date) return ''
-  return new Date(date).toLocaleDateString('nl-NL', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
+type GearItem = { camera: string; photos: number; lenses: string[] }
+
+/** "24.0 mm f/1.7" en "24mm f/1.7" zijn dezelfde lens: schrijfwijze gelijktrekken. */
+function normalizeLens(lens: string): string {
+  return lens
+    .replace(/(\d+)\.0\b/g, '$1')
+    .replace(/(\d)\s+mm\b/g, '$1mm')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/**
+ * Waar ik mee fotografeer, afgeleid uit de EXIF van de mediabibliotheek. Zo
+ * klopt het blok altijd met de foto's die echt op de site staan.
+ */
+async function getGear(): Promise<GearItem[]> {
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'media',
+    where: { 'exif.camera': { exists: true } },
+    depth: 0,
+    limit: 2000,
+    select: { exif: true },
   })
+
+  const byCamera = new Map<string, { label: string; photos: number; lenses: Map<string, number> }>()
+  for (const doc of docs) {
+    const camera = doc.exif?.camera?.trim()
+    if (!camera) continue
+    const key = camera.toLowerCase()
+    const entry = byCamera.get(key) ?? { label: camera, photos: 0, lenses: new Map() }
+    entry.photos++
+    const lens = doc.exif?.lens ? normalizeLens(doc.exif.lens) : ''
+    if (lens) entry.lenses.set(lens, (entry.lenses.get(lens) ?? 0) + 1)
+    // Voorkeur voor de schrijfwijze met kleine letters ("Nikon" boven "NIKON")
+    if (camera !== camera.toUpperCase()) entry.label = camera
+    byCamera.set(key, entry)
+  }
+
+  return [...byCamera.values()]
+    .sort((a, b) => b.photos - a.photos)
+    .slice(0, 4)
+    .map((entry) => ({
+      camera: entry.label,
+      photos: entry.photos,
+      lenses: [...entry.lenses.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([lens]) => lens),
+    }))
 }
 
 export default async function FotografiePage() {
   const payload = await getPayload({ config })
 
-  const [{ docs: fotoVerhalen }, { docs: tips }] = await Promise.all([
+  const [{ docs: fotoVerhalen }, { docs: tips }, strip, gear] = await Promise.all([
     payload.find({
       collection: 'stories',
       where: {
@@ -39,168 +120,157 @@ export default async function FotografiePage() {
       depth: 1,
       limit: 6,
     }),
+    getGalleryStrip(),
+    getGear(),
   ])
 
+  const [featured, ...rest] = fotoVerhalen
+
   return (
-    <main className="min-h-screen bg-warm-white">
+    <main className="min-h-screen bg-cream">
       <PageHero
         title="Fotografie"
-        subtitle="Reisfotografie verhalen, compositietips en eerlijke gear reviews."
-        image="/media/DSC_3088-scaled.webp"
-        imageAlt="Reisfotografie landschap"
+        breadcrumbs={[{ name: 'Fotografie', href: '/fotografie' }]}
+        subtitle="Reisfotografie verhalen, beelden van onderweg en de camera's waarmee ze gemaakt zijn."
+        image={HERO_IMAGES.fotografie}
       />
 
       {/* Reisfotografie verhalen */}
       <section className="py-16 md:py-24">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <span className="block text-[11px] uppercase tracking-[0.15em] text-accent font-semibold mb-2">
-                Diepte
-              </span>
-              <h2 className="text-3xl md:text-4xl font-display font-bold text-forest leading-tight">
-                Reisfotografie verhalen
-              </h2>
-            </div>
-            <Link
-              href="/verhalen"
-              className="hidden md:inline-flex items-center gap-2 text-accent font-semibold text-sm uppercase tracking-[0.1em] hover:gap-3 transition-all"
-            >
-              Alle verhalen
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-          </div>
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+          <SectionHeader
+            eyebrow="Diepte"
+            title="Reisfotografie verhalen"
+            link={{ href: '/verhalen', label: 'Alle reportages' }}
+            className="mb-10 md:mb-12"
+          />
 
-          {fotoVerhalen.length === 0 ? (
-            <div className="py-16 text-center border border-dashed border-cream-dark rounded-2xl">
-              <p className="text-text-muted">De eerste reisfotografie verhalen komen er aan.</p>
-              <p className="text-text-muted/60 text-sm mt-1">
-                Voeg een verhaal toe in het admin panel en tag het met &ldquo;Reisfotografie&rdquo;.
-              </p>
-            </div>
+          {!featured ? (
+            <EmptyState title="Binnenkort" text="De eerste reisfotografie verhalen komen eraan." />
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {fotoVerhalen.map((story, i) => (
-                <Link
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <PhotoCard
+                href={`/verhalen/${featured.slug}`}
+                image={imageUrl(featured.heroImage)}
+                alt={featured.title}
+                title={<span className="t-h3 block">{featured.title}</span>}
+                eyebrow={featured.eyebrow ?? undefined}
+                meta={formatDate(featured.publishedDate)}
+                aspect="aspect-[4/3] md:aspect-[21/9]"
+                sizes="100vw"
+                className="lg:col-span-2"
+              >
+                {featured.intro && (
+                  <p className="mt-3 line-clamp-2 max-w-xl text-[15px] leading-relaxed text-cream/80">{featured.intro}</p>
+                )}
+              </PhotoCard>
+              {rest.map((story) => (
+                <PhotoCard
                   key={story.id}
                   href={`/verhalen/${story.slug}`}
-                  className={`group block relative overflow-hidden rounded-2xl ${i === 0 ? 'lg:col-span-2' : ''}`}
-                >
-                  <div className={`relative ${i === 0 ? 'min-h-[480px]' : 'min-h-[320px]'}`}>
-                    {storyImageUrl(story.heroImage) ? (
-                      <Image
-                        src={storyImageUrl(story.heroImage)}
-                        alt={story.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                        sizes={i === 0 ? '100vw' : '(max-width: 1024px) 100vw, 50vw'}
-                      />
-                    ) : (
-                      <div className="absolute inset-0 bg-forest/60" />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    <div className="absolute inset-0 flex items-end p-6 md:p-8">
-                      <div className="w-full">
-                        {story.eyebrow && (
-                          <span className="block text-[10px] uppercase tracking-[0.15em] text-accent font-semibold mb-2">
-                            {story.eyebrow}
-                          </span>
-                        )}
-                        <h3
-                          className={`font-display font-bold text-white leading-tight mb-2 group-hover:text-cream/90 transition-colors ${i === 0 ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-xl md:text-2xl'}`}
-                        >
-                          {story.title}
-                        </h3>
-                        {i === 0 && (
-                          <p className="text-cream/70 text-sm md:text-base leading-relaxed line-clamp-2 mb-4 max-w-xl">
-                            {story.intro}
-                          </p>
-                        )}
-                        <span className="text-[10px] uppercase tracking-[0.15em] text-cream/50">
-                          {formatDate(story.publishedDate)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
+                  image={imageUrl(story.heroImage)}
+                  alt={story.title}
+                  title={story.title}
+                  eyebrow={story.eyebrow ?? undefined}
+                  meta={formatDate(story.publishedDate)}
+                  aspect="aspect-[4/3]"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
               ))}
             </div>
           )}
-
-          <Link
-            href="/verhalen"
-            className="md:hidden mt-6 inline-flex items-center gap-2 text-accent font-semibold text-sm uppercase tracking-[0.1em]"
-          >
-            Alle verhalen
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
         </div>
       </section>
 
-      {/* Tips & Gear */}
-      <section className="pb-24 md:pb-32">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="mb-10">
-            <span className="block text-[11px] uppercase tracking-[0.15em] text-accent font-semibold mb-2">
-              Kennis
-            </span>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-forest leading-tight">
-              Tips & Inspiratie
-            </h2>
+      {/* Fotostrook uit de bestemmingsgalerijen */}
+      {strip.length > 0 && (
+        <section className="pb-16 md:pb-24">
+          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+            <SectionHeader
+              eyebrow="Onderweg"
+              title="Uit de galerijen"
+              link={{ href: '/bestemmingen', label: 'Alle bestemmingen' }}
+              className="mb-8 md:mb-10"
+            />
           </div>
+          <div className="no-scrollbar flex gap-4 overflow-x-auto px-[max(1.5rem,calc((100vw-1400px)/2+1.5rem))] lg:px-[max(2.5rem,calc((100vw-1400px)/2+2.5rem))]">
+            {strip.map(({ media, destination }) => (
+              <Link
+                key={media.id}
+                href={`/bestemmingen/${destination.slug}`}
+                className="group relative aspect-[3/4] w-[min(70vw,280px)] shrink-0 overflow-hidden rounded-3xl bg-cream-dark"
+              >
+                <Image
+                  src={media.url!}
+                  alt={media.alt || destination.name}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  sizes="280px"
+                />
+                <ExifCaption exif={media.exif} location={media.caption || destination.name} />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
-          {tips.length === 0 ? (
-            <div className="py-16 text-center border border-dashed border-cream-dark rounded-2xl">
-              <p className="text-text-muted">Fotografie tips en gear reviews komen er aan.</p>
+      {/* Gear */}
+      {gear.length > 0 && (
+        <section className="relative bg-cream-dark py-24 md:py-32">
+          <OrganicEdge position="top" fill="var(--color-cream)" className="h-[36px] md:h-[56px]" />
+          <OrganicEdge fill="var(--color-cream)" className="h-[36px] md:h-[56px]" />
+          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+            <SectionHeader eyebrow="Gear" title="Waar ik mee fotografeer" className="mb-10 md:mb-12">
+              Afgeleid uit de foto&apos;s op deze site: welke camera ze maakte en met welke lens.
+            </SectionHeader>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {gear.map((item) => (
+                <div key={item.camera} className="rounded-3xl border border-forest/10 bg-cream p-7">
+                  <p className="t-meta mb-3 font-semibold text-accent">
+                    {item.photos === 1 ? '1 foto' : `${item.photos} foto's`} op de site
+                  </p>
+                  <h3 className="t-card mb-4 text-forest">{item.camera}</h3>
+                  {item.lenses.length > 0 && (
+                    <ul className="space-y-1.5 text-[15px] text-text-muted">
+                      {item.lenses.map((lens) => (
+                        <li key={lens}>{lens}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {tips.map((tip) => {
-                const img =
-                  tip.heroImage && typeof tip.heroImage === 'object' ? (tip.heroImage.url ?? '') : ''
-                return (
-                  <article key={tip.id}>
-                    <Link href={`/fotografie/blog/${tip.slug}`} className="group block card-lift">
-                      {img && (
-                        <div className="relative aspect-[4/3] organic-img overflow-hidden img-zoom mb-5">
-                          <Image
-                            src={img}
-                            alt={tip.title}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          />
-                        </div>
-                      )}
-                      <div>
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="text-[11px] uppercase tracking-[0.12em] text-accent font-semibold">
-                            Fotografie
-                          </span>
-                          <span className="text-text-muted/50">|</span>
-                          <span className="text-[11px] uppercase tracking-[0.15em] text-text-muted/70">
-                            {formatDate(tip.publishedDate)}
-                          </span>
-                        </div>
-                        <h3 className="text-xl font-serif font-bold text-forest mb-2 group-hover:text-accent transition-colors">
-                          {tip.title}
-                        </h3>
-                        <p className="text-text-muted text-[15px] leading-relaxed line-clamp-2">
-                          {tip.excerpt}
-                        </p>
-                      </div>
-                    </Link>
-                  </article>
-                )
-              })}
+          </div>
+        </section>
+      )}
+
+      {/* Tips: alleen als er al iets staat */}
+      {tips.length > 0 && (
+        <section className="py-16 md:py-24">
+          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+            <SectionHeader eyebrow="Kennis" title="Tips en inspiratie" className="mb-10 md:mb-12" />
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {tips.map((tip) => (
+                <PostCard
+                  key={tip.id}
+                  post={{
+                    title: tip.title,
+                    href: `/fotografie/blog/${tip.slug}`,
+                    image: imageUrl(tip.heroImage),
+                    excerpt: tip.excerpt,
+                    category: 'Fotografie',
+                    date: formatDate(tip.publishedDate),
+                  }}
+                />
+              ))}
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
+
+      <div className="pb-20 text-center md:pb-28">
+        <TextLink href="/werk-in-opdracht">Fotografie in opdracht</TextLink>
+      </div>
     </main>
   )
 }

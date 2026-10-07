@@ -1,21 +1,17 @@
-import Image from 'next/image'
-import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
+import { OrganicEdge } from '@/components/OrganicEdge'
+import { PhotoCard } from '@/components/ui/PhotoCard'
+import { HERO_IMAGES } from '@/lib/heroImages'
+import { imageUrl } from '@/lib/media'
+import { publishedPostsWhere } from '@/lib/queries'
 import type { Destination } from '@/payload-types'
 import { DestinationsWorldMap } from './DestinationsWorldMap'
 
-function heroUrl(img: Destination['heroImage']): string {
-  return img && typeof img === 'object' ? (img.url ?? '') : ''
-}
-
 function thumbnailUrl(destination: Destination): string {
   const firstGallery = destination.gallery?.[0]
-  if (firstGallery?.image && typeof firstGallery.image === 'object') {
-    return firstGallery.image.url ?? ''
-  }
-  return heroUrl(destination.heroImage)
+  return imageUrl(firstGallery?.image) || imageUrl(destination.heroImage)
 }
 
 const regionLabel: Record<string, string> = {
@@ -28,16 +24,62 @@ const regionLabel: Record<string, string> = {
   'middle-east': 'Midden-Oosten',
 }
 
+function relationId(value: number | Destination | null | undefined): number | null {
+  if (value == null) return null
+  return typeof value === 'object' ? value.id : value
+}
+
+/**
+ * Aantal gepubliceerde blogposts per land. Een post kan aan een stad of regio
+ * hangen; die telt mee bij het land erboven. Elke post telt één keer per land.
+ */
+async function countPostsPerCountry(): Promise<Map<number, number>> {
+  const payload = await getPayload({ config })
+  const [{ docs: allDestinations }, { docs: posts }] = await Promise.all([
+    payload.find({ collection: 'destinations', depth: 0, limit: 1000, select: { parent: true } }),
+    payload.find({ collection: 'posts', where: publishedPostsWhere(), depth: 0, limit: 1000, select: { destinations: true } }),
+  ])
+
+  const parentOf = new Map(allDestinations.map((d) => [d.id, relationId(d.parent)]))
+  const rootOf = (id: number): number => {
+    let current = id
+    // Begrensd, zodat een per ongeluk circulaire parent de pagina niet laat hangen.
+    for (let i = 0; i < 6; i++) {
+      const parent = parentOf.get(current)
+      if (parent == null) break
+      current = parent
+    }
+    return current
+  }
+
+  const counts = new Map<number, number>()
+  for (const post of posts) {
+    const countries = new Set(
+      (post.destinations ?? []).map(relationId).filter((id): id is number => id != null).map(rootOf),
+    )
+    for (const country of countries) counts.set(country, (counts.get(country) ?? 0) + 1)
+  }
+  return counts
+}
+
+function articleLabel(count: number): string | undefined {
+  if (count === 0) return undefined
+  return count === 1 ? '1 artikel' : `${count} artikelen`
+}
+
 export default async function DestinatiesPage() {
   const payload = await getPayload({ config })
 
-  const { docs: countries } = await payload.find({
-    collection: 'destinations',
-    where: { level: { equals: 'land' } },
-    sort: 'name',
-    depth: 1,
-    limit: 100,
-  })
+  const [{ docs: countries }, postCounts] = await Promise.all([
+    payload.find({
+      collection: 'destinations',
+      where: { level: { equals: 'land' } },
+      sort: 'name',
+      depth: 1,
+      limit: 100,
+    }),
+    countPostsPerCountry(),
+  ])
 
   const mapData = countries
     .filter((d) => d.countryIds && d.countryIds.length > 0)
@@ -51,59 +93,38 @@ export default async function DestinatiesPage() {
     <main>
       <PageHero
         title="Bestemmingen"
+        breadcrumbs={[{ name: 'Bestemmingen', href: '/bestemmingen' }]}
         subtitle="Alle plekken waar ik ben geweest, van Zuidoost-Azië tot Zuid-Amerika."
-        image="/media/maleisie-7-scaled.webp"
-        imageAlt="Weg door de jungle in Maleisië"
+        image={HERO_IMAGES.bestemmingen}
+        next="var(--color-forest-dark)"
         variant="dark"
       />
 
-      <section className="bg-forest-dark py-10 md:py-14">
+      {/* Compacte kaartband direct onder de hero, met een golf naar het raster */}
+      <section className="relative bg-forest-dark pb-16 pt-6 md:pb-24 md:pt-8">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-          <p className="mb-4 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-cream/35">
-            Klik op een land om te verkennen
-          </p>
+          <p className="t-meta mb-2 text-center font-semibold text-cream/40">Klik op een land om te verkennen</p>
           <DestinationsWorldMap destinations={mapData} />
         </div>
+        <OrganicEdge fill="var(--color-cream)" className="h-[36px] md:h-[64px]" />
       </section>
 
-      <section className="mx-auto max-w-[1400px] px-6 py-16 md:py-20 lg:px-10">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {countries.map((destination) => {
-            const image = thumbnailUrl(destination)
-            const label = regionLabel[destination.region] ?? destination.region
-
-            return (
-              <Link
+      <section className="bg-cream">
+        <div className="mx-auto max-w-[1400px] px-6 pb-20 pt-10 md:pb-28 md:pt-14 lg:px-10">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {countries.map((destination) => (
+              <PhotoCard
                 key={destination.slug}
                 href={`/bestemmingen/${destination.slug}`}
-                className="group relative block aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-forest text-cream"
-              >
-                {image && (
-                  <Image
-                    src={image}
-                    alt={destination.name}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/30 to-transparent" />
-                <div className="absolute left-5 top-5 rounded-full bg-white/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-cream backdrop-blur-sm">
-                  {label}
-                </div>
-                <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
-                  <h2 className="text-3xl font-display font-light text-cream!">
-                    {destination.name}
-                  </h2>
-                  {destination.intro && (
-                    <p className="mt-2 max-w-md text-sm leading-relaxed text-cream/75 line-clamp-2">
-                      {destination.intro}
-                    </p>
-                  )}
-                </div>
-              </Link>
-            )
-          })}
+                image={thumbnailUrl(destination)}
+                alt={destination.name}
+                title={destination.name}
+                eyebrow={regionLabel[destination.region] ?? destination.region}
+                meta={articleLabel(postCounts.get(destination.id) ?? 0)}
+                aspect="aspect-[4/3]"
+              />
+            ))}
+          </div>
         </div>
       </section>
     </main>

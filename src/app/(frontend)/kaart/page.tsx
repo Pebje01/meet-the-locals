@@ -1,6 +1,8 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
+import { SectionHeader } from '@/components/ui/SectionHeader'
+import { HERO_IMAGES } from '@/lib/heroImages'
 import { PhotoMap, type MapSpot } from './PhotoMap'
 import type { Media, Post } from '@/payload-types'
 
@@ -67,15 +69,15 @@ export default async function KaartPage() {
     <main>
       <PageHero
         title="Kaart"
+        breadcrumbs={[{ name: 'Kaart', href: '/kaart' }]}
         subtitle="Bekijk de interactieve kaart met bestemmingen en bijzondere plekken."
-        image="/media/Shirakawago-3.webp"
-        imageAlt="Uitzicht over een rivierdal in Azië"
+        image={HERO_IMAGES.kaart}
       />
 
       <section className="mx-auto max-w-[1600px] px-4 py-14 sm:px-6 md:py-20 lg:px-10">
-        <div className="mb-8 w-full md:mb-12">
-          <h2 className="text-3xl md:text-4xl">De wereld in fotospots</h2>
-        </div>
+        <SectionHeader eyebrow="Fotospots" title="De wereld in fotospots" className="mb-8 md:mb-12">
+          Elke pin is een plek waar ik heb gefotografeerd. Klik erop voor de foto en waar hij gemaakt is.
+        </SectionHeader>
 
         <PhotoMap spots={spots} />
       </section>

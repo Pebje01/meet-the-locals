@@ -4,6 +4,12 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { NewsletterForm } from './NewsletterForm'
+import { OrganicEdge } from '@/components/OrganicEdge'
+import { EmptyState } from '@/components/ui/EmptyState'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { SectionHeader } from '@/components/ui/SectionHeader'
+import { formatDate } from '@/lib/format'
+import { imageUrl } from '@/lib/media'
 
 async function getRecentNews() {
   const payload = await getPayload({ config })
@@ -25,42 +31,6 @@ const BLIPS = [
   { top: '48%', left: '74%', delay: '1.9s', size: 'w-1.5 h-1.5' },
 ]
 
-const CATEGORIES = [
-  {
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
-      </svg>
-    ),
-    title: 'Nieuwe bestemmingen',
-    text: 'Plekken die nog niet op ieders radar staan, maar dat binnenkort wel zullen zijn.',
-    cardClass: 'bg-water-muted border-water-light/50',
-    iconClass: 'bg-white/55 text-water',
-  },
-  {
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-      </svg>
-    ),
-    title: 'Reistips van de week',
-    text: 'Praktische updates: de beste tijd om te boeken, nieuwe routes en lokale tips.',
-    cardClass: 'bg-[#e6f0df] border-forest/10',
-    iconClass: 'bg-white/55 text-forest',
-  },
-  {
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" />
-      </svg>
-    ),
-    title: 'Lokale ontdekkingen',
-    text: 'Verborgen eetadressen, nieuwe hotspots en plekken die de algoritmes nog niet kennen.',
-    cardClass: 'bg-accent-muted border-accent/15',
-    iconClass: 'bg-white/60 text-accent',
-  },
-]
-
 function RadarScreen() {
   return (
     <div className="relative w-[260px] h-[260px] md:w-[340px] md:h-[340px] lg:w-[400px] lg:h-[400px] flex-shrink-0">
@@ -71,7 +41,7 @@ function RadarScreen() {
       {[1, 0.72, 0.46, 0.22].map((scale, i) => (
         <div
           key={i}
-          className="absolute rounded-full border border-[#5aab6a]/25"
+          className="absolute rounded-full border border-radar/25"
           style={{
             top: `${(1 - scale) * 50}%`,
             left: `${(1 - scale) * 50}%`,
@@ -83,17 +53,17 @@ function RadarScreen() {
 
       {/* Crosshairs */}
       <div className="absolute inset-0 flex items-center">
-        <div className="w-full h-px bg-[#5aab6a]/15" />
+        <div className="w-full h-px bg-radar/15" />
       </div>
       <div className="absolute inset-0 flex justify-center">
-        <div className="h-full w-px bg-[#5aab6a]/15" />
+        <div className="h-full w-px bg-radar/15" />
       </div>
       {/* Diagonals */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-full h-px bg-[#5aab6a]/08 origin-center rotate-45" />
+        <div className="w-full h-px bg-radar/8 origin-center rotate-45" />
       </div>
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-full h-px bg-[#5aab6a]/08 origin-center -rotate-45" />
+        <div className="w-full h-px bg-radar/8 origin-center -rotate-45" />
       </div>
 
       {/* Sweep wrapper */}
@@ -111,21 +81,21 @@ function RadarScreen() {
         />
         {/* Sweep line */}
         <div
-          className="absolute left-1/2 top-0 h-1/2 w-[1.5px] bg-gradient-to-b from-[#5aab6a]/0 via-[#5aab6a]/80 to-[#5aab6a]"
+          className="absolute left-1/2 top-0 h-1/2 w-[1.5px] bg-gradient-to-b from-radar/0 via-radar/80 to-radar"
           style={{ transformOrigin: 'bottom center', transform: 'translateX(-50%)' }}
         />
       </div>
 
       {/* Center dot */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-3 h-3 bg-[#5aab6a] rounded-full shadow-[0_0_10px_rgba(90,171,106,0.9)]" />
+        <div className="w-3 h-3 bg-radar rounded-full shadow-[0_0_10px_rgba(90,171,106,0.9)]" />
       </div>
 
       {/* Blips */}
       {BLIPS.map((blip, i) => (
         <div
           key={i}
-          className={`absolute ${blip.size} rounded-full bg-[#5aab6a]`}
+          className={`absolute ${blip.size} rounded-full bg-radar`}
           style={{
             top: blip.top,
             left: blip.left,
@@ -134,7 +104,7 @@ function RadarScreen() {
           }}
         >
           <div
-            className="absolute inset-0 rounded-full bg-[#5aab6a]/40"
+            className="absolute inset-0 rounded-full bg-radar/40"
             style={{ animation: `radar-ping 1.5s ${blip.delay} ease-out infinite` }}
           />
         </div>
@@ -146,22 +116,19 @@ function RadarScreen() {
 export default async function ReisnieuwsPage() {
   const newsItems = await getRecentNews()
   return (
-    <main className="bg-warm-white">
+    <main className="bg-cream">
       {/* HERO */}
       <section className="relative min-h-[75vh] overflow-hidden bg-forest-dark px-6 pb-20 pt-32 text-cream md:pt-40 lg:px-10 flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-br from-forest-dark via-forest-dark/98 to-[#0f2a14]" />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,29,15,0.55) 100%)' }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-forest-dark via-forest-dark/98 to-forest-deep" />
+        <div aria-hidden className="grain-layer opacity-60" />
 
         <div className="relative z-10 mx-auto w-full max-w-[1400px]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             <div className="lg:col-span-6">
-              <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-[#5aab6a]">
-                Reisnieuws
-              </span>
-              <h1 className="mb-6 font-display text-cream! leading-[0.95]" style={{ fontSize: 'clamp(3rem, 7vw, 6rem)' }}>
-                Travel Radar
-              </h1>
-              <p className="text-[20px] leading-relaxed text-cream/65 md:text-[22px]">
+              <Breadcrumbs items={[{ name: 'Reisnieuws', href: '/reisnieuws' }]} className="mb-5" />
+              <p className="t-eyebrow mb-4 text-radar">Reisnieuws</p>
+              <h1 className="t-h1-xl mb-6 text-cream">Travel Radar</h1>
+              <p className="t-lead text-cream/70 md:text-[21px]">
                 Alles wat er beweegt in de reiswereld: nieuwe bestemmingen, trends in de branche en alle ins en outs van reizen anno 2026. Wat zie ik op mijn radar? 👀
               </p>
             </div>
@@ -172,42 +139,35 @@ export default async function ReisnieuwsPage() {
           </div>
         </div>
 
-        {/* Wave */}
-        <div className="absolute bottom-0 left-0 right-0 z-10">
-          <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-[50px] md:h-[70px] block">
-            <path d="M0,80 L0,50 C200,70 400,30 600,50 C800,70 1100,35 1440,55 L1440,80 Z" fill="var(--color-warm-white)" />
-          </svg>
-        </div>
+        <OrganicEdge fill="var(--color-cream)" className="h-[40px] md:h-[70px]" />
       </section>
 
       {/* OP DE RADAR — recente nieuwsitems */}
-      <section className="py-20 md:py-28 bg-warm-white">
+      <section className="bg-cream py-20 md:py-28">
         <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-          <div className="mb-14 text-center">
-            <h2 className="text-4xl md:text-5xl font-display font-light text-forest">Op de radar</h2>
-          </div>
+          <SectionHeader title="Op de radar" align="center" className="mb-12 md:mb-14" />
 
           {newsItems.length === 0 ? (
-            <p className="text-center text-text-muted text-[18px]">Binnenkort verschijnt hier het laatste reisnieuws.</p>
+            <EmptyState
+              title="Nog even stil op de radar"
+              text="Binnenkort verschijnt hier het laatste reisnieuws. Schrijf je in voor de nieuwsbrief, dan mis je niets."
+              link={{ href: '#nieuwsbrief', label: 'Naar de nieuwsbrief' }}
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {newsItems.map((item) => {
-                const imageUrl = typeof item.heroImage === 'object' && item.heroImage !== null
-                  ? (item.heroImage as { url?: string }).url
-                  : null
-                const date = item.publishedDate
-                  ? new Date(item.publishedDate).toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' })
-                  : ''
+                const image = imageUrl(item.heroImage)
+                const date = formatDate(item.publishedDate)
                 return (
                   <Link
                     key={item.id}
                     href={`/reisnieuws/${item.slug}`}
-                    className="group block bg-white rounded-2xl overflow-hidden natural-shadow-box"
+                    className="group block overflow-hidden rounded-3xl bg-white natural-shadow-box card-lift"
                   >
-                    {imageUrl && (
+                    {image && (
                       <div className="relative aspect-[16/9] overflow-hidden">
                         <Image
-                          src={imageUrl}
+                          src={image}
                           alt={item.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
@@ -218,16 +178,16 @@ export default async function ReisnieuwsPage() {
                     <div className="p-6">
                       <div className="flex items-center gap-3 mb-3">
                         {item.category && (
-                          <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-accent">
+                          <span className="t-meta font-semibold text-accent">
                             {item.category}
                           </span>
                         )}
-                        <span className="text-[12px] text-text-muted/60">{date}</span>
+                        <span className="t-meta text-text-muted/70">{date}</span>
                       </div>
-                      <h3 className="font-display text-xl font-light text-forest mb-2 group-hover:text-accent transition-colors leading-snug">
+                      <h3 className="t-card mb-2 text-forest transition-colors group-hover:text-accent">
                         {item.title}
                       </h3>
-                      <p className="text-text-muted text-[15px] leading-relaxed line-clamp-3">{item.excerpt}</p>
+                      <p className="t-body line-clamp-3 text-text-muted">{item.excerpt}</p>
                     </div>
                   </Link>
                 )
@@ -238,21 +198,22 @@ export default async function ReisnieuwsPage() {
       </section>
 
       {/* NIEUWSBRIEF */}
-      <section className="relative overflow-hidden bg-forest-dark py-24 md:py-32 noise-overlay">
-        <div className="absolute inset-0 bg-gradient-to-br from-forest-dark via-forest-dark/98 to-[#0f2a14]" />
+      <section id="nieuwsbrief" className="footer-ready relative scroll-mt-20 overflow-hidden bg-forest-dark py-28 noise-overlay md:py-36">
+        <div className="absolute inset-0 bg-gradient-to-br from-forest-dark via-forest-dark/98 to-forest-deep" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-10">
+          <OrganicEdge position="top" fill="var(--color-cream)" className="h-[40px] md:h-[70px]" />
+        </div>
 
         <div className="relative z-10 mx-auto max-w-[1400px] px-6 lg:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
             {/* Links: uitleg */}
             <div>
-              <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-[#5aab6a]">
-                Nieuwsbrief
-              </span>
-              <h2 className="mb-6 font-display text-cream! leading-[0.95]" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.8rem)' }}>
+              <p className="t-eyebrow mb-4 text-radar">Nieuwsbrief</p>
+              <h2 className="t-h2 mb-6 text-cream">
                 Blijf op de hoogte van de reiswereld
               </h2>
-              <p className="text-[19px] leading-relaxed text-cream/60 mb-10">
+              <p className="t-lead mb-10 text-cream/65">
                 Eén keer per maand reisnieuws, een lokale ondernemer in de spotlight, eerlijke verhalen over werken in de reisbranche en een overzicht van aankomende events. Geen spam, geen reclame.
               </p>
 
@@ -297,12 +258,12 @@ export default async function ReisnieuwsPage() {
                   },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-4">
-                    <div className="mt-0.5 flex-shrink-0 w-10 h-10 rounded-xl bg-cream/8 border border-cream/12 flex items-center justify-center text-[#5aab6a]">
+                    <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-cream/12 bg-cream/8 text-radar">
                       {item.icon}
                     </div>
                     <div>
                       <p className="text-[15px] font-semibold text-cream mb-1">{item.title}</p>
-                      <p className="text-[14px] leading-relaxed text-cream/45">{item.text}</p>
+                      <p className="text-[14px] leading-relaxed text-cream/55">{item.text}</p>
                     </div>
                   </div>
                 ))}

@@ -1,14 +1,19 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { Metadata } from 'next'
-import type { Story } from '@/payload-types'
-import { ArticleJsonLd, BreadcrumbJsonLd } from '@/components/JsonLd'
+import type { Media, Story } from '@/payload-types'
+import { ArticleJsonLd } from '@/components/JsonLd'
 import { AuthorByline } from '@/components/AuthorByline'
+import { OrganicEdge } from '@/components/OrganicEdge'
+import { RichText } from '@/components/blog/RichText'
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { CREDIT } from '@/lib/credit'
+import { formatDate } from '@/lib/format'
+import { imageUrl, imageAlt } from '@/lib/media'
+import { WERELDDEEL_OPTIONS, labelFor } from '@/lib/taxonomy'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://meetthelocals.nl'
 
@@ -37,10 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = story.seo?.metaTitle || `${story.title} | Meet the Locals`
   const description = story.seo?.metaDescription || story.intro || ''
-  const ogImg =
-    story.seo?.ogImage && typeof story.seo.ogImage === 'object'
-      ? (story.seo.ogImage.url ?? '')
-      : imageUrl(story.heroImage)
+  const ogImg = imageUrl(story.seo?.ogImage) || imageUrl(story.heroImage)
 
   return {
     title,
@@ -63,17 +65,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-function imageUrl(img: Story['heroImage']): string {
-  return img && typeof img === 'object' ? (img.url ?? '') : ''
-}
-
-function formatDate(date?: string | null): string {
-  if (!date) return ''
-  return new Date(date).toLocaleDateString('nl-NL', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
+/** EXIF-regel onder een galerijfoto, alleen de velden die gevuld zijn. */
+function exifLine(media: number | Media | null | undefined): string[] {
+  if (!media || typeof media !== 'object' || !media.exif) return []
+  const e = media.exif
+  return [e.camera, e.lens, e.aperture, e.shutterSpeed, e.iso ? `ISO ${e.iso}` : '', e.focalLength].filter(
+    (v): v is string => Boolean(v),
+  )
 }
 
 export default async function VerhaalDetailPage({ params }: Props) {
@@ -81,108 +79,90 @@ export default async function VerhaalDetailPage({ params }: Props) {
   const story = await getStory(slug)
   if (!story) notFound()
 
+  const hero = imageUrl(story.heroImage)
+  const eyebrow = story.eyebrow || labelFor(WERELDDEEL_OPTIONS, story.werelddeel) || 'Reportage'
+
   return (
-    <main>
+    <main className="bg-cream">
       <ArticleJsonLd
         title={story.title}
         description={story.seo?.metaDescription || story.intro || ''}
         slug={slug}
-        image={imageUrl(story.heroImage)}
+        image={hero}
         datePublished={story.publishedDate ?? story.createdAt}
         dateModified={story.updatedAt}
         basePath="/verhalen"
         {...(story.thema?.length && { category: story.thema[0] })}
       />
-      <BreadcrumbJsonLd
-        items={[
-          { name: 'Home', url: '/' },
-          { name: 'Verhalen', url: '/verhalen' },
-          { name: story.title, url: `/verhalen/${slug}` },
-        ]}
-      />
-      {/* Full-screen hero — links gradient, tekst links, foto rechts zichtbaar */}
-      <section className="relative min-h-screen w-full overflow-hidden">
-        {imageUrl(story.heroImage) && (
+
+      {/* Hero: beeldvullend, tekst linksonder op het vaste zijverloop */}
+      <section className="relative flex min-h-[85vh] items-end overflow-hidden bg-forest-dark">
+        {hero && (
           <Image
-            src={imageUrl(story.heroImage)}
-            alt={story.title}
+            src={hero}
+            alt={imageAlt(story.heroImage, story.title)}
             fill
             priority
             className="object-cover object-center"
             sizes="100vw"
           />
         )}
-        {/* Links-naar-rechts: donker links, foto rechts vrij zichtbaar */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/20" />
-        {/* Subtiele bottom vignette voor leesbaarheid */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+        <div aria-hidden className="absolute inset-0 photo-overlay-side" />
 
-        <div className="absolute inset-0 flex items-end">
-          <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-16 pb-16 md:pb-24">
-                <div className="w-full">
-              {story.eyebrow && (
-                <span className="block font-oswald text-lg uppercase tracking-[0.05em] !text-white/70 mb-4">
-                  {story.eyebrow}
-                </span>
-              )}
-              <h1 className="!font-editorial !text-white !font-normal leading-[1.0] mb-5" style={{ fontSize: 'clamp(2rem, 8vw, 5.5rem)' }}>
-                {story.title}
-              </h1>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-px bg-white/40" />
-                <span className="text-[11px] uppercase tracking-[0.15em] !text-white/55">
-                  {formatDate(story.publishedDate)}
-                </span>
-              </div>
-              <p className="!text-white/75 text-base md:text-[17px] leading-relaxed">
-                {story.intro}
+        <div className="relative z-10 w-full pb-24 pt-40 md:pb-32">
+          <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+            <div className="max-w-[60ch]">
+              <Breadcrumbs
+                items={[
+                  { name: 'Reportages', href: '/verhalen' },
+                  { name: story.title, href: `/verhalen/${slug}` },
+                ]}
+                className="mb-6"
+              />
+              <Eyebrow tone="light" className="mb-4">
+                {eyebrow}
+              </Eyebrow>
+              <h1 className="t-h1 font-editorial mb-5 text-white">{story.title}</h1>
+              <p className="t-meta mb-6 text-white/60">
+                <time dateTime={story.publishedDate}>{formatDate(story.publishedDate, 'long')}</time>
               </p>
+              <p className="t-lead text-white/85">{story.intro}</p>
             </div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 right-8 md:right-12 flex flex-col items-center gap-2 text-white/30">
-          <div className="w-px h-12 bg-white/20" />
-          <span className="text-[9px] uppercase tracking-[0.2em] rotate-90 origin-center mt-2">
-            Scroll
-          </span>
-        </div>
+        <OrganicEdge fill="var(--color-cream)" className="h-[36px] md:h-[64px]" />
       </section>
 
-      {/* Content */}
-      <article className="bg-warm-white">
-        <div className="max-w-3xl mx-auto px-6 py-16 md:py-24">
-          <Link
-            href="/verhalen"
-            className="inline-block mb-10 text-accent font-semibold text-sm uppercase tracking-[0.1em]"
-          >
-            ← Alle verhalen
-          </Link>
-
-          <div className="text-text-muted text-lg leading-relaxed [&_p]:mb-5 [&_h2]:font-display [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:text-forest [&_h2]:leading-snug [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-forest [&_h3]:mt-8 [&_h3]:mb-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-5 [&_li]:mb-1 [&_a]:text-accent [&_a]:underline [&_strong]:text-forest [&_img]:rounded-xl [&_img]:my-6">
-            <RichText data={story.content} />
-          </div>
+      <article>
+        <div className="mx-auto max-w-3xl px-6 py-14 md:py-20">
+          <RichText data={story.content} />
 
           {story.gallery && story.gallery.length > 0 && (
-            <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-2">
               {story.gallery.map((item, i) => {
-                const src =
-                  item.image && typeof item.image === 'object' ? (item.image.url ?? '') : ''
+                const src = imageUrl(item.image)
                 if (!src) return null
+                const exif = exifLine(item.image)
                 return (
-                  <figure key={i} className="overflow-hidden rounded-xl">
-                    <div className="relative aspect-[4/3]">
+                  <figure key={i} className="group">
+                    <div className="relative aspect-[4/3] overflow-hidden organic-img natural-shadow-box bg-forest-dark">
                       <Image
                         src={src}
-                        alt={item.caption ?? story.title}
+                        alt={imageAlt(item.image, item.caption ?? story.title)}
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, 50vw"
                       />
+                      {exif.length > 0 && (
+                        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-wrap gap-x-3 gap-y-1 bg-black/50 px-4 py-2.5 text-[11px] text-white/90 [@media(hover:hover)]:opacity-0 backdrop-blur-sm transition-opacity [@media(hover:hover)]:group-hover:opacity-100">
+                          {exif.map((v) => (
+                            <span key={v}>{v}</span>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                    {/* Naamsvermelding staat er altijd, de locatie alleen als die bekend is */}
-                    <figcaption className="mt-2 flex flex-wrap gap-x-2 text-[12px] uppercase tracking-[0.1em] text-text-muted/60">
+                    <figcaption className="t-meta mt-3 flex flex-wrap gap-x-3 text-text-muted/60">
                       {item.caption && <span>{item.caption}</span>}
                       <span className="ml-auto">© {CREDIT.creator}</span>
                     </figcaption>

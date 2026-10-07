@@ -3,20 +3,14 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Story } from '@/payload-types'
-import { OrganicClipDefs } from '@/components/OrganicEdge'
-
-function imageUrl(img: Story['heroImage']): string {
-  return img && typeof img === 'object' ? (img.url ?? '') : ''
-}
-
-function formatDate(date?: string | null): string {
-  if (!date) return ''
-  return new Date(date).toLocaleDateString('nl-NL', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-}
+import { PageHero } from '@/components/PageHero'
+import { Eyebrow } from '@/components/ui/Eyebrow'
+import { TextLink } from '@/components/ui/TextLink'
+import { EmptyState } from '@/components/ui/EmptyState'
+import { HERO_IMAGES } from '@/lib/heroImages'
+import { formatDate } from '@/lib/format'
+import { imageUrl, imageAlt } from '@/lib/media'
+import { WERELDDEEL_OPTIONS, labelFor } from '@/lib/taxonomy'
 
 export default async function VerhalenPage() {
   const payload = await getPayload({ config })
@@ -29,136 +23,93 @@ export default async function VerhalenPage() {
   })
 
   return (
-    <main className="min-h-screen bg-warm-white">
+    <main className="min-h-screen bg-cream">
+      <PageHero
+        title="Reportages"
+        breadcrumbs={[{ name: 'Reportages', href: '/verhalen' }]}
+        subtitle="Persoonlijke verhalen en fotografie van de meest bijzondere plekken ter wereld."
+        image={HERO_IMAGES.verhalen}
+        height="md"
+      />
 
       {/*
-        De hero krijgt zelf een golvende onderrand via clip-path, in plaats van
-        er een gevulde golf overheen te leggen. Die golf was crèmekleurig,
-        terwijl eronder een foto staat, en dat gaf een witte strook.
-        Nu is het gebied onder de golf gewoon weggeknipt en schuift het eerste
-        verhaal er met een negatieve marge onder, zodat de foto doorloopt.
+        Elke reportage is een foto met een tekstpaneel ernaast. De tekst stond
+        eerst over de foto heen, maar op drukke beelden was die onleesbaar.
+        Het paneel schuift op grote schermen een stuk over de foto, zodat het
+        geheel organisch blijft en niet als twee losse blokken oogt. De
+        onderste marge is ruim, want de golf van de voet ligt over deze sectie.
       */}
-      <OrganicClipDefs id="verhalenWaveClip" diepte={0.13} />
-      <OrganicClipDefs id="verhaalKaartClip" diepte={0.075} />
-
-      <section
-        className="relative z-10 h-[75vh] min-h-[500px] flex flex-col items-center justify-center overflow-hidden bg-forest-dark"
-        style={{ clipPath: 'url(#verhalenWaveClip)' }}
-      >
-        <Image
-          src="/media/maleisie-5-scaled.webp"
-          alt="Reizen"
-          fill
-          priority
-          className="object-cover object-center opacity-20"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-forest-dark via-forest-dark/90 to-forest-dark" />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,29,15,0.55) 100%)' }} />
-
-        <div className="relative z-10 text-center px-6 w-full pt-16">
-          <span className="block text-[11px] uppercase tracking-[0.3em] text-white/55 mb-5">
-            Diepgaande reisverhalen
-          </span>
-          <h1
-            className="!text-white leading-none mb-6 drop-shadow-[0_4px_30px_rgba(0,0,0,0.4)]"
-            style={{ fontSize: 'clamp(3.5rem, 11vw, 11rem)' }}
-          >
-            Verhalen
-          </h1>
-          <p className="text-white/75 text-lg md:text-xl max-w-xl mx-auto leading-relaxed drop-shadow-[0_2px_15px_rgba(0,0,0,0.3)]">
-            Persoonlijke verhalen en fotografie van de meest bijzondere plekken ter wereld.
-          </p>
+      <section className="footer-ready pb-32 pt-16 md:pb-44 md:pt-24">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
+          {stories.length === 0 ? (
+            <EmptyState
+              title="De eerste reportages komen eraan"
+              text="Tot die tijd vind je de korte verhalen en reistips bij de blog."
+              link={{ href: '/blog', label: 'Naar de korte verhalen' }}
+            />
+          ) : (
+            <div className="flex flex-col gap-16 md:gap-24 lg:gap-28">
+              {stories.map((story, i) => (
+                <StoryCard key={story.id} story={story} flip={i % 2 === 1} priority={i === 0} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
-
-      {stories.length === 0 ? (
-        <section className="relative z-0 -mt-[9vh] py-24 md:py-32">
-          <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
-            <p className="text-text-muted text-lg">De eerste verhalen komen er aan. Snel terug.</p>
-          </div>
-        </section>
-      ) : (
-        <section className="relative z-0 -mt-[9vh]">
-        {/*
-          Elke kaart knipt zijn eigen onderrand en de volgende schuift eronder,
-          zodat de foto's in elkaar overlopen in plaats van met een rechte naad
-          op elkaar te stapelen. De z-index loopt af, want anders schildert een
-          latere kaart met haar rechte bovenkant over de golf van de vorige.
-          De laatste kaart blijft ongeknipt: daaronder zit geen foto meer.
-        */}
-          {stories.map((story, i) => {
-            const isLaatste = i === stories.length - 1
-            return (
-            <Link
-              key={story.id}
-              href={`/verhalen/${story.slug}`}
-              className={`group block relative overflow-hidden ${i > 0 ? '-mt-[6vh]' : ''}`}
-              style={{
-                zIndex: stories.length - i,
-                clipPath: isLaatste ? undefined : 'url(#verhaalKaartClip)',
-              }}
-            >
-              {/* Kaart: min 70vh, foto rechts zichtbaar, tekst links */}
-              <div className="relative h-screen">
-                {imageUrl(story.heroImage) ? (
-                  <Image
-                    src={imageUrl(story.heroImage)}
-                    alt={story.title}
-                    fill
-                    className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
-                    sizes="100vw"
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-forest" />
-                )}
-
-                {/* Links-naar-rechts gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/20" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-
-                {/* Content links */}
-                <div className="absolute inset-0 flex items-end">
-                  <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-16 pb-14 md:pb-20">
-                    <div className="w-full">
-                      {story.eyebrow && (
-                        <span className="block font-oswald text-lg uppercase tracking-[0.05em] !text-white/70 mb-4">
-                          {story.eyebrow}
-                        </span>
-                      )}
-                      <h2 className="!font-editorial text-4xl md:text-5xl lg:text-6xl !text-white !font-normal leading-[1.0] mb-4">
-                        {story.title}
-                      </h2>
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-6 h-px bg-white/35" />
-                        <span className="text-[11px] uppercase tracking-[0.15em] !text-white/50">
-                          {formatDate(story.publishedDate)}
-                        </span>
-                      </div>
-                      <p className="!text-white/65 text-[15px] md:text-base leading-relaxed line-clamp-2 mb-6">
-                        {story.intro}
-                      </p>
-                      <span className="font-btn inline-flex items-center gap-2 text-accent font-semibold text-sm uppercase tracking-[0.1em] group-hover:gap-3 transition-all">
-                        Lees verhaal
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <path
-                            d="M5 12h14M13 6l6 6-6 6"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Link>
-            )
-          })}
-        </section>
-      )}
     </main>
+  )
+}
+
+function StoryCard({ story, flip, priority }: { story: Story; flip: boolean; priority: boolean }) {
+  const href = `/verhalen/${story.slug}`
+  const image = imageUrl(story.heroImage)
+  const eyebrow = story.eyebrow || labelFor(WERELDDEEL_OPTIONS, story.werelddeel) || 'Reportage'
+
+  return (
+    <article className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12 lg:gap-0">
+      {/* Foto */}
+      <Link
+        href={href}
+        aria-label={story.title}
+        className={`group relative block aspect-[4/3] overflow-hidden organic-img natural-shadow-box img-zoom bg-forest-dark lg:col-span-7 ${
+          flip ? 'lg:order-2 lg:col-start-6' : 'lg:order-1'
+        }`}
+      >
+        {image ? (
+          <Image
+            src={image}
+            alt={imageAlt(story.heroImage, story.title)}
+            fill
+            priority={priority}
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 58vw"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-forest" />
+        )}
+      </Link>
+
+      {/* Tekstpaneel */}
+      <div
+        className={`relative z-10 overflow-hidden rounded-3xl bg-cream-dark p-8 md:p-10 lg:col-span-5 lg:p-12 ${
+          flip ? 'lg:order-1 lg:col-start-1 lg:row-start-1 lg:-mr-16' : 'lg:order-2 lg:-ml-16'
+        }`}
+      >
+        <div aria-hidden className="grain-layer opacity-50" />
+        <div className="relative">
+          <Eyebrow className="mb-4">{eyebrow}</Eyebrow>
+          <h2 className="t-h2 mb-4 text-forest">
+            <Link href={href} className="transition-colors hover:text-accent">
+              {story.title}
+            </Link>
+          </h2>
+          <p className="t-meta mb-5 text-text-muted/70">
+            <time dateTime={story.publishedDate}>{formatDate(story.publishedDate, 'long')}</time>
+          </p>
+          <p className="t-body mb-7 line-clamp-3 text-text-muted">{story.intro}</p>
+          <TextLink href={href}>Lees reportage</TextLink>
+        </div>
+      </div>
+    </article>
   )
 }

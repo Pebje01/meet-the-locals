@@ -64,10 +64,8 @@ Gebruik **nooit** de REST API (`/api/...`) vanuit server-side code. Die is voor 
 
 De site heeft scroll-lag door deze componenten. Pas ze voorzichtig aan:
 
-- **`TextReveal`** (`src/components/TextReveal.tsx`) — maakt per woord een aparte `useTransform()`. Bij lange teksten zijn dat 50+ gelijktijdige Framer Motion transforms. Zwaarste component op de site.
-- **`PageHero`** (`src/components/PageHero.tsx`) — combineert parallax (`useScroll` + `useTransform`) met een oneindige Ken Burns animatie (25s loop). Op elke subpagina actief.
-- **Homepage** (`src/app/(frontend)/page.tsx`) — is volledig `use client` met 7 `whileInView` secties en meerdere losse `useScroll` hooks. Liefst opsplitsen in Server Component + client animatie-wrappers.
-- **`TravelPath`** — globale SVG scroll-animatie, staat uitgecommentarieerd in de layout. Niet aanzetten zonder performance-test.
+- **`PageHero`** (`src/components/PageHero.tsx`): foto met blur-placeholder uit `src/lib/heroImages.ts` en een `OrganicEdge` in de kleur van de sectie eronder (`next` prop). Op elke subpagina actief.
+- **Homepage** (`src/app/(frontend)/page.tsx`): servercomponent. Alleen `HeroSlideshow`, `DestinationSlider` en `ContinentMap` in `src/components/home/` draaien in de browser. Houd dat zo.
 - **Noise/speckle overlays** in globals.css (`.noise-overlay`, `.speckle-overlay`) gebruiken inline SVG `fractalNoise` filters — vermijd op grote secties.
 - **Lenis** (`SmoothScroll.tsx`): `touchMultiplier: 2` verdubbelt scroll-snelheid op touch. Verlagen naar `1` als animaties op mobiel achterliggen.
 
@@ -81,6 +79,16 @@ De site heeft scroll-lag door deze componenten. Pas ze voorzichtig aan:
 - Tailwind 4: gebruik `@theme` in `globals.css` voor design tokens. Geen `tailwind.config.js`.
 - Afbeeldingen altijd via Next.js `<Image>` met `sizes` prop. Hero-afbeeldingen krijgen `priority`.
 
+## Bouwstenen en typografie
+
+Pagina's gebruiken de gedeelde bouwstenen in `src/components/ui/` in plaats van eigen opmaak: `Button` (varianten `accent`, `forest`, `glass`, `cream`, `outline`), `TextLink`, `Eyebrow`, `SectionHeader`, `PhotoCard` (tekst op foto), `PostCard` (tekst onder foto), `TintedCard`, `EmptyState` en `ExifCaption`.
+
+- Tekstmaten alleen via de schaal in `globals.css`: `t-h1`, `t-h1-xl`, `t-h2`, `t-h3`, `t-card`, `t-eyebrow`, `t-meta`, `t-lead`, `t-body`. Geen inline `fontSize`, geen `!` op koppen.
+- Tekst op foto altijd op `photo-overlay` of `photo-overlay-side`.
+- Korrel via `<div className="grain-layer" />`, labels en filters via `pill`, formuliervelden via `field` en `field-label`.
+- Sectieovergangen via `OrganicEdge` in de kleur van de aangrenzende sectie. Op een sectie met `noise-overlay` de golven in een `absolute inset-0 z-10` laag zetten, anders valt de korrel eroverheen.
+- Kleuren alleen via tokens (`cream`, `forest`, `forest-deep`, `accent`, `accent-deep`, `radar`, `mint`, `sand-pale`), geen losse hexwaarden.
+
 ## Fotosliders: EXIF op hover
 
 In **alle fotosliders** op de site geldt: toon EXIF-metadata bij hover over een foto. Verplicht in elke slider-component die je aanmaakt of aanpast.
@@ -92,7 +100,7 @@ Wat tonen (als de data beschikbaar is in de Media-collectie of als prop):
 - Brandpuntsafstand
 - Locatie (GPS of tekstuele naam)
 
-Implementatie: een absoluut gepositioneerde overlay (`opacity-0 group-hover:opacity-100 transition-opacity`) onderaan of rechtsboven de foto. Gebruik `text-[11px]` of kleiner, lichte achtergrond (`bg-black/50 backdrop-blur-sm`) of donkere glasmorfiek stijl passend bij de context. De overlay mag subtiel zijn maar moet leesbaar zijn op zowel lichte als donkere foto's.
+Implementatie: een absoluut gepositioneerde overlay (`[@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 transition-opacity`, zodat hij op touch altijd zichtbaar is) onderaan of rechtsboven de foto. Gebruik `text-[11px]` of kleiner, lichte achtergrond (`bg-black/50 backdrop-blur-sm`) of donkere glasmorfiek stijl passend bij de context. De overlay mag subtiel zijn maar moet leesbaar zijn op zowel lichte als donkere foto's.
 
 ## CSS utilities
 

@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
@@ -8,7 +7,13 @@ import type { Destination, Post } from '@/payload-types'
 import { DestinationHeroClient } from './DestinationHeroClient'
 import { DestinationPhotoSlider } from './DestinationPhotoSlider'
 import { DestinationInfoStrip } from './DestinationInfoStrip'
-import { BreadcrumbJsonLd } from '@/components/JsonLd'
+import { Eyebrow } from '@/components/ui/Eyebrow'
+import { PhotoCard } from '@/components/ui/PhotoCard'
+import { PostCard } from '@/components/ui/PostCard'
+import { SectionHeader } from '@/components/ui/SectionHeader'
+import { formatDate } from '@/lib/format'
+import { imageUrl } from '@/lib/media'
+import { publishedPostsWhere } from '@/lib/queries'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -24,23 +29,6 @@ const REGION_LABELS: Record<string, string> = {
   'africa': 'Afrika',
   'oceania': 'Oceanië',
   'middle-east': 'Midden-Oosten',
-}
-
-function heroUrl(img: Destination['heroImage']): string {
-  return img && typeof img === 'object' ? (img.url ?? '') : ''
-}
-
-function postImageUrl(img: Post['heroImage']): string {
-  return img && typeof img === 'object' ? (img.url ?? '') : ''
-}
-
-function formatDate(date?: string | null): string {
-  if (!date) return ''
-  return new Date(date).toLocaleDateString('nl-NL', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  })
 }
 
 function normalizeText(value: string): string {
@@ -90,6 +78,13 @@ function isRelatedPost(post: Post, dest: Destination): boolean {
   return destTerms.some((term) => postText.includes(term))
 }
 
+/** Afwisselende tinten voor de highlightkaartjes, dezelfde als TintedCard. */
+const HIGHLIGHT_TONES = [
+  'bg-water-muted border-water-light/50',
+  'bg-mint border-forest/10',
+  'bg-accent-muted border-accent/15',
+]
+
 // --- Metadata ---
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://meetthelocals.nl'
@@ -106,7 +101,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const dest = docs[0]
   if (!dest) return { title: 'Bestemming niet gevonden' }
 
-  const hero = heroUrl(dest.heroImage)
+  const hero = imageUrl(dest.heroImage)
   const heroAbsolute = hero ? (hero.startsWith('http') ? hero : `${SITE_URL}${hero}`) : undefined
 
   return {
@@ -129,51 +124,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ...(heroAbsolute && { images: [heroAbsolute] }),
     },
   }
-}
-
-// --- Sub-componenten ---
-
-function Breadcrumb({ crumbs }: { crumbs: { name: string; slug: string }[] }) {
-  if (crumbs.length === 0) return null
-  return (
-    <nav className="mb-6 flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-cream/55">
-      <Link href="/bestemmingen" className="transition-colors hover:text-cream">
-        Alle bestemmingen
-      </Link>
-      {crumbs.map((crumb) => (
-        <span key={crumb.slug} className="flex items-center gap-2">
-          <span>/</span>
-          <Link href={`/bestemmingen/${crumb.slug}`} className="transition-colors hover:text-cream">
-            {crumb.name}
-          </Link>
-        </span>
-      ))}
-      <span>/</span>
-    </nav>
-  )
-}
-
-function FactItems({ dest }: { dest: Destination }) {
-  const items = [
-    dest.region ? { label: 'Werelddeel', value: REGION_LABELS[dest.region] ?? dest.region } : null,
-    dest.population ? { label: 'Inwoners', value: dest.population } : null,
-    dest.flightHours ? { label: 'Reistijd', value: dest.flightHours } : null,
-  ].filter(Boolean) as { label: string; value: string }[]
-
-  if (items.length === 0) return null
-
-  return (
-    <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">
-      {items.map((item) => (
-        <div key={item.label} className="border-l border-cream/15 pl-5">
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.15em] text-cream/35">
-            {item.label}
-          </p>
-          <p className="text-lg leading-snug text-cream md:text-xl">{item.value}</p>
-        </div>
-      ))}
-    </div>
-  )
 }
 
 // --- Hoofd-exportcomponent ---
@@ -203,7 +153,7 @@ export default async function DestinationPage({ params }: Props) {
   })
 
   const hasChildren = children.length > 0
-  const image = heroUrl(dest.heroImage)
+  const image = imageUrl(dest.heroImage)
   // Per-filename object-position overrides for the photo slider
   const objectPositionMap: Record<string, string> = {
     'singapore-12.webp': 'top',   // Fullerton Hotel: hotel visible at top
@@ -239,6 +189,8 @@ export default async function DestinationPage({ params }: Props) {
         marker: [dest.coordinates.longitude, dest.coordinates.latitude] as [number, number],
         label: dest.mapLabel!,
         scale: dest.mapScale ?? 1500,
+        // Een land past de kaart zelf in; regio's en steden houden de zoom uit het CMS
+        fitToCountry: dest.level === 'land',
         center: [
           dest.mapCenter?.longitude ?? dest.coordinates.longitude,
           dest.mapCenter?.latitude ?? dest.coordinates.latitude,
@@ -249,27 +201,22 @@ export default async function DestinationPage({ params }: Props) {
   // Gerelateerde posts (voor alle niveau's)
   const { docs: allPosts } = await payload.find({
     collection: 'posts',
-    where: { status: { equals: 'published' } },
+    where: publishedPostsWhere(),
     sort: '-publishedDate',
     depth: 1,
     limit: 100,
   })
   const relatedPosts = allPosts.filter((post) => isRelatedPost(post, dest)).slice(0, 3)
 
-  const breadcrumbItems = [
-    { name: 'Bestemmingen', url: `${SITE_URL}/bestemmingen` },
-    ...breadcrumbs.map((c) => ({ name: c.name, url: `${SITE_URL}/bestemmingen/${c.slug}` })),
-    { name: dest.name, url: `${SITE_URL}/bestemmingen/${dest.slug}` },
-  ]
 
   return (
-    <main className="bg-warm-white">
-      <BreadcrumbJsonLd items={breadcrumbItems} />
+    <main className="bg-cream">
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <DestinationHeroClient
         heroImageUrl={image}
         mapProps={mapProps}
         breadcrumbs={breadcrumbs}
+        slug={dest.slug}
         name={dest.name}
         eyebrow={dest.eyebrow}
         intro={dest.intro}
@@ -280,103 +227,51 @@ export default async function DestinationPage({ params }: Props) {
         ].filter(Boolean) as { label: string; value: string }[]}
       />
 
-      {/* ── Fotogalerij ──────────────────────────────────────────────────── */}
-      {galleryImages.length > 0 && (
-        <div className="relative z-[1] -mt-20 md:-mt-28 lg:-mt-36">
-          <DestinationPhotoSlider images={galleryImages} name={dest.name} />
-        </div>
-      )}
+      {/* ── Reisinfo-balk en fotogalerij ─────────────────────────────────
+          Samen onder de golf van de hero geschoven: is er reisinfo, dan vult
+          de oranje balk die golf, anders loopt de foto er direct onder door. */}
+      <div className="relative z-[1] -mt-20 md:-mt-28 lg:-mt-36">
+        <DestinationInfoStrip info={dest.travelInfo ?? null} flightHours={dest.flightHours ?? null} />
+        {galleryImages.length > 0 && <DestinationPhotoSlider images={galleryImages} name={dest.name} />}
+      </div>
 
-      {/* ── Gerelateerde blogs (direct onder fotoslider) ──────────────── */}
+      {/* ── Gerelateerde verhalen (direct onder de fotoslider) ─────────── */}
       {relatedPosts.length > 0 && (
-        <section className="bg-[#F5EFE8] py-16 md:py-20">
+        <section className="bg-cream py-16 md:py-20">
           <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-            <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-              <div>
-                <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-                  Meer lezen
-                </span>
-                <h2 className="text-4xl leading-tight text-forest md:text-5xl">
-                  Reisblogs over {dest.name}
-                </h2>
-              </div>
-              <Link
-                href="/blog"
-                className="text-sm font-semibold uppercase tracking-[0.1em] text-forest transition-colors hover:text-accent"
-              >
-                Alle reistips bekijken →
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <SectionHeader
+              eyebrow="Meer lezen"
+              title={`Verhalen over ${dest.name}`}
+              link={{ href: '/blog', label: 'Alle verhalen' }}
+              className="mb-10 md:mb-12"
+            />
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               {relatedPosts.map((post) => (
-                <article key={post.id}>
-                  <Link href={`/blog/${post.slug}`} className="group block h-full">
-                    <div className="h-full overflow-hidden rounded-[1.75rem] bg-white natural-shadow-box transition-transform duration-300 group-hover:-translate-y-1">
-                      <div className="relative aspect-[4/3] bg-cream">
-                        {postImageUrl(post.heroImage) && (
-                          <Image
-                            src={postImageUrl(post.heroImage)}
-                            alt={post.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                          />
-                        )}
-                      </div>
-                      <div className="p-6">
-                        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
-                          {formatDate(post.publishedDate)}
-                        </p>
-                        <h3 className="mb-3 text-2xl leading-tight text-forest transition-colors group-hover:text-accent">
-                          {post.title}
-                        </h3>
-                        <p className="mb-5 line-clamp-3 text-[16px] leading-relaxed text-text-muted">
-                          {post.excerpt}
-                        </p>
-                        <span className="text-sm font-semibold uppercase tracking-[0.1em] text-forest">
-                          Lees verder →
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </article>
+                <PostCard
+                  key={post.id}
+                  post={{
+                    title: post.title,
+                    href: `/blog/${post.slug}`,
+                    image: imageUrl(post.heroImage),
+                    excerpt: post.excerpt,
+                    date: formatDate(post.publishedDate),
+                  }}
+                />
               ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* ── Reisinfo-strip ───────────────────────────────────────────────── */}
-      <DestinationInfoStrip info={dest.travelInfo ?? null} flightHours={dest.flightHours ?? null} />
 
       {/* ── Highlights ───────────────────────────────────────────────────── */}
       {dest.highlightList && dest.highlightList.length > 0 && (
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
-            <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-              Highlights
-            </span>
+            <Eyebrow className="mb-6">Highlights</Eyebrow>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
               {dest.highlightList.map((item, index) => {
-                const cardClass =
-                  index === 0
-                    ? 'bg-water-muted border-water-light/50'
-                    : index === 1
-                      ? 'bg-[#e6f0df] border-forest/10'
-                      : 'bg-accent-muted border-accent/15'
-
-                // Mini map: static OSM tile centered on the destination's coordinates
-                const lat = dest.coordinates?.latitude
-                const lng = dest.coordinates?.longitude
-                const mapZoom =
-                  dest.level === 'stad' ? 11
-                  : dest.level === 'gebied' ? 9
-                  : dest.level === 'land' ? 5
-                  : 7
-                const mapUrl =
-                  lat != null && lng != null
-                    ? `https://staticmap.openstreetmap.de/staticmap.php?center=${lat},${lng}&zoom=${mapZoom}&size=600x230`
-                    : null
+                const cardClass = HIGHLIGHT_TONES[index % HIGHLIGHT_TONES.length]
 
                 // Highlight photo (optional, set per item in the CMS)
                 const photoMedia =
@@ -386,36 +281,20 @@ export default async function DestinationPage({ params }: Props) {
                 return (
                   <article
                     key={item.id}
-                    className={`overflow-hidden rounded-[1.75rem] border ${cardClass}`}
+                    className={`overflow-hidden rounded-3xl border ${cardClass}`}
                   >
-                    {/* Mini map at top */}
-                    {mapUrl && (
-                      <div
-                        className="relative h-[115px] w-full"
-                        style={{
-                          backgroundImage: `url(${mapUrl})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                        }}
-                      >
-                        <span className="absolute bottom-1 right-2 font-sans text-[8px] text-black/30">
-                          © OpenStreetMap
-                        </span>
-                      </div>
-                    )}
-
                     {/* Number badge + highlight text */}
                     <div className="px-8 pb-5 pt-8">
                       <span className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/60 text-sm font-semibold text-forest/70">
                         {String(index + 1).padStart(2, '0')}
                       </span>
-                      <h3 className="text-2xl leading-tight text-forest">{item.text}</h3>
+                      <h3 className="t-h3 text-forest">{item.text}</h3>
                     </div>
 
                     {/* Photo at bottom */}
                     {photoUrl && (
                       <div className="px-6 pb-6">
-                        <div className="relative h-[130px] overflow-hidden rounded-[1.25rem]">
+                        <div className="relative h-[130px] overflow-hidden rounded-2xl">
                           <Image
                             src={photoUrl}
                             alt={item.text}
@@ -440,25 +319,23 @@ export default async function DestinationPage({ params }: Props) {
           <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 lg:grid-cols-12 lg:px-10">
             {dest.title && (
               <div className="lg:col-span-5">
-                <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-                  Over {dest.name}
-                </span>
-                <h2 className="text-4xl leading-[1.05] text-forest md:text-5xl">{dest.title}</h2>
+                <Eyebrow className="mb-4">Over {dest.name}</Eyebrow>
+                <h2 className="t-h2 text-forest">{dest.title}</h2>
               </div>
             )}
-            <div className="space-y-6 text-[19px] leading-relaxed text-text-muted md:text-[20px] lg:col-span-7">
+            <div className="t-lead space-y-6 text-text-muted lg:col-span-7">
               {dest.intro && <p>{dest.intro}</p>}
               {dest.mood && <p>{dest.mood}</p>}
               {dest.places && dest.places.length > 0 && (
                 <div className="pt-2">
-                  <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.16em] text-forest/40">
+                  <Eyebrow tone="muted" as="p" className="mb-3">
                     Gebieden
-                  </p>
+                  </Eyebrow>
                   <div className="flex flex-wrap gap-3">
                     {dest.places.map((place) => (
                       <span
                         key={place.id}
-                        className="rounded-full border border-forest/10 bg-white px-5 py-2.5 text-sm font-medium text-forest/75 natural-shadow-box"
+                        className="pill border border-forest/10 bg-white text-forest/75"
                       >
                         {place.name}
                       </span>
@@ -474,60 +351,27 @@ export default async function DestinationPage({ params }: Props) {
       {/* ── Sub-bestemmingen (regio's, gebieden, steden) ─────────────────── */}
       {hasChildren && (
         <section className="mx-auto max-w-[1400px] px-6 py-24 md:py-32 lg:px-10">
-          <span className="mb-4 block text-[12px] font-semibold uppercase tracking-[0.16em] text-accent">
-            {dest.level === 'land' ? "Regio's" : dest.level === 'regio' ? 'Gebieden' : 'Plekken'}
-          </span>
-          <h2 className="mb-12 text-4xl leading-tight text-forest md:text-5xl">
-            Ontdek {dest.name} per{' '}
-            {dest.level === 'land' ? 'regio' : dest.level === 'regio' ? 'gebied' : 'plek'}
-          </h2>
-
+          <SectionHeader
+            eyebrow={dest.level === 'land' ? "Regio's" : dest.level === 'regio' ? 'Gebieden' : 'Plekken'}
+            title={`Ontdek ${dest.name} per ${dest.level === 'land' ? 'regio' : dest.level === 'regio' ? 'gebied' : 'plek'}`}
+          />
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {children.map((child) => {
-              const childImage = heroUrl(child.heroImage)
-              return (
-                <Link
-                  key={child.slug}
-                  href={`/bestemmingen/${child.slug}`}
-                  className="group block"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-forest">
-                    {childImage && (
-                      <Image
-                        src={childImage}
-                        alt={child.name}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-forest/30 to-transparent" />
-                    {child.eyebrow && (
-                      <div className="absolute left-5 top-5 rounded-full bg-white/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-cream backdrop-blur-sm">
-                        {child.eyebrow}
-                      </div>
-                    )}
-                    <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
-                      <h3 className="text-3xl font-display font-light text-cream!">
-                        {child.name}
-                      </h3>
-                      {child.intro && (
-                        <p className="mt-2 text-sm leading-relaxed text-cream/75 line-clamp-2">
-                          {child.intro}
-                        </p>
-                      )}
-                      <span className="mt-4 inline-block text-sm font-semibold uppercase tracking-[0.1em] text-cream/80 transition-colors group-hover:text-cream">
-                        Bekijk →
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              )
-            })}
+            {children.map((child) => (
+              <PhotoCard
+                key={child.slug}
+                href={`/bestemmingen/${child.slug}`}
+                image={imageUrl(child.heroImage)}
+                alt={child.name}
+                title={child.name}
+                eyebrow={child.eyebrow ?? undefined}
+                aspect="aspect-[4/3]"
+              >
+                {child.intro && <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-cream/75">{child.intro}</p>}
+              </PhotoCard>
+            ))}
           </div>
         </section>
       )}
-
     </main>
   )
 }

@@ -31,6 +31,7 @@ export type HeroMapProps = {
   marker: [number, number]
   scale: number
   center: [number, number]
+  fitToCountry?: boolean
 }
 
 export function HeroDecorMap({ mapProps }: { mapProps: HeroMapProps | null }) {

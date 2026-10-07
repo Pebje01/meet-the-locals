@@ -21,6 +21,18 @@ const CURVE = 'C160,29 320,62 540,42 C760,21 900,58 1100,37 C1300,17 1380,46 144
 /** Zelfde vorm, maar omgekeerd getekend voor een rand aan de bovenkant. */
 const CURVE_OMGEKEERD = 'C1300,17 1380,46 1440,33'
 
+/** Het gevulde vlak, als los pad zodat het ook als masker kan dienen. */
+const VLAK = `M0,100 L0,50 ${CURVE} L1440,100 Z`
+
+/**
+ * Dezelfde vorm als CSS-masker. Nodig om de korrel van de sectie ernaast door
+ * te laten lopen tot in de golf: zonder korrel is de golf net iets anders van
+ * toon dan het vlak eronder, en dan zie je de naad alsnog.
+ */
+const MASKER = `url("data:image/svg+xml;utf8,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="${VLAK}" fill="#fff"/></svg>`,
+)}")`
+
 export type OrganicEdgeProps = {
   /** Aan welke kant van de sectie de rand komt. */
   position?: 'top' | 'bottom'
@@ -28,6 +40,8 @@ export type OrganicEdgeProps = {
   fill: string
   /** Hoogte van de golf. Standaard loopt mee met het scherm. */
   className?: string
+  /** Trek de korrel van de aangrenzende sectie door tot in de golf. */
+  texture?: boolean
 }
 
 /**
@@ -38,12 +52,16 @@ export function OrganicEdge({
   position = 'bottom',
   fill,
   className = 'h-[40px] md:h-[70px]',
+  texture = false,
 }: OrganicEdgeProps) {
   const isTop = position === 'top'
 
   return (
     <div
-      className={`pointer-events-none absolute inset-x-0 z-[2] ${isTop ? 'top-0' : 'bottom-0'}`}
+      // Een pixel over de rand heen: de onderrand van het pad wordt anders
+      // half doorzichtig gerenderd en daar schemert de sectie erachter
+      // doorheen als een dunne streep.
+      className={`pointer-events-none absolute inset-x-0 z-[2] ${isTop ? '-top-px' : '-bottom-px'}`}
       aria-hidden="true"
     >
       <svg
@@ -51,8 +69,28 @@ export function OrganicEdge({
         preserveAspectRatio="none"
         className={`block w-full ${className} ${isTop ? 'rotate-180' : ''}`}
       >
-        <path d={`M0,100 L0,50 ${CURVE} L1440,100 Z`} fill={fill} />
+        <path d={VLAK} fill={fill} />
       </svg>
+
+      {texture && (
+        <div
+          className={`absolute inset-0 ${isTop ? 'rotate-180' : ''}`}
+          style={{
+            backgroundImage: "url('/textures/grain.webp')",
+            backgroundSize: '800px 533px',
+            // Op de naad uitlijnen, zodat de tegel gewoon doorloopt in de sectie.
+            backgroundPosition: 'left bottom',
+            opacity: 0.7,
+            mixBlendMode: 'overlay',
+            maskImage: MASKER,
+            WebkitMaskImage: MASKER,
+            maskSize: '100% 100%',
+            WebkitMaskSize: '100% 100%',
+            maskRepeat: 'no-repeat',
+            WebkitMaskRepeat: 'no-repeat',
+          }}
+        />
+      )}
     </div>
   )
 }

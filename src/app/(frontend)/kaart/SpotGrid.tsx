@@ -27,7 +27,7 @@ function SpotCard({ spot }: { spot: MapSpot }) {
         />
 
         {/* Naamsvermelding, met camera-instellingen erbij als die bekend zijn */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-1 opacity-0 transition-all duration-300 group-hover/photo:translate-y-0 group-hover/photo:opacity-100">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 [@media(hover:hover)]:translate-y-1 [@media(hover:hover)]:opacity-0 transition-all duration-300 [@media(hover:hover)]:group-hover/photo:translate-y-0 [@media(hover:hover)]:group-hover/photo:opacity-100">
           <div className="bg-gradient-to-t from-black/70 to-transparent px-3 pb-3 pt-6">
               {spot.camera && (
                 <p className="mb-1.5 truncate text-[11px] font-medium text-white/90">
@@ -50,7 +50,7 @@ function SpotCard({ spot }: { spot: MapSpot }) {
           </span>
         )}
       </div>
-      <h3 className="font-serif text-xl font-bold text-forest transition-colors group-hover:text-accent">
+      <h3 className="text-xl text-forest transition-colors group-hover:text-accent">
         {spot.title}
       </h3>
       {spot.story && (

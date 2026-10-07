@@ -66,6 +66,8 @@ export const extractExif: CollectionBeforeChangeHook = async ({ data, req }) => 
   try {
     // exifr eerst, dat is snel en zonder subproces. Kan hij het formaat niet
     // aan (WebP), dan doet exiftool het alsnog.
+    // exifr levert ongetypeerde tags terug; de velden worden hieronder stuk voor stuk gecontroleerd.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let raw: Record<string, any> | undefined
     try {
       raw = await exifr.parse(file.data, { tiff: true, exif: true, gps: true })
