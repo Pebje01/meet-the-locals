@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { OrganicEdge } from '@/components/OrganicEdge'
 import { SOCIAL_LINKS } from '@/lib/social'
 import { SocialIcon } from '@/components/SocialIcon'
+import { AnalyticsSettingsLink } from '@/components/analytics/Analytics'
 
 const footerLinks = {
   ontdek: [
@@ -127,6 +128,7 @@ export function Footer() {
             &copy; {new Date().getFullYear()} Meet the Locals is onderdeel van <a href="https://thedaleyedit.nl" target="_blank" rel="noopener noreferrer" className="text-cream/60 hover:text-accent transition-colors">The Daley Edit</a>
           </p>
           <p className="text-cream/40 text-[13px]">
+            <AnalyticsSettingsLink className="mr-4 text-cream/60 hover:text-accent transition-colors" />
             Webdesign by <a href="https://wegrowbrands.online" target="_blank" rel="noopener noreferrer" className="text-cream/60 hover:text-accent transition-colors">We Grow Brands</a>
           </p>
         </div>

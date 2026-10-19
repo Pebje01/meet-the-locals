@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { SmoothScroll } from '@/components/SmoothScroll'
 import { GlobalJsonLd } from '@/components/JsonLd'
+import { AnalyticsConsent, AnalyticsHead } from '@/components/analytics/Analytics'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://meetthelocals.nl'
 
@@ -91,6 +92,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
   return (
     <html lang="nl">
       <head>
+        <AnalyticsHead />
         {/* Poleno en Athletics komen van Typekit; de lettertypebestanden zelf staan op p.typekit.net */}
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://p.typekit.net" crossOrigin="anonymous" />
@@ -102,6 +104,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
         <Header />
         {children}
         <Footer />
+        <AnalyticsConsent />
       </body>
     </html>
   )
