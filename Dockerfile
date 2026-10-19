@@ -17,9 +17,13 @@ COPY . .
 ARG DATABASE_URI=postgresql://payload:payload@localhost:5432/meetthelocals
 ARG PAYLOAD_SECRET=build-time-secret-placeholder
 ARG NEXT_PUBLIC_SITE_URL=https://meetthelocals.nl
+# GA4 datastream van meetthelocals.nl. Alleen in deze productiebuild, de
+# meetcode staat er niet als de waarde leeg is. Coolify mag hem overschrijven.
+ARG NEXT_PUBLIC_GA_ID=G-X0YT9HVYS3
 ENV DATABASE_URI=$DATABASE_URI
 ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN pnpm build

@@ -3,6 +3,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        # Lokaal niet meten, de standaard in de Dockerfile is voor productie.
+        NEXT_PUBLIC_GA_ID: ''
     ports:
       - '3000:3000'
     environment:
