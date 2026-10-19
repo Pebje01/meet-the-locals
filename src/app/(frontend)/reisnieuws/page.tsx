@@ -11,16 +11,26 @@ import { SectionHeader } from '@/components/ui/SectionHeader'
 import { formatDate } from '@/lib/format'
 import { imageUrl } from '@/lib/media'
 
+/**
+ * De laatste nieuwsitems. Faalt de query (op productie bestaat de tabel
+ * `news` nog niet), dan toont de pagina de lege staat in plaats van een
+ * serverfout: de radar en de nieuwsbrief werken dan gewoon.
+ */
 async function getRecentNews() {
-  const payload = await getPayload({ config })
-  const { docs } = await payload.find({
-    collection: 'news',
-    where: { status: { equals: 'published' } },
-    sort: '-publishedDate',
-    limit: 3,
-    depth: 1,
-  })
-  return docs
+  try {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'news',
+      where: { status: { equals: 'published' } },
+      sort: '-publishedDate',
+      limit: 3,
+      depth: 1,
+    })
+    return docs
+  } catch (error) {
+    console.error('[reisnieuws] nieuws niet opgehaald:', error instanceof Error ? error.message : error)
+    return []
+  }
 }
 
 const BLIPS = [
